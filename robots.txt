@@ -1,0 +1,12 @@
+# ==========================================================
+# GenZ Time - Robots.txt for Google & Search Crawlers
+# ==========================================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /data/
+
+# Sitemap Location
+Sitemap: http://localhost:8000/sitemap.php

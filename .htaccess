@@ -1,0 +1,38 @@
+# ==========================================================
+# GenZ Time - Apache mod_rewrite for Shared Hosting
+# ==========================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Redirect preview domain (*.hostingersite.com) permanently to genztime.com
+  RewriteCond %{HTTP_HOST} hostingersite\.com$ [NC]
+  RewriteRule ^(.*)$ https://genztime.com/$1 [R=301,L]
+
+  # Sitemap clean rewrite
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+  # Blog post clean URL: /blog/slug-name -> post.php?slug=slug-name
+  RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ post.php?slug=$1 [L,QSA]
+
+  # Category clean URL: /category/slug-name -> category.php?slug=slug-name
+  RewriteRule ^category/([a-zA-Z0-9_-]+)/?$ category.php?slug=$1 [L,QSA]
+
+  # Standard pages
+  RewriteRule ^blog/?$ blog.php [L,QSA]
+  RewriteRule ^about/?$ about.php [L,QSA]
+  RewriteRule ^contact/?$ contact.php [L,QSA]
+  RewriteRule ^editorial-disclosure/?$ editorial-disclosure.php [L,QSA]
+  RewriteRule ^privacy/?$ privacy.php [L,QSA]
+  RewriteRule ^terms/?$ terms.php [L,QSA]
+
+  # Prevent directory listing
+  Options -Indexes
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "(database\.sql|\.json|\.env)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
