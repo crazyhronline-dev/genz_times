@@ -41,27 +41,43 @@ export default async function HomePage() {
   const secondaryFeatured = featuredPosts.slice(1, 3);
   const latestPosts = posts.filter((p) => p.id !== heroPost.id).slice(0, 6);
 
+  const trendingList = trendingPosts.length > 0 ? trendingPosts : posts.slice(0, 6);
+  // Duplicate list to achieve continuous seamless loop
+  const marqueeItems = [...trendingList, ...trendingList];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-16">
       
-      {/* 1. Trending Hardware Ticker */}
-      <div className="rounded-2xl bg-tech-900/60 border border-slate-800/80 px-4 py-2.5 flex items-center gap-3 overflow-hidden text-xs font-mono">
-        <div className="flex items-center gap-1.5 text-tech-cyan flex-shrink-0 font-bold uppercase tracking-wider bg-tech-cyan/10 px-2.5 py-1 rounded-md border border-tech-cyan/30">
+      {/* 1. Trending Hardware Marquee Ticker */}
+      <div className="relative rounded-2xl bg-tech-900/70 border border-slate-800/80 px-4 py-2.5 flex items-center gap-4 overflow-hidden text-xs font-mono group">
+        {/* Fixed "Trending Now" Cyber Badge */}
+        <div className="flex items-center gap-1.5 text-tech-cyan flex-shrink-0 font-bold uppercase tracking-wider bg-tech-cyan/10 px-3 py-1.5 rounded-lg border border-tech-cyan/30 z-20 shadow-md backdrop-blur-md">
           <Flame className="w-3.5 h-3.5 animate-pulse text-amber-400" />
           <span>Trending Now</span>
         </div>
-        <div className="flex items-center gap-6 overflow-x-auto no-scrollbar whitespace-nowrap text-slate-400 py-1">
-          {trendingPosts.slice(0, 4).map((t, index) => (
-            <Link
-              key={t.id}
-              href={`/blog/${t.slug}`}
-              className="hover:text-white transition flex items-center gap-2 group"
-            >
-              <span className="text-tech-cyan/70 font-semibold">0{index + 1}.</span>
-              <span className="group-hover:underline">{t.title}</span>
-              <span className="text-tech-emerald font-bold">[{t.verdictScore}/10]</span>
-            </Link>
-          ))}
+
+        {/* Left & Right Gradient Fade Masks */}
+        <div className="pointer-events-none absolute left-[145px] sm:left-[160px] top-0 bottom-0 w-8 bg-gradient-to-r from-tech-900 via-tech-900/60 to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-tech-900 to-transparent z-10" />
+
+        {/* Continuous Marquee Track */}
+        <div className="overflow-hidden flex-1 relative flex items-center">
+          <div className="animate-marquee flex items-center gap-8 whitespace-nowrap text-slate-400 py-0.5">
+            {marqueeItems.map((t, index) => (
+              <Link
+                key={`${t.id}-${index}`}
+                href={`/blog/${t.slug}`}
+                className="hover:text-white transition-colors flex items-center gap-2 group/item flex-shrink-0"
+              >
+                <span className="text-tech-cyan/80 font-bold">#{((index % trendingList.length) + 1).toString().padStart(2, '0')}</span>
+                <span className="group-hover/item:underline group-hover/item:text-tech-cyan transition-colors">{t.title}</span>
+                <span className="text-tech-emerald font-bold bg-tech-emerald/10 border border-tech-emerald/30 px-1.5 py-0.5 rounded text-[11px]">
+                  {t.verdictScore}/10
+                </span>
+                <span className="text-slate-600 select-none ml-2">•</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 

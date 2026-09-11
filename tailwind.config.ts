@@ -30,8 +30,15 @@ const config: Config = {
         "glow-emerald": "0 0 25px -5px rgba(16, 185, 129, 0.25)",
         "glow-violet": "0 0 25px -5px rgba(139, 92, 246, 0.25)",
       },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        marquee: "marquee 32s linear infinite",
       },
     },
   },

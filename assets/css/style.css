@@ -243,12 +243,14 @@ h1, h2, h3, h4, h5, h6 {
   padding: 8px 0;
   font-size: 0.78rem;
   overflow: hidden;
+  position: relative;
 }
 
 .ticker-inner {
   display: flex;
   align-items: center;
   gap: 16px;
+  overflow: hidden;
 }
 
 .ticker-label {
@@ -260,13 +262,24 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.08em;
   font-size: 0.68rem;
   white-space: nowrap;
+  flex-shrink: 0;
+  z-index: 2;
 }
 
 .ticker-text {
   color: var(--text-muted);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: inline-block;
+  animation: ticker-marquee 32s linear infinite;
+}
+
+.ticker-text:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Hero Section */
