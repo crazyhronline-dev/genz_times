@@ -165,7 +165,7 @@ export default function Footer() {
         <div className="pt-10 mt-10 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} GenZ Time. All rights reserved. Specialized in consumer hardware & tech gadgets.</p>
           <p className="font-mono text-slate-400">
-            Engineered with Next.js SSR • Ultra-Fast SEO Architecture
+            Powered By - CrazyHR Technologies Pvt. Ltd.
           </p>
         </div>
       </div>

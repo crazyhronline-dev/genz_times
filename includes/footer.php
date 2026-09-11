@@ -94,7 +94,7 @@
 
       <div class="footer-bottom">
         <div>
-          &copy; <?= date('Y') ?> <strong><?= SITE_NAME ?></strong>. All rights reserved. Built for high-ranking Google E-E-A-T search performance.
+          &copy; <?= date('Y') ?> <strong><?= SITE_NAME ?></strong>. All rights reserved. • Powered By - CrazyHR Technologies Pvt. Ltd.
         </div>
         <div style="display: flex; gap: 16px;">
           <a href="<?= url('sitemap.php') ?>">XML Sitemap</a>
