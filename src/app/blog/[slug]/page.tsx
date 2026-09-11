@@ -76,7 +76,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// Generate static params for fast rendering & SEO indexing
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const dynamicParams = true;
+
+// Generate static params for initial build & SEO indexing
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({

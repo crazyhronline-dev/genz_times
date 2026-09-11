@@ -36,6 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   return CATEGORIES.map((cat) => ({
     slug: cat.slug,
