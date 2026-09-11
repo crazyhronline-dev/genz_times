@@ -5,11 +5,14 @@ import BlogListClient from './BlogListClient';
 import { Cpu, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Hardware Reviews, Benchmarks & Tech Gadgets Archive',
-  description: 'Browse the complete index of GenZ Time hands-on reviews, teardowns, and benchmark reports across smartphones, spatial computing, laptops, and smart audio.',
+  title: 'Every Gadget We\'ve Ever Tested — Full Review Archive | GenZ Time',
+  description: 'Browse every smartphone, laptop, earbud, drone, and AI gadget we\'ve personally tested and scored. Filter by category, sort by GenZ Lab Score, or search by brand — no sponsored content, ever.',
   openGraph: {
-    title: 'Hardware Reviews, Benchmarks & Tech Gadgets Archive | GenZ Time',
-    description: 'Browse the complete index of GenZ Time hands-on reviews, teardowns, and benchmark reports across smartphones, spatial computing, laptops, and smart audio.',
+    title: 'Every Gadget We\'ve Ever Tested — Full Review Archive | GenZ Time',
+    description: 'Browse every smartphone, laptop, earbud, drone, and AI gadget we\'ve personally tested and scored. No sponsored rankings. Real hands-on data from the GenZ Time lab.',
+  },
+  alternates: {
+    canonical: 'https://genztime.com/blog',
   },
 };
 

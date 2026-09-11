@@ -16,10 +16,14 @@ import {
 import { SITE_CONFIG } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'About GenZ Time | Hardware Testing Lab & Editorial Standards',
-  description: 'Learn about GenZ Time, our independent gadget testing laboratory, standardized benchmarking protocols, and editorial team.',
+  title: 'About GenZ Time — Who We Are, How We Test & Why You Can Trust Us',
+  description: 'GenZ Time is an independent tech review publication built for the next generation. We buy or borrow devices, test them for weeks, and publish results no brand can influence. Meet the team and our testing standards.',
   alternates: {
     canonical: `${SITE_CONFIG.url}/about`,
+  },
+  openGraph: {
+    title: 'About GenZ Time — Who We Are, How We Test & Why You Can Trust Us',
+    description: 'GenZ Time is an independent tech review publication built for the next generation. We buy or borrow devices, test them for weeks, and publish results no brand can influence.',
   },
 };
 

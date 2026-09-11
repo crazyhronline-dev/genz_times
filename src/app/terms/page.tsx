@@ -4,10 +4,14 @@ import { FileText, CheckCircle } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | GenZ Time',
-  description: 'Terms and conditions for browsing GenZ Time and quoting our benchmark data.',
+  title: 'Terms of Use — What You Can & Can\'t Do With GenZ Time Content',
+  description: 'Our terms are written in plain English, not legal jargon. Understand your rights when reading our reviews, sharing our benchmark data, or embedding our content. Short version: credit us, don\'t steal our work.',
   alternates: {
     canonical: `${SITE_CONFIG.url}/terms`,
+  },
+  openGraph: {
+    title: 'Terms of Use — What You Can & Can\'t Do With GenZ Time Content',
+    description: 'Our terms are written in plain English, not legal jargon. Understand your rights when reading, sharing, or embedding GenZ Time content.',
   },
 };
 

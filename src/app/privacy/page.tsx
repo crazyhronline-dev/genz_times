@@ -4,10 +4,14 @@ import { Shield, Lock } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | GenZ Time',
-  description: 'GenZ Time Privacy Policy explaining data protection, analytics, and cookie transparency.',
+  title: 'Privacy Policy — How GenZ Time Handles Your Data',
+  description: 'We keep it simple: GenZ Time does not sell your data, ever. Read our straightforward privacy policy to understand what we collect, why we collect it, and how you stay in full control.',
   alternates: {
     canonical: `${SITE_CONFIG.url}/privacy`,
+  },
+  openGraph: {
+    title: 'Privacy Policy — How GenZ Time Handles Your Data',
+    description: 'We keep it simple: GenZ Time does not sell your data, ever. Read our straightforward privacy policy.',
   },
 };
 

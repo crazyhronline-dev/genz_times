@@ -4,10 +4,14 @@ import { ShieldCheck, CheckCircle2, AlertTriangle, FileText, Lock } from 'lucide
 import { SITE_CONFIG } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Editorial Standards & Testing Disclosure | GenZ Time',
-  description: 'Our rigorous guidelines for review units, testing ethics, affiliate links, and editorial independence.',
+  title: 'How We Review Gadgets — Our Testing Standards & Editorial Independence',
+  description: 'Transparency is everything. Read exactly how GenZ Time tests devices, who funds our work, how we handle review units, and why no tech brand has ever changed one of our scores. Our editorial integrity is non-negotiable.',
   alternates: {
     canonical: `${SITE_CONFIG.url}/editorial-disclosure`,
+  },
+  openGraph: {
+    title: 'How We Review Gadgets — Our Testing Standards & Editorial Independence',
+    description: 'Transparency is everything. Read exactly how GenZ Time tests devices and why no tech brand has ever changed one of our scores.',
   },
 };
 
