@@ -2,8 +2,8 @@ import { BlogPost } from "@/types/blog";
 
 export const SITE_CONFIG = {
   name: "GenZ Time",
-  title: "GenZ Time — Real Gadget Reviews, Benchmarks & Next-Gen Tech for Gen Z",
-  description: "We personally test every device before writing a single word. GenZ Time delivers honest smartphone reviews, laptop benchmarks, AI gadget breakdowns, and next-gen tech coverage trusted by 18–35 year olds who demand the truth about their tech.",
+  title: "GenZ Time | Real Gadget Reviews, Lab Benchmarks & Next-Gen Tech",
+  description: "We test every device with our own hands before publishing. GenZ Time delivers honest smartphone reviews, laptop benchmarks, AI gadget deep-dives, and next-gen hardware tests built for Gen Z creators and tech enthusiasts who want real data.",
   url: "https://genztime.com",
   ogImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1400&q=80",
   twitterHandle: "@GenZTimeTech",
