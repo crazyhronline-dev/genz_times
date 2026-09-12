@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { PromoDeal } from '@/types/deal';
+import { generateAutoDealSeo } from './deals-seo';
 
 const DEALS_FILE = path.join(process.cwd(), 'data', 'deals.json');
 
@@ -19,7 +20,19 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     isFeatured: true,
     isActive: true,
     expiresAt: '2026-10-31',
-    createdAt: new Date().toISOString(),
+    tags: ['samsung-promo', 'galaxy-s25-ultra', 'smartphones-deals', 'verified-coupon', 'trade-in-discount'],
+    seoKeywords: [
+      'samsung promo code 2026',
+      'galaxy s25 ultra discount',
+      'samsung coupon code',
+      'samsung trade in voucher',
+      'best smartphone deals 2026',
+      'samsung checkout discount'
+    ],
+    metaTitle: 'Samsung Galaxy S25 Ultra Promo Code ($150 OFF) 2026 | GenZ Time',
+    metaDescription: 'Verified $150 OFF promo code for Samsung Galaxy S25 Ultra at Samsung Store. Tested daily by GenZ Time lab. Instant checkout savings.',
+    verifiedAt: '2026-09-12T19:00:00.000Z',
+    createdAt: '2026-09-12T19:00:00.000Z',
     clicks: 142,
     copiedCount: 89,
   },
@@ -37,7 +50,18 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     isFeatured: true,
     isActive: true,
     expiresAt: '2026-11-15',
-    createdAt: new Date().toISOString(),
+    tags: ['nordvpn-promo', 'vpn-deals', '72off', 'verified-coupon', 'cloud-security'],
+    seoKeywords: [
+      'nordvpn promo code 2026',
+      'nordvpn coupon code',
+      'nordvpn 72 off discount',
+      'best vpn deals 2026',
+      'nordvpn free extra months'
+    ],
+    metaTitle: 'NordVPN Promo Code (72% OFF + 3 Months Free) 2026 | GenZ Time',
+    metaDescription: 'Exclusive 72% OFF NordVPN coupon code plus 3 free months. Verified working voucher code for secure tech browsing tested by GenZ Time.',
+    verifiedAt: '2026-09-12T19:00:00.000Z',
+    createdAt: '2026-09-12T19:00:00.000Z',
     clicks: 310,
     copiedCount: 220,
   },
@@ -55,7 +79,18 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     isFeatured: false,
     isActive: true,
     expiresAt: '2026-10-15',
-    createdAt: new Date().toISOString(),
+    tags: ['apple-promo', 'macbook-pro-m4', 'laptops-deals', 'verified-coupon', '200off'],
+    seoKeywords: [
+      'macbook pro m4 discount code',
+      'apple promo code 2026',
+      'apple macbook coupon',
+      'bh photo apple discount',
+      'best laptop deals 2026'
+    ],
+    metaTitle: 'MacBook Pro M4 Pro $200 OFF Promo Code 2026 | GenZ Time',
+    metaDescription: 'Save $200 instantly on M4 Pro MacBook Pro models. Verified working Apple promo code tested by GenZ Time lab.',
+    verifiedAt: '2026-09-12T19:00:00.000Z',
+    createdAt: '2026-09-12T19:00:00.000Z',
     clicks: 98,
     copiedCount: 65,
   },
@@ -73,7 +108,17 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     isFeatured: true,
     isActive: true,
     expiresAt: '2026-09-30',
-    createdAt: new Date().toISOString(),
+    tags: ['sony-promo', 'amazon-coupon', 'audio-deals', 'wh1000xm5', 'verified-coupon'],
+    seoKeywords: [
+      'sony wh1000xm5 coupon code',
+      'sony headphones promo code 2026',
+      'amazon electronics discount',
+      'best anc headphones deals'
+    ],
+    metaTitle: 'Sony WH-1000XM5 Coupon Code (25% OFF) 2026 | GenZ Time',
+    metaDescription: 'Get 25% OFF Sony WH-1000XM5 wireless noise-canceling headphones. Verified discount code for Amazon checkout tested by GenZ Time.',
+    verifiedAt: '2026-09-12T19:00:00.000Z',
+    createdAt: '2026-09-12T19:00:00.000Z',
     clicks: 185,
     copiedCount: 112,
   },
@@ -91,7 +136,17 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     isFeatured: false,
     isActive: true,
     expiresAt: '2026-10-20',
-    createdAt: new Date().toISOString(),
+    tags: ['asus-promo', 'rog-ally-x', 'gaming-deals', 'handheld-discount', 'verified-coupon'],
+    seoKeywords: [
+      'rog ally x discount code',
+      'asus promo code 2026',
+      'rog gaming console voucher',
+      'asus coupon code 2026'
+    ],
+    metaTitle: 'ASUS ROG Ally X Promo Code ($80 OFF) 2026 | GenZ Time',
+    metaDescription: 'Save $80 on ASUS ROG Ally X gaming handheld console. Tested working promo code and instant checkout voucher from GenZ Time.',
+    verifiedAt: '2026-09-12T19:00:00.000Z',
+    createdAt: '2026-09-12T19:00:00.000Z',
     clicks: 74,
     copiedCount: 48,
   },
@@ -100,8 +155,34 @@ export const DEFAULT_DEALS: PromoDeal[] = [
 export async function getAllDeals(): Promise<PromoDeal[]> {
   try {
     const data = await fs.readFile(DEALS_FILE, 'utf-8');
-    const deals: PromoDeal[] = JSON.parse(data);
-    return deals && deals.length > 0 ? deals : DEFAULT_DEALS;
+    let deals: PromoDeal[] = JSON.parse(data);
+    if (!deals || !Array.isArray(deals) || deals.length === 0) {
+      deals = DEFAULT_DEALS;
+    }
+
+    // Ensure all deals have rich SEO keywords, tags, and meta information
+    let needsRewrite = false;
+    const enrichedDeals = deals.map((deal) => {
+      if (!deal.tags || deal.tags.length === 0 || !deal.seoKeywords || deal.seoKeywords.length === 0) {
+        needsRewrite = true;
+        const autoSeo = generateAutoDealSeo(deal);
+        return {
+          ...deal,
+          tags: deal.tags && deal.tags.length > 0 ? deal.tags : autoSeo.tags,
+          seoKeywords: deal.seoKeywords && deal.seoKeywords.length > 0 ? deal.seoKeywords : autoSeo.seoKeywords,
+          metaTitle: deal.metaTitle || autoSeo.metaTitle,
+          metaDescription: deal.metaDescription || autoSeo.metaDescription,
+          verifiedAt: deal.verifiedAt || deal.createdAt || new Date().toISOString(),
+        };
+      }
+      return deal;
+    });
+
+    if (needsRewrite) {
+      await fs.writeFile(DEALS_FILE, JSON.stringify(enrichedDeals, null, 2), 'utf-8');
+    }
+
+    return enrichedDeals;
   } catch (error) {
     // If file doesn't exist, seed it
     await fs.mkdir(path.dirname(DEALS_FILE), { recursive: true });
@@ -125,6 +206,27 @@ export async function saveDeal(dealData: Partial<PromoDeal> & { title: string; s
   const id = dealData.id || `deal-${Date.now()}`;
   const now = new Date().toISOString();
 
+  // Automatic SEO keywords and tags generation
+  const autoSeo = generateAutoDealSeo({
+    title: dealData.title,
+    store: dealData.store,
+    discountText: dealData.discountText,
+    category: dealData.category || 'smartphones',
+    description: dealData.description,
+    promoCode: dealData.promoCode,
+  });
+
+  const finalTags = (Array.isArray(dealData.tags) && dealData.tags.length > 0)
+    ? Array.from(new Set([...dealData.tags.map(t => t.trim().toLowerCase().replace(/^#/, '')), ...autoSeo.tags]))
+    : autoSeo.tags;
+
+  const finalKeywords = (Array.isArray(dealData.seoKeywords) && dealData.seoKeywords.length > 0)
+    ? Array.from(new Set([...dealData.seoKeywords.map(k => k.trim().toLowerCase()), ...autoSeo.seoKeywords]))
+    : autoSeo.seoKeywords;
+
+  const finalMetaTitle = dealData.metaTitle?.trim() || autoSeo.metaTitle;
+  const finalMetaDescription = dealData.metaDescription?.trim() || autoSeo.metaDescription;
+
   const newDeal: PromoDeal = {
     id,
     title: dealData.title.trim(),
@@ -139,6 +241,12 @@ export async function saveDeal(dealData: Partial<PromoDeal> & { title: string; s
     isFeatured: Boolean(dealData.isFeatured),
     isActive: dealData.isActive !== undefined ? Boolean(dealData.isActive) : true,
     expiresAt: dealData.expiresAt?.trim() || undefined,
+    tags: finalTags,
+    seoKeywords: finalKeywords,
+    metaTitle: finalMetaTitle,
+    metaDescription: finalMetaDescription,
+    verifiedAt: dealData.verifiedAt || now,
+    terms: dealData.terms?.trim() || undefined,
     createdAt: dealData.createdAt || now,
     updatedAt: now,
     clicks: dealData.clicks || 0,

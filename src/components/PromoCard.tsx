@@ -18,9 +18,10 @@ import {
 
 interface PromoCardProps {
   deal: PromoDeal;
+  onSelectTag?: (tag: string) => void;
 }
 
-export default function PromoCard({ deal }: PromoCardProps) {
+export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
   // If hideCode is true, the code starts concealed (masked 50%)
   const [isRevealed, setIsRevealed] = useState<boolean>(!deal.hideCode);
   const [copied, setCopied] = useState(false);
@@ -76,20 +77,33 @@ export default function PromoCard({ deal }: PromoCardProps) {
   };
 
   return (
-    <article className="group relative rounded-3xl bg-tech-900/60 border border-slate-800/90 hover:border-tech-cyan/50 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl hover:shadow-glow">
+    <article 
+      itemScope 
+      itemType="https://schema.org/Offer" 
+      id={deal.id}
+      className="group relative rounded-3xl bg-tech-900/60 border border-slate-800/90 hover:border-tech-cyan/50 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl hover:shadow-glow"
+    >
+      <meta itemProp="name" content={deal.metaTitle || deal.title} />
+      <meta itemProp="description" content={deal.metaDescription || deal.description} />
+      <meta itemProp="price" content={deal.discountText} />
+      <meta itemProp="priceCurrency" content="USD" />
+      <meta itemProp="availability" content="https://schema.org/InStock" />
+      {deal.expiresAt && <meta itemProp="priceValidUntil" content={deal.expiresAt} />}
+
       {/* Top Banner Image with Badges */}
       <div className="relative aspect-[16/9] w-full bg-tech-950 overflow-hidden">
         <img
           src={deal.imageUrl}
-          alt={deal.title}
+          alt={deal.metaTitle || deal.title}
+          itemProp="image"
           loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-tech-950 via-tech-950/40 to-transparent" />
 
         {/* Store Name Badge */}
-        <div className="absolute top-3.5 left-3.5 z-10">
-          <span className="px-3 py-1 rounded-xl text-xs font-mono font-bold bg-tech-950/85 backdrop-blur-md text-white border border-slate-700/80 shadow-md flex items-center gap-1.5">
+        <div className="absolute top-3.5 left-3.5 z-10" itemProp="seller" itemScope itemType="https://schema.org/Organization">
+          <span itemProp="name" className="px-3 py-1 rounded-xl text-xs font-mono font-bold bg-tech-950/85 backdrop-blur-md text-white border border-slate-700/80 shadow-md flex items-center gap-1.5">
             <Store className="w-3.5 h-3.5 text-tech-cyan" />
             <span>{deal.store}</span>
           </span>
@@ -120,6 +134,27 @@ export default function PromoCard({ deal }: PromoCardProps) {
           <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
             {deal.description}
           </p>
+
+          {/* High-Ranking Tag Chips */}
+          {deal.tags && deal.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-3">
+              {deal.tags.slice(0, 4).map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectTag?.(tag);
+                  }}
+                  className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/5 hover:bg-tech-cyan/20 text-slate-400 hover:text-tech-cyan border border-slate-800 hover:border-tech-cyan/40 transition flex items-center gap-0.5"
+                  title={`Filter by #${tag}`}
+                >
+                  <Tag className="w-2.5 h-2.5 opacity-60" />
+                  <span>#{tag}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Expiry Date & Category */}

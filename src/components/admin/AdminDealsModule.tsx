@@ -25,6 +25,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import PromoCard from '@/components/PromoCard';
+import { generateAutoDealSeo } from '@/lib/deals-seo';
 
 interface AdminDealsModuleProps {
   deals: PromoDeal[];
@@ -67,6 +68,13 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
   const [isFeatured, setIsFeatured] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [expiresAt, setExpiresAt] = useState('');
+
+  // SEO & Ranking fields
+  const [tags, setTags] = useState('');
+  const [seoKeywords, setSeoKeywords] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [terms, setTerms] = useState('');
 
   const showNotice = (msg: string) => {
     setNotice(msg);
@@ -113,6 +121,11 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     setIsFeatured(false);
     setIsActive(true);
     setExpiresAt('');
+    setTags('');
+    setSeoKeywords('');
+    setMetaTitle('');
+    setMetaDescription('');
+    setTerms('');
     setIsModalOpen(true);
   };
 
@@ -130,7 +143,32 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     setIsFeatured(Boolean(deal.isFeatured));
     setIsActive(Boolean(deal.isActive));
     setExpiresAt(deal.expiresAt || '');
+    setTags((deal.tags || []).join(', '));
+    setSeoKeywords((deal.seoKeywords || []).join(', '));
+    setMetaTitle(deal.metaTitle || '');
+    setMetaDescription(deal.metaDescription || '');
+    setTerms(deal.terms || '');
     setIsModalOpen(true);
+  };
+
+  const handleAutoGenerateSeo = () => {
+    if (!title.trim() && !store.trim()) {
+      alert('Please enter at least a Deal Title and Store / Brand name first.');
+      return;
+    }
+    const res = generateAutoDealSeo({
+      title,
+      store,
+      discountText,
+      category,
+      description,
+      promoCode,
+    });
+    setTags(res.tags.join(', '));
+    setSeoKeywords(res.seoKeywords.join(', '));
+    setMetaTitle(res.metaTitle);
+    setMetaDescription(res.metaDescription);
+    showNotice(`✨ Generated ${res.seoKeywords.length} ranking keywords & ${res.tags.length} SEO tags!`);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,6 +224,11 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
         isFeatured,
         isActive,
         expiresAt: expiresAt.trim() || undefined,
+        tags: tags ? tags.split(',').map((s) => s.trim().replace(/^#/, '')).filter(Boolean) : undefined,
+        seoKeywords: seoKeywords ? seoKeywords.split(',').map((s) => s.trim()).filter(Boolean) : undefined,
+        metaTitle: metaTitle.trim() || undefined,
+        metaDescription: metaDescription.trim() || undefined,
+        terms: terms.trim() || undefined,
       };
 
       const url = editingDeal ? `/api/deals/${editingDeal.id}` : '/api/deals';
@@ -264,6 +307,11 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     isFeatured,
     isActive,
     expiresAt: expiresAt || '2026-10-31',
+    tags: tags ? tags.split(',').map((s) => s.trim().replace(/^#/, '')).filter(Boolean) : ['samsung-promo', 'verified-coupon'],
+    seoKeywords: seoKeywords ? seoKeywords.split(',').map((s) => s.trim()).filter(Boolean) : undefined,
+    metaTitle: metaTitle || undefined,
+    metaDescription: metaDescription || undefined,
+    terms: terms || undefined,
     createdAt: new Date().toISOString(),
   };
 
@@ -677,7 +725,7 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
 
                   {/* Description */}
                   <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1">Description & Terms</label>
+                    <label className="block text-xs font-mono text-slate-400 mb-1">Description</label>
                     <textarea
                       rows={2}
                       value={description}
@@ -685,6 +733,109 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
                       placeholder="Details, eligibility terms, or caveats for this deal..."
                       className="w-full px-3 py-2 bg-tech-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-tech-cyan leading-relaxed"
                     />
+                  </div>
+
+                  {/* SEO & Search Engine Ranking Engine */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/10 via-tech-900/40 to-tech-950 border border-amber-500/30 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-400" />
+                        <span className="text-xs font-bold font-mono text-amber-300 uppercase tracking-wider">
+                          Google Search & SEO Ranking Suite
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleAutoGenerateSeo}
+                        className="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-tech-950 text-[11px] font-mono font-bold flex items-center gap-1.5 transition shadow-glow"
+                        title="Auto-generate high ranking keywords and tags based on Title & Store"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        <span>⚡ Auto-Generate SEO</span>
+                      </button>
+                    </div>
+
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      Optimizes every deal with Schema.org Offer structured data, high-intent ranking keywords, and Google SERP snippets for #1 search placement.
+                    </p>
+
+                    {/* Meta Title */}
+                    <div>
+                      <div className="flex items-center justify-between text-[11px] font-mono mb-1">
+                        <label className="text-slate-400">Google SERP Title</label>
+                        <span className={metaTitle.length > 65 ? 'text-amber-400' : 'text-slate-500'}>
+                          {metaTitle.length} / 60 chars
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={metaTitle}
+                        onChange={(e) => setMetaTitle(e.target.value)}
+                        placeholder="e.g. Samsung Galaxy S25 Ultra Promo Code ($150 OFF) 2026 | GenZ Time"
+                        className="w-full px-3 py-1.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    {/* Meta Description */}
+                    <div>
+                      <div className="flex items-center justify-between text-[11px] font-mono mb-1">
+                        <label className="text-slate-400">Google Snippet Description</label>
+                        <span className={metaDescription.length > 165 ? 'text-amber-400' : 'text-slate-500'}>
+                          {metaDescription.length} / 160 chars
+                        </span>
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={metaDescription}
+                        onChange={(e) => setMetaDescription(e.target.value)}
+                        placeholder="Verified discount code tested by GenZ Time lab..."
+                        className="w-full px-3 py-1.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 text-[11px] leading-relaxed"
+                      />
+                    </div>
+
+                    {/* Target Ranking Keywords */}
+                    <div>
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">
+                        Target Google Ranking Keywords (comma-separated)
+                      </label>
+                      <input
+                        type="text"
+                        value={seoKeywords}
+                        onChange={(e) => setSeoKeywords(e.target.value)}
+                        placeholder="samsung promo code 2026, galaxy s25 discount, verified coupon code"
+                        className="w-full px-3 py-1.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono text-[11px]"
+                      />
+                    </div>
+
+                    {/* Tags for Search Indexing */}
+                    <div>
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">
+                        Display Tags (comma-separated, without #)
+                      </label>
+                      <input
+                        type="text"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                        placeholder="samsung-promo, galaxy-s25, verified-coupon"
+                        className="w-full px-3 py-1.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono text-[11px]"
+                      />
+                    </div>
+
+                    {/* Live Google Search Preview Box */}
+                    <div className="p-3 rounded-xl bg-tech-950/90 border border-slate-800 space-y-1">
+                      <span className="text-[10px] font-mono uppercase text-slate-500 block">
+                        Google Search Results Preview (SERP)
+                      </span>
+                      <div className="text-[11px] text-slate-400 font-mono truncate">
+                        https://genztime.com &rsaquo; deals &rsaquo; #{store.toLowerCase().replace(/[^a-z0-9]/g, '') || 'deal'}
+                      </div>
+                      <div className="text-sm font-bold text-sky-400 hover:underline cursor-pointer truncate">
+                        {metaTitle || title || 'Promo Code & Discount Voucher 2026 | GenZ Time'}
+                      </div>
+                      <div className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                        {metaDescription || description || 'Verified tech discount and promo code tested by GenZ Time lab team. 100% working.'}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Active & Featured Switches */}

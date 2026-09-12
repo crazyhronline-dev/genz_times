@@ -43,15 +43,18 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
       .filter((deal) => {
         if (!deal.isActive) return false;
 
-        // Search match
+        // Search match across title, store, desc, code, discount, tags, and SEO keywords
         if (searchQuery.trim()) {
-          const q = searchQuery.toLowerCase();
+          const q = searchQuery.toLowerCase().replace(/^#/, '');
           const matchTitle = deal.title.toLowerCase().includes(q);
           const matchStore = deal.store.toLowerCase().includes(q);
           const matchDesc = deal.description?.toLowerCase().includes(q);
           const matchCode = deal.promoCode?.toLowerCase().includes(q);
           const matchDiscount = deal.discountText.toLowerCase().includes(q);
-          if (!matchTitle && !matchStore && !matchDesc && !matchCode && !matchDiscount) {
+          const matchTags = (deal.tags || []).some(t => t.toLowerCase().includes(q) || q.includes(t.toLowerCase()));
+          const matchSeo = (deal.seoKeywords || []).some(k => k.toLowerCase().includes(q) || q.includes(k.toLowerCase()));
+          
+          if (!matchTitle && !matchStore && !matchDesc && !matchCode && !matchDiscount && !matchTags && !matchSeo) {
             return false;
           }
         }
@@ -83,6 +86,14 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
   }, [initialDeals, searchQuery, selectedCategory, filterCodeOnly, sortBy]);
+
+  const allPopularTags = useMemo(() => {
+    const set = new Set<string>();
+    initialDeals.forEach((d) => {
+      (d.tags || []).forEach((t) => set.add(t));
+    });
+    return Array.from(set).slice(0, 10);
+  }, [initialDeals]);
 
   return (
     <div className="min-h-screen pb-24">
@@ -199,6 +210,32 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
               );
             })}
           </div>
+
+          {/* Popular Ranking Tags Bar */}
+          {allPopularTags.length > 0 && (
+            <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-800/60 text-xs font-mono">
+              <span className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mr-1 flex items-center gap-1">
+                <Tag className="w-3 h-3 text-amber-400" />
+                Popular Tags:
+              </span>
+              {allPopularTags.map((tag) => {
+                const isSelected = searchQuery.toLowerCase() === tag.toLowerCase();
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => setSearchQuery(isSelected ? '' : tag)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] transition flex items-center gap-1 ${
+                      isSelected
+                        ? 'bg-amber-400/25 text-amber-300 border border-amber-400/50 font-bold'
+                        : 'bg-tech-950/60 text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    <span>#{tag}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Results Info Bar */}
@@ -235,7 +272,11 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
         {filteredDeals.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredDeals.map((deal) => (
-              <PromoCard key={deal.id} deal={deal} />
+              <PromoCard 
+                key={deal.id} 
+                deal={deal} 
+                onSelectTag={(tag) => setSearchQuery(tag)}
+              />
             ))}
           </div>
         ) : (

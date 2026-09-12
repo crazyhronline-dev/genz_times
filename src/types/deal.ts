@@ -12,6 +12,12 @@ export interface PromoDeal {
   isFeatured?: boolean;
   isActive: boolean;
   expiresAt?: string; // e.g. "2026-10-31" or "Limited Time"
+  tags?: string[]; // e.g. ["samsung-promo", "galaxy-s25", "verified-coupon"]
+  seoKeywords?: string[]; // Target search engine ranking keywords e.g. ["samsung promo code 2026", "galaxy s25 coupon"]
+  metaTitle?: string; // Custom Google SERP title
+  metaDescription?: string; // Custom Google snippet
+  verifiedAt?: string; // Date tested by GenZ Time lab
+  terms?: string; // Short terms and conditions / eligibility
   createdAt: string;
   updatedAt?: string;
   clicks?: number; // Total referral link clicks
