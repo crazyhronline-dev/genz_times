@@ -92,7 +92,7 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
 
       {/* Top Banner Image with Badges */}
       <div className={`relative aspect-[16/9] w-full overflow-hidden flex items-center justify-center ${
-        deal.imageUrl.includes('logos') || deal.imageUrl.includes('.png') ? 'bg-slate-900/90' : 'bg-tech-950'
+        deal.imageUrl.includes('logos') ? 'bg-slate-900/90' : 'bg-tech-950'
       }`}>
         <img
           src={deal.imageUrl}
@@ -100,7 +100,7 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
           itemProp="image"
           loading="lazy"
           className={`transition-transform duration-500 group-hover:scale-105 ${
-            deal.imageUrl.includes('logos') || deal.imageUrl.includes('.png')
+            deal.imageUrl.includes('logos')
               ? 'w-auto h-auto max-w-[75%] max-h-[65%] object-contain drop-shadow-md'
               : 'w-full h-full object-cover'
           }`}
