@@ -179,8 +179,10 @@ export default function AdminDashboardPage() {
     system: 'System Diagnostics & Cache',
   };
 
+  const activeRole = currentUser?.role || 'author';
+
   const handleSelectModule = (m: AdminModule) => {
-    if (currentUser && !hasModuleAccess(currentUser.role, m)) {
+    if (!hasModuleAccess(activeRole, m)) {
       setActiveModule('overview');
       return;
     }
@@ -317,7 +319,8 @@ export default function AdminDashboardPage() {
                 posts={posts}
                 categories={categories}
                 unreadEnquiries={unreadEnquiryCount}
-                onSelectModule={setActiveModule}
+                currentUserRole={activeRole}
+                onSelectModule={handleSelectModule}
                 onEditPost={handleEditPost}
               />
             )}
@@ -326,6 +329,7 @@ export default function AdminDashboardPage() {
               <AdminArticlesModule
                 posts={posts}
                 categories={categories}
+                currentUserRole={activeRole}
                 onEditPost={handleEditPost}
                 onNewPost={handleNewPost}
                 onRefresh={fetchData}
@@ -354,37 +358,77 @@ export default function AdminDashboardPage() {
             )}
 
             {activeModule === 'categories' && (
-              <AdminCategoriesModule
-                categories={categories}
-                posts={posts}
-                onRefresh={fetchData}
-              />
+              hasModuleAccess(activeRole, 'categories') ? (
+                <AdminCategoriesModule
+                  categories={categories}
+                  posts={posts}
+                  onRefresh={fetchData}
+                />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Category Manager</span>
+                  <p className="text-xs text-slate-400">Your role ({ROLE_CONFIG[activeRole]?.label}) is restricted from managing sectors.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
             )}
 
             {activeModule === 'reviews' && (
-              <AdminReviewsModule
-                posts={posts}
-                onEditPost={handleEditPost}
-                onRefresh={fetchData}
-              />
+              hasModuleAccess(activeRole, 'reviews') ? (
+                <AdminReviewsModule
+                  posts={posts}
+                  onEditPost={handleEditPost}
+                  onRefresh={fetchData}
+                />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Reviews Matrix</span>
+                  <p className="text-xs text-slate-400">Your role ({ROLE_CONFIG[activeRole]?.label}) does not have lab score reviewer clearance.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
             )}
 
             {activeModule === 'enquiries' && (
-              <AdminEnquiriesModule
-                enquiries={enquiries}
-                onRefresh={fetchData}
-              />
+              hasModuleAccess(activeRole, 'enquiries') ? (
+                <AdminEnquiriesModule
+                  enquiries={enquiries}
+                  onRefresh={fetchData}
+                />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Enquiries Inbox</span>
+                  <p className="text-xs text-slate-400">Your role ({ROLE_CONFIG[activeRole]?.label}) cannot view contact form submissions.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
             )}
 
             {activeModule === 'team' && (
-              <AdminTeamModule
-                currentUserRole={currentUser?.role || 'admin'}
-                onRefresh={fetchData}
-              />
+              hasModuleAccess(activeRole, 'team') ? (
+                <AdminTeamModule
+                  currentUserRole={activeRole}
+                  onRefresh={fetchData}
+                />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Editorial Team</span>
+                  <p className="text-xs text-slate-400">Only Super Admin accounts can manage team credentials and access permissions.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
             )}
 
             {activeModule === 'system' && (
-              <AdminSystemModule />
+              hasModuleAccess(activeRole, 'system') ? (
+                <AdminSystemModule />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: System Diagnostics</span>
+                  <p className="text-xs text-slate-400">Server diagnostics and cache control require Super Admin access.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
             )}
           </main>
 

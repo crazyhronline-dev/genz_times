@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { EditorialUser, UserRole } from '@/types/user';
-import { ROLE_CONFIG, ROLE_PERMISSIONS } from '@/lib/auth';
+import { ROLE_CONFIG, ROLE_PERMISSIONS, hasModuleAccess } from '@/lib/auth';
 import { 
   Users, 
   UserPlus, 
@@ -28,6 +28,17 @@ interface AdminTeamModuleProps {
   currentUserRole?: UserRole;
   onRefresh?: () => void;
 }
+
+const ALL_MODULES_LIST = [
+  { id: 'overview', label: 'Command Center' },
+  { id: 'articles', label: 'All Articles' },
+  { id: 'publish', label: 'Publish Studio' },
+  { id: 'reviews', label: 'Reviews & Lab Matrix' },
+  { id: 'enquiries', label: 'Contact Inquiries' },
+  { id: 'categories', label: 'Category Manager' },
+  { id: 'team', label: 'Editorial Team' },
+  { id: 'system', label: 'System Diagnostics' },
+];
 
 export default function AdminTeamModule({
   currentUserRole = 'admin',
@@ -446,9 +457,14 @@ export default function AdminTeamModule({
                     </td>
 
                     <td className="py-3.5 pr-4">
-                      <span className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-bold ${roleMeta.badgeColor}`}>
-                        {roleMeta.label}
-                      </span>
+                      <div className="space-y-1">
+                        <span className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-bold ${roleMeta.badgeColor}`}>
+                          {roleMeta.label}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400 block">
+                          {ROLE_PERMISSIONS[user.role]?.length || 3} of 8 Modules Active
+                        </span>
+                      </div>
                     </td>
 
                     <td className="py-3.5 pr-4">
@@ -620,9 +636,37 @@ export default function AdminTeamModule({
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-tech-900/60 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-                <span className="text-white font-bold block">Assigned Role Privilege:</span>
-                <span>{ROLE_CONFIG[formData.role]?.description}</span>
+              <div className="p-3.5 rounded-2xl bg-tech-900/60 border border-slate-800 text-[11px] text-slate-400 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-bold block">Assigned Role Clearance:</span>
+                  <span className="font-mono text-tech-cyan text-[10px] font-bold">
+                    {ROLE_PERMISSIONS[formData.role]?.length || 3} of 8 Modules Active
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">{ROLE_CONFIG[formData.role]?.description}</p>
+                
+                <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-800/80">
+                  {ALL_MODULES_LIST.map((mod) => {
+                    const isAllowed = hasModuleAccess(formData.role, mod.id);
+                    return (
+                      <div
+                        key={mod.id}
+                        className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] font-mono ${
+                          isAllowed
+                            ? 'bg-tech-emerald/10 text-tech-emerald border border-tech-emerald/25 font-bold'
+                            : 'bg-rose-500/5 text-slate-500 border border-slate-800'
+                        }`}
+                      >
+                        {isAllowed ? (
+                          <Check className="w-3 h-3 text-tech-emerald shrink-0" />
+                        ) : (
+                          <X className="w-3 h-3 text-rose-500/50 shrink-0" />
+                        )}
+                        <span className="truncate">{mod.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
@@ -716,6 +760,39 @@ export default function AdminTeamModule({
                     onChange={(e) => setEditFormData({ ...editFormData, designation: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-tech-900 border border-slate-700 text-white focus:outline-none focus:border-tech-cyan"
                   />
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-tech-900/60 border border-slate-800 text-[11px] text-slate-400 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-bold block">Assigned Role Clearance:</span>
+                  <span className="font-mono text-tech-cyan text-[10px] font-bold">
+                    {ROLE_PERMISSIONS[editFormData.role]?.length || 3} of 8 Modules Active
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">{ROLE_CONFIG[editFormData.role]?.description}</p>
+                
+                <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-800/80">
+                  {ALL_MODULES_LIST.map((mod) => {
+                    const isAllowed = hasModuleAccess(editFormData.role, mod.id);
+                    return (
+                      <div
+                        key={mod.id}
+                        className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] font-mono ${
+                          isAllowed
+                            ? 'bg-tech-emerald/10 text-tech-emerald border border-tech-emerald/25 font-bold'
+                            : 'bg-rose-500/5 text-slate-500 border border-slate-800'
+                        }`}
+                      >
+                        {isAllowed ? (
+                          <Check className="w-3 h-3 text-tech-emerald shrink-0" />
+                        ) : (
+                          <X className="w-3 h-3 text-rose-500/50 shrink-0" />
+                        )}
+                        <span className="truncate">{mod.label}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

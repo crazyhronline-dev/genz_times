@@ -28,17 +28,19 @@ function AdminLoginForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Check if already logged in
+  const [existingUser, setExistingUser] = useState<{ username: string; name: string; role: string } | null>(null);
+
+  // Check if session exists to display switcher banner
   useEffect(() => {
     fetch('/api/auth/check')
       .then((res) => res.json())
       .then((data) => {
-        if (data.authenticated) {
-          router.push(redirectUrl);
+        if (data.authenticated && data.user) {
+          setExistingUser(data.user);
         }
       })
       .catch(() => {});
-  }, [redirectUrl, router]);
+  }, []);
 
   const handleLogin = async (u = username, p = password) => {
     setError('');
@@ -115,6 +117,23 @@ function AdminLoginForm() {
           </div>
         ) : (
           <form onSubmit={onSubmit} className="space-y-5">
+            {existingUser && (
+              <div className="p-3.5 rounded-2xl bg-tech-cyan/10 border border-tech-cyan/30 flex items-center justify-between text-xs font-mono">
+                <div className="min-w-0 pr-2">
+                  <span className="text-slate-400 block text-[10px] uppercase">Active Session:</span>
+                  <span className="font-bold text-white block truncate">{existingUser.name}</span>
+                  <span className="text-tech-cyan text-[10px] font-bold block uppercase">Role: {existingUser.role}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => router.push(redirectUrl)}
+                  className="px-3 py-1.5 rounded-xl bg-tech-cyan text-tech-950 font-bold text-xs shrink-0 shadow-glow hover:opacity-90"
+                >
+                  Open Dashboard →
+                </button>
+              </div>
+            )}
+
             {error && (
               <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />

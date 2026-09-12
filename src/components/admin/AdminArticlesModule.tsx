@@ -17,10 +17,12 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { BlogPost, CategoryInfo } from '@/types/blog';
+import { UserRole } from '@/types/user';
 
 interface AdminArticlesModuleProps {
   posts: BlogPost[];
   categories: CategoryInfo[];
+  currentUserRole?: UserRole;
   onEditPost: (postId: string) => void;
   onNewPost: () => void;
   onRefresh: () => void;
@@ -29,6 +31,7 @@ interface AdminArticlesModuleProps {
 export default function AdminArticlesModule({
   posts,
   categories,
+  currentUserRole = 'author',
   onEditPost,
   onNewPost,
   onRefresh,
@@ -254,9 +257,12 @@ export default function AdminArticlesModule({
                     <td className="py-3.5 px-3 text-center whitespace-nowrap">
                       <button
                         onClick={() => handleToggleFeatured(post)}
-                        title={post.isFeatured ? 'Click to unfeature' : 'Click to feature on home'}
+                        disabled={currentUserRole === 'author'}
+                        title={currentUserRole === 'author' ? 'Only Editors and Admins can feature articles' : (post.isFeatured ? 'Click to unfeature' : 'Click to feature on home')}
                         className={`p-1.5 rounded-lg border transition ${
-                          post.isFeatured
+                          currentUserRole === 'author'
+                            ? 'opacity-40 cursor-not-allowed border-slate-800 text-slate-600'
+                            : post.isFeatured
                             ? 'bg-amber-400/15 border-amber-400/40 text-amber-300'
                             : 'bg-white/5 border-slate-800 text-slate-600 hover:text-slate-400'
                         }`}
@@ -269,9 +275,12 @@ export default function AdminArticlesModule({
                     <td className="py-3.5 px-3 text-center whitespace-nowrap">
                       <button
                         onClick={() => handleToggleTrending(post)}
-                        title={post.isTrending ? 'Click to remove from marquee' : 'Click to add to trending marquee'}
+                        disabled={currentUserRole === 'author'}
+                        title={currentUserRole === 'author' ? 'Only Editors and Admins can feature in trending' : (post.isTrending ? 'Click to remove from marquee' : 'Click to add to trending marquee')}
                         className={`p-1.5 rounded-lg border transition ${
-                          post.isTrending
+                          currentUserRole === 'author'
+                            ? 'opacity-40 cursor-not-allowed border-slate-800 text-slate-600'
+                            : post.isTrending
                             ? 'bg-tech-emerald/15 border-tech-emerald/40 text-tech-emerald'
                             : 'bg-white/5 border-slate-800 text-slate-600 hover:text-slate-400'
                         }`}
@@ -305,14 +314,16 @@ export default function AdminArticlesModule({
                           <Edit3 className="w-4 h-4" />
                         </button>
 
-                        <button
-                          onClick={() => handleDeletePost(post.id, post.title)}
-                          disabled={deletingId === post.id}
-                          className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition border border-rose-500/20 disabled:opacity-50"
-                          title="Delete review"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {(currentUserRole === 'admin' || currentUserRole === 'editor') && (
+                          <button
+                            onClick={() => handleDeletePost(post.id, post.title)}
+                            disabled={deletingId === post.id}
+                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition border border-rose-500/20 disabled:opacity-50"
+                            title="Delete review"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

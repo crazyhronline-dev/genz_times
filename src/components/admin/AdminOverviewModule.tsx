@@ -21,12 +21,15 @@ import {
   Mail
 } from 'lucide-react';
 import { BlogPost, CategoryInfo } from '@/types/blog';
+import { UserRole } from '@/types/user';
+import { hasModuleAccess } from '@/lib/auth';
 import { AdminModule } from './AdminSidebar';
 
 interface AdminOverviewModuleProps {
   posts: BlogPost[];
   categories: CategoryInfo[];
   unreadEnquiries?: number;
+  currentUserRole?: UserRole;
   onSelectModule: (module: AdminModule) => void;
   onEditPost: (postId: string) => void;
 }
@@ -35,6 +38,7 @@ export default function AdminOverviewModule({
   posts,
   categories,
   unreadEnquiries = 0,
+  currentUserRole = 'author',
   onSelectModule,
   onEditPost,
 }: AdminOverviewModuleProps) {
@@ -94,14 +98,16 @@ export default function AdminOverviewModule({
             <span>New Review</span>
           </button>
 
-          <button
-            onClick={handlePurgeCache}
-            disabled={purging}
-            className="px-4 py-2.5 rounded-xl bg-tech-900/80 hover:bg-tech-900 text-slate-300 hover:text-tech-cyan text-xs font-mono transition flex items-center gap-2 border border-slate-700"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${purging ? 'animate-spin text-tech-cyan' : ''}`} />
-            <span>{purging ? 'Purging...' : 'Purge Cache (1s)'}</span>
-          </button>
+          {currentUserRole === 'admin' && (
+            <button
+              onClick={handlePurgeCache}
+              disabled={purging}
+              className="px-4 py-2.5 rounded-xl bg-tech-900/80 hover:bg-tech-900 text-slate-300 hover:text-tech-cyan text-xs font-mono transition flex items-center gap-2 border border-slate-700"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${purging ? 'animate-spin text-tech-cyan' : ''}`} />
+              <span>{purging ? 'Purging...' : 'Purge Cache (1s)'}</span>
+            </button>
+          )}
 
           <Link
             href="/"
@@ -122,7 +128,7 @@ export default function AdminOverviewModule({
       )}
 
       {/* Unread Inquiries Notification */}
-      {unreadEnquiries > 0 && (
+      {unreadEnquiries > 0 && hasModuleAccess(currentUserRole, 'enquiries') && (
         <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-tech-cyan/15 via-tech-950 to-slate-900 border border-tech-cyan/40 shadow-glow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-tech-cyan/20 border border-tech-cyan/40 text-tech-cyan flex items-center justify-center shrink-0">
@@ -305,12 +311,14 @@ export default function AdminOverviewModule({
                 </p>
               </div>
 
-              <button
-                onClick={() => onSelectModule('categories')}
-                className="text-xs font-mono text-tech-cyan hover:underline"
-              >
-                Manage ↗
-              </button>
+              {hasModuleAccess(currentUserRole, 'categories') && (
+                <button
+                  onClick={() => onSelectModule('categories')}
+                  className="text-xs font-mono text-tech-cyan hover:underline"
+                >
+                  Manage ↗
+                </button>
+              )}
             </div>
 
             <div className="space-y-2">

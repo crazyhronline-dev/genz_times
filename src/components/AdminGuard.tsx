@@ -30,6 +30,9 @@ export default function AdminGuard({ children }: Props) {
     fetch('/api/auth/check')
       .then((r) => r.json())
       .then((data) => {
+        if (data.authenticated && data.user) {
+          localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+        }
         setIsAuthenticated(Boolean(data.authenticated));
       })
       .catch(() => {
@@ -51,6 +54,9 @@ export default function AdminGuard({ children }: Props) {
       const data = await res.json();
       if (data.success) {
         localStorage.setItem(AUTH_STORAGE_KEY, 'true');
+        if (data.user) {
+          localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+        }
         setIsAuthenticated(true);
       } else {
         setError(data.error || 'Invalid credentials');
