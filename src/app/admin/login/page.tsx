@@ -54,10 +54,13 @@ function AdminLoginForm() {
       const data = await res.json();
       if (data.success) {
         localStorage.setItem(AUTH_STORAGE_KEY, 'true');
+        if (data.user) {
+          localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+        }
         setSuccess(true);
         setTimeout(() => {
           router.push(redirectUrl);
-        }, 800);
+        }, 600);
       } else {
         setError(data.error || 'Invalid credentials');
       }
@@ -68,10 +71,10 @@ function AdminLoginForm() {
     }
   };
 
-  const handleOneClickLogin = () => {
-    setUsername(ADMIN_CREDENTIALS.username);
-    setPassword(ADMIN_CREDENTIALS.password);
-    handleLogin(ADMIN_CREDENTIALS.username, ADMIN_CREDENTIALS.password);
+  const handleQuickRoleLogin = (u: string, p: string) => {
+    setUsername(u);
+    setPassword(p);
+    handleLogin(u, p);
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -88,10 +91,10 @@ function AdminLoginForm() {
         </div>
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-tech-cyan/10 text-tech-cyan border border-tech-cyan/30">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Admin Authentication Portal</span>
+          <span>Editorial Team Login</span>
         </div>
         <p className="text-xs text-slate-400 font-mono">
-          Restricted access for publishing gadget reviews & lab benchmarks
+          Sign in to access your designated editorial role & permissions
         </p>
       </div>
 
@@ -107,7 +110,7 @@ function AdminLoginForm() {
             </div>
             <h3 className="text-xl font-bold text-white">Access Granted</h3>
             <p className="text-xs font-mono text-slate-400">
-              Welcome back, {ADMIN_CREDENTIALS.displayName}. Redirecting to Admin Studio...
+              Session authorized. Loading your custom editorial workspace...
             </p>
           </div>
         ) : (
@@ -122,7 +125,7 @@ function AdminLoginForm() {
             {/* Username Input */}
             <div>
               <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                Admin Username
+                Staff Username
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -131,7 +134,7 @@ function AdminLoginForm() {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin"
+                  placeholder="admin, alex_reviewer, or maya_writer"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-tech-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-tech-cyan focus:ring-1 focus:ring-tech-cyan font-mono"
                 />
               </div>
@@ -140,7 +143,7 @@ function AdminLoginForm() {
             {/* Password Input */}
             <div>
               <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                Admin Passkey / Password
+                Staff Passkey / Password
               </label>
               <div className="relative">
                 <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -149,7 +152,7 @@ function AdminLoginForm() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter admin password..."
+                  placeholder="Enter staff password..."
                   className="w-full pl-10 pr-10 py-3 rounded-xl bg-tech-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-tech-cyan focus:ring-1 focus:ring-tech-cyan font-mono"
                 />
                 <button
@@ -166,34 +169,62 @@ function AdminLoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-tech-950 bg-gradient-to-r from-tech-cyan to-tech-emerald shadow-glow hover:opacity-90 transition transform active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-tech-950 bg-gradient-to-r from-tech-cyan to-tech-emerald shadow-glow hover:opacity-90 transition transform active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 font-mono"
             >
               <Lock className="w-4 h-4" />
-              <span>{loading ? 'Authenticating...' : 'Sign In as Admin'}</span>
+              <span>{loading ? 'Authenticating...' : 'Sign In to Workspace'}</span>
             </button>
 
-            {/* Instant Demo Login Button */}
-            <div className="pt-2 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={handleOneClickLogin}
-                className="w-full py-2.5 px-3 rounded-xl bg-tech-cyan/10 hover:bg-tech-cyan/20 border border-tech-cyan/30 text-tech-cyan text-xs font-mono font-semibold transition flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>⚡ 1-Click Instant Admin Access (Demo)</span>
-              </button>
+            {/* Instant Demo Role Login Switchers */}
+            <div className="pt-3 border-t border-slate-800 space-y-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block font-bold">
+                ⚡ 1-Click Role Login Test:
+              </span>
+
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleQuickRoleLogin('admin', 'genztime2026')}
+                  className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-[10px] font-mono transition text-center"
+                >
+                  <span className="font-bold block">👑 Admin</span>
+                  <span className="text-[9px] text-slate-400 block">8 Modules</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickRoleLogin('alex_reviewer', 'reviewer2026')}
+                  className="p-2 rounded-xl bg-tech-cyan/10 hover:bg-tech-cyan/20 border border-tech-cyan/30 text-tech-cyan text-[10px] font-mono transition text-center"
+                >
+                  <span className="font-bold block">✒️ Editor</span>
+                  <span className="text-[9px] text-slate-400 block">5 Modules</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickRoleLogin('maya_writer', 'writer2026')}
+                  className="p-2 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] font-mono transition text-center"
+                >
+                  <span className="font-bold block">📝 Writer</span>
+                  <span className="text-[9px] text-slate-400 block">3 Modules</span>
+                </button>
+              </div>
             </div>
 
-            {/* Credentials reminder box */}
-            <div className="p-3.5 rounded-2xl bg-tech-950/80 border border-slate-800 text-[11px] font-mono space-y-1 text-slate-400">
-              <span className="text-slate-300 font-bold block mb-1">Default Admin Credentials:</span>
+            {/* Role Permissions Legend */}
+            <div className="p-3 rounded-2xl bg-tech-950/80 border border-slate-800 text-[10px] font-mono space-y-1 text-slate-400">
+              <span className="text-slate-300 font-bold block mb-0.5">Role Access Permissions:</span>
               <div className="flex justify-between">
-                <span>Username:</span>
-                <span className="text-tech-cyan font-bold">admin</span>
+                <span className="text-rose-400 font-semibold">Admin:</span>
+                <span>All 8 modules (Team, System, Categories)</span>
               </div>
               <div className="flex justify-between">
-                <span>Password:</span>
-                <span className="text-tech-emerald font-bold">genztime2026</span>
+                <span className="text-tech-cyan font-semibold">Editor:</span>
+                <span>5 modules (Articles, Reviews, Enquiries)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-amber-400 font-semibold">Writer:</span>
+                <span>3 modules (Articles, Publish Studio)</span>
               </div>
             </div>
 

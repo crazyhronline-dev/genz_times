@@ -16,7 +16,7 @@ import PublishStudio from '@/components/admin/PublishStudio';
 import { BlogPost, CategoryInfo } from '@/types/blog';
 import { ContactEnquiry } from '@/types/enquiry';
 import { UserSession } from '@/types/user';
-import { hasModuleAccess } from '@/lib/auth';
+import { hasModuleAccess, ROLE_CONFIG } from '@/lib/auth';
 import { CATEGORIES } from '@/lib/categories';
 import { 
   Menu, 
@@ -26,7 +26,8 @@ import {
   RefreshCw, 
   PlusCircle, 
   Star,
-  Activity
+  Activity,
+  UserCheck
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -41,8 +42,19 @@ export default function AdminDashboardPage() {
   const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
   const [enquiries, setEnquiries] = useState<ContactEnquiry[]>([]);
   const [unreadEnquiryCount, setUnreadEnquiryCount] = useState<number>(0);
-  const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserSession | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const s = localStorage.getItem('genz_current_user');
+        return s ? JSON.parse(s) : null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(true);
+  const [switchingRole, setSwitchingRole] = useState(false);
 
   // Editing state passed to Publish Studio
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
@@ -78,17 +90,50 @@ export default function AdminDashboardPage() {
 
       if (authData.authenticated && authData.user) {
         setCurrentUser(authData.user);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('genz_current_user', JSON.stringify(authData.user));
+        }
+        // Safety guard: if current active module is restricted for this user, redirect to overview
+        if (!hasModuleAccess(authData.user.role, activeModule)) {
+          setActiveModule('overview');
+        }
       }
     } catch (err) {
       console.error('Error fetching admin data:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeModule]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // Instant Role Switcher
+  const handleRoleSwitch = async (username: string, pass: string) => {
+    setSwitchingRole(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password: pass }),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setCurrentUser(data.user);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+        }
+        if (!hasModuleAccess(data.user.role, activeModule)) {
+          setActiveModule('overview');
+        }
+      }
+    } catch (e) {
+      console.error('Error switching role:', e);
+    } finally {
+      setSwitchingRole(false);
+    }
+  };
 
   // Handle Edit Post from any module
   const handleEditPost = (postId: string) => {
@@ -108,6 +153,10 @@ export default function AdminDashboardPage() {
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('genz_current_user');
+        localStorage.removeItem('genz_time_admin_auth');
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -205,6 +254,61 @@ export default function AdminDashboardPage() {
               </Link>
             </div>
           </header>
+
+          {/* Role-Based Access Live Simulator & Session Switcher */}
+          <div className="bg-tech-950 border-b border-slate-800/80 px-4 sm:px-8 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs font-mono">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="flex items-center gap-1.5 shrink-0 text-slate-400">
+                <UserCheck className="w-3.5 h-3.5 text-tech-cyan" />
+                <span>Active Workspace:</span>
+              </div>
+              <span className="font-bold text-white truncate">{currentUser?.name || 'Staff User'}</span>
+              <span className="text-slate-500 hidden sm:inline truncate">(@{currentUser?.username || 'user'})</span>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${ROLE_CONFIG[currentUser?.role || 'author']?.badgeColor}`}>
+                {ROLE_CONFIG[currentUser?.role || 'author']?.label}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 shrink-0 overflow-x-auto pb-0.5">
+              <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mr-1">Switch Role:</span>
+              <button
+                onClick={() => handleRoleSwitch('admin', 'genztime2026')}
+                disabled={switchingRole}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
+                  currentUser?.role === 'admin'
+                    ? 'bg-rose-500 text-white shadow-glow'
+                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
+                }`}
+                title="Super Admin has access to all 8 modules including Team & System"
+              >
+                👑 Super Admin (8)
+              </button>
+              <button
+                onClick={() => handleRoleSwitch('alex_reviewer', 'reviewer2026')}
+                disabled={switchingRole}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
+                  currentUser?.role === 'editor'
+                    ? 'bg-tech-cyan text-tech-950 shadow-glow'
+                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
+                }`}
+                title="Senior Editor has access to 5 modules (Overview, Articles, Publish, Reviews, Enquiries)"
+              >
+                ✒️ Senior Editor (5)
+              </button>
+              <button
+                onClick={() => handleRoleSwitch('maya_writer', 'writer2026')}
+                disabled={switchingRole}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
+                  currentUser?.role === 'author'
+                    ? 'bg-amber-400 text-slate-950 shadow-glow'
+                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
+                }`}
+                title="Staff Writer has access to 3 modules (Overview, Articles, Publish Studio)"
+              >
+                📝 Staff Writer (3)
+              </button>
+            </div>
+          </div>
 
           {/* Module Content Container */}
           <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">

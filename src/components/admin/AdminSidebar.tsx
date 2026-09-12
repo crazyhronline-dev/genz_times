@@ -113,9 +113,10 @@ export default function AdminSidebar({
     },
   ];
 
+  // Strict Least-Privilege RBAC Filtering: If role is not yet known, default to lowest privilege ('author')
+  const activeRole = currentUser?.role || 'author';
   const visibleNavItems = navItems.filter((item) => {
-    if (!currentUser) return true;
-    return hasModuleAccess(currentUser.role, item.id);
+    return hasModuleAccess(activeRole, item.id);
   });
 
   return (
