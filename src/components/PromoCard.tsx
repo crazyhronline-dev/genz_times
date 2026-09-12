@@ -9,7 +9,6 @@ import {
   Copy, 
   Sparkles, 
   Tag, 
-  Clock, 
   Store, 
   ShieldCheck, 
   Flame,
@@ -163,17 +162,15 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
           )}
         </div>
 
-        {/* Expiry Date & Category */}
+        {/* Category & Verified Status */}
         <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-3 border-t border-slate-800/80">
           <span className="capitalize px-2 py-0.5 rounded bg-white/5 border border-slate-800">
             #{deal.category}
           </span>
-          {deal.expiresAt && (
-            <span className="flex items-center gap-1 text-slate-400">
-              <Clock className="w-3 h-3 text-amber-400" />
-              <span>Expires {deal.expiresAt}</span>
-            </span>
-          )}
+          <span className="flex items-center gap-1.5 text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Verified Active</span>
+          </span>
         </div>
 
         {/* Promo Code & Action Box */}

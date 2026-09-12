@@ -306,7 +306,7 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     hideCode,
     isFeatured,
     isActive,
-    expiresAt: expiresAt || '2026-10-31',
+    expiresAt: expiresAt || undefined,
     tags: tags ? tags.split(',').map((s) => s.trim().replace(/^#/, '')).filter(Boolean) : ['samsung-promo', 'verified-coupon'],
     seoKeywords: seoKeywords ? seoKeywords.split(',').map((s) => s.trim()).filter(Boolean) : undefined,
     metaTitle: metaTitle || undefined,
@@ -630,12 +630,15 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono text-slate-400 mb-1">Expiry Date</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-mono text-slate-400">Expiry Date</label>
+                        <span className="text-[10px] font-mono text-slate-500">Optional</span>
+                      </div>
                       <input
                         type="text"
                         value={expiresAt}
                         onChange={(e) => setExpiresAt(e.target.value)}
-                        placeholder="e.g. 2026-10-31"
+                        placeholder="Optional (leave empty for ongoing)"
                         className="w-full px-3 py-2 bg-tech-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-tech-cyan font-mono"
                       />
                     </div>

@@ -19,7 +19,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: true,
     isFeatured: true,
     isActive: true,
-    expiresAt: '2026-12-31',
     tags: ['hostinger-promo', 'hostinger-coupon', 'web-hosting-deals', 'cloud-hosting', '45off', 'sahcrazyhowp', 'verified-coupon', 'tech-deals-2026'],
     seoKeywords: [
       'hostinger promo code 2026',
@@ -54,7 +53,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: true,
     isFeatured: true,
     isActive: true,
-    expiresAt: '2026-10-31',
     tags: ['samsung-promo', 'galaxy-s25-ultra', 'smartphones-deals', 'verified-coupon', 'trade-in-discount'],
     seoKeywords: [
       'samsung promo code 2026',
@@ -84,7 +82,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: true,
     isFeatured: true,
     isActive: true,
-    expiresAt: '2026-11-15',
     tags: ['nordvpn-promo', 'vpn-deals', '72off', 'verified-coupon', 'cloud-security'],
     seoKeywords: [
       'nordvpn promo code 2026',
@@ -113,7 +110,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: true,
     isFeatured: false,
     isActive: true,
-    expiresAt: '2026-10-15',
     tags: ['apple-promo', 'macbook-pro-m4', 'laptops-deals', 'verified-coupon', '200off'],
     seoKeywords: [
       'macbook pro m4 discount code',
@@ -142,7 +138,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: false,
     isFeatured: true,
     isActive: true,
-    expiresAt: '2026-09-30',
     tags: ['sony-promo', 'amazon-coupon', 'audio-deals', 'wh1000xm5', 'verified-coupon'],
     seoKeywords: [
       'sony wh1000xm5 coupon code',
@@ -170,7 +165,6 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     hideCode: true,
     isFeatured: false,
     isActive: true,
-    expiresAt: '2026-10-20',
     tags: ['asus-promo', 'rog-ally-x', 'gaming-deals', 'handheld-discount', 'verified-coupon'],
     seoKeywords: [
       'rog ally x discount code',
