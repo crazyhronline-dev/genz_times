@@ -18,7 +18,8 @@ import {
   Activity,
   ArrowRight,
   Inbox,
-  Mail
+  Mail,
+  Tag
 } from 'lucide-react';
 import { BlogPost, CategoryInfo } from '@/types/blog';
 import { UserRole } from '@/types/user';
@@ -29,6 +30,7 @@ interface AdminOverviewModuleProps {
   posts: BlogPost[];
   categories: CategoryInfo[];
   unreadEnquiries?: number;
+  dealsCount?: number;
   currentUserRole?: UserRole;
   onSelectModule: (module: AdminModule) => void;
   onEditPost: (postId: string) => void;
@@ -38,6 +40,7 @@ export default function AdminOverviewModule({
   posts,
   categories,
   unreadEnquiries = 0,
+  dealsCount = 0,
   currentUserRole = 'author',
   onSelectModule,
   onEditPost,
@@ -97,6 +100,16 @@ export default function AdminOverviewModule({
             <PlusCircle className="w-4 h-4" />
             <span>New Review</span>
           </button>
+
+          {hasModuleAccess(currentUserRole, 'deals') && (
+            <button
+              onClick={() => onSelectModule('deals')}
+              className="px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-mono transition flex items-center gap-2 border border-amber-500/30"
+            >
+              <Tag className="w-3.5 h-3.5" />
+              <span>Deals & Coupons ({dealsCount})</span>
+            </button>
+          )}
 
           {currentUserRole === 'admin' && (
             <button
@@ -160,7 +173,7 @@ export default function AdminOverviewModule({
       )}
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="p-5 rounded-2xl bg-tech-900/60 border border-slate-800 hover:border-slate-700 transition">
           <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
             <span>Articles</span>
@@ -205,15 +218,29 @@ export default function AdminOverviewModule({
           <span className="text-[10px] font-mono text-slate-500 mt-1 block">Product sectors</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-tech-900/60 border border-slate-800 hover:border-slate-700 transition col-span-2 md:col-span-1">
+        <div 
+          onClick={() => hasModuleAccess(currentUserRole, 'deals') && onSelectModule('deals')}
+          className={`p-5 rounded-2xl bg-tech-900/60 border border-slate-800 transition ${hasModuleAccess(currentUserRole, 'deals') ? 'hover:border-amber-500/50 cursor-pointer group' : ''}`}
+        >
           <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
-            <span>E-E-A-T Score</span>
+            <span>Active Deals</span>
+            <Tag className="w-4 h-4 text-amber-400 group-hover:scale-110 transition" />
+          </div>
+          <div className="text-2xl sm:text-3xl font-black font-mono text-amber-300">
+            {dealsCount}
+          </div>
+          <span className="text-[10px] font-mono text-slate-500 mt-1 block">Coupons & promo</span>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-tech-900/60 border border-slate-800 hover:border-slate-700 transition">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+            <span>E-E-A-T</span>
             <Sparkles className="w-4 h-4 text-tech-cyan" />
           </div>
           <div className="text-2xl sm:text-3xl font-black font-mono text-tech-cyan">
             {avgEeat}%
           </div>
-          <span className="text-[10px] font-mono text-slate-500 mt-1 block">Trust & experience</span>
+          <span className="text-[10px] font-mono text-slate-500 mt-1 block">Trust score</span>
         </div>
       </div>
 

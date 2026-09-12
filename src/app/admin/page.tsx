@@ -12,9 +12,11 @@ import AdminReviewsModule from '@/components/admin/AdminReviewsModule';
 import AdminSystemModule from '@/components/admin/AdminSystemModule';
 import AdminEnquiriesModule from '@/components/admin/AdminEnquiriesModule';
 import AdminTeamModule from '@/components/admin/AdminTeamModule';
+import AdminDealsModule from '@/components/admin/AdminDealsModule';
 import PublishStudio from '@/components/admin/PublishStudio';
 import { BlogPost, CategoryInfo } from '@/types/blog';
 import { ContactEnquiry } from '@/types/enquiry';
+import { PromoDeal } from '@/types/deal';
 import { UserSession } from '@/types/user';
 import { hasModuleAccess, ROLE_CONFIG } from '@/lib/auth';
 import { CATEGORIES } from '@/lib/categories';
@@ -41,6 +43,7 @@ export default function AdminDashboardPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
   const [enquiries, setEnquiries] = useState<ContactEnquiry[]>([]);
+  const [deals, setDeals] = useState<PromoDeal[]>([]);
   const [unreadEnquiryCount, setUnreadEnquiryCount] = useState<number>(0);
   const [currentUser, setCurrentUser] = useState<UserSession | null>(() => {
     if (typeof window !== 'undefined') {
@@ -59,21 +62,23 @@ export default function AdminDashboardPage() {
   // Editing state passed to Publish Studio
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
-  // Fetch all posts, categories, enquiries, and user session
+  // Fetch all posts, categories, enquiries, deals, and user session
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [postsRes, catRes, enqRes, authRes] = await Promise.all([
+      const [postsRes, catRes, enqRes, authRes, dealsRes] = await Promise.all([
         fetch('/api/posts'),
         fetch('/api/categories'),
         fetch('/api/enquiries'),
         fetch('/api/auth/check'),
+        fetch('/api/deals'),
       ]);
 
       const postsData = await postsRes.json();
       const catData = await catRes.json();
       const enqData = await enqRes.json();
       const authData = await authRes.json();
+      const dealsData = await dealsRes.json().catch(() => ({}));
 
       if (postsData.success && Array.isArray(postsData.posts)) {
         setPosts(postsData.posts);
@@ -86,6 +91,10 @@ export default function AdminDashboardPage() {
       if (enqData.success && Array.isArray(enqData.enquiries)) {
         setEnquiries(enqData.enquiries);
         setUnreadEnquiryCount(enqData.unreadCount ?? 0);
+      }
+
+      if (dealsData.success && Array.isArray(dealsData.deals)) {
+        setDeals(dealsData.deals);
       }
 
       if (authData.authenticated && authData.user) {
@@ -173,6 +182,7 @@ export default function AdminDashboardPage() {
     articles: 'All Articles & Posts',
     publish: editingPostId ? 'Edit Article Review' : 'Publishing Studio',
     categories: 'Category Manager',
+    deals: 'Deals & Discount Coupons',
     reviews: 'Reviews & Lab Matrix',
     enquiries: 'Contact Inquiries & Inbox',
     team: 'Editorial Team & Access Roles',
@@ -208,6 +218,7 @@ export default function AdminDashboardPage() {
           categoryCount={categories.length}
           avgScore={avgScore}
           unreadEnquiryCount={unreadEnquiryCount}
+          dealsCount={deals.length}
           currentUser={currentUser}
           mobileOpen={mobileSidebarOpen}
           onToggleMobile={() => setMobileSidebarOpen(!mobileSidebarOpen)}
@@ -324,6 +335,7 @@ export default function AdminDashboardPage() {
                 posts={posts}
                 categories={categories}
                 unreadEnquiries={unreadEnquiryCount}
+                dealsCount={deals.length}
                 currentUserRole={activeRole}
                 onSelectModule={handleSelectModule}
                 onEditPost={handleEditPost}
@@ -373,6 +385,21 @@ export default function AdminDashboardPage() {
                 <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
                   <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Category Manager</span>
                   <p className="text-xs text-slate-400">Your role ({ROLE_CONFIG[activeRole]?.label}) is restricted from managing sectors.</p>
+                  <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
+                </div>
+              )
+            )}
+
+            {activeModule === 'deals' && (
+              hasModuleAccess(activeRole, 'deals') ? (
+                <AdminDealsModule
+                  deals={deals}
+                  onRefresh={fetchData}
+                />
+              ) : (
+                <div className="p-8 rounded-3xl bg-tech-900/40 border border-rose-500/30 text-center space-y-3 font-mono">
+                  <span className="text-rose-400 font-bold text-sm block">🔒 Access Denied: Deals & Coupons</span>
+                  <p className="text-xs text-slate-400">Your role ({ROLE_CONFIG[activeRole]?.label}) is restricted from managing promo deals and coupons.</p>
                   <button onClick={() => setActiveModule('overview')} className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-tech-cyan text-xs">Return to Command Center</button>
                 </div>
               )

@@ -17,12 +17,13 @@ import {
   Sparkles,
   ChevronRight,
   Inbox,
-  Users
+  Users,
+  Tag
 } from 'lucide-react';
 import { UserSession } from '@/types/user';
 import { hasModuleAccess, ROLE_CONFIG } from '@/lib/auth';
 
-export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'reviews' | 'enquiries' | 'team' | 'system';
+export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'deals' | 'reviews' | 'enquiries' | 'team' | 'system';
 
 interface AdminSidebarProps {
   activeModule: AdminModule;
@@ -31,6 +32,7 @@ interface AdminSidebarProps {
   categoryCount: number;
   avgScore: string;
   unreadEnquiryCount?: number;
+  dealsCount?: number;
   currentUser?: UserSession | null;
   mobileOpen: boolean;
   onToggleMobile: () => void;
@@ -44,6 +46,7 @@ export default function AdminSidebar({
   categoryCount,
   avgScore,
   unreadEnquiryCount = 0,
+  dealsCount = 0,
   currentUser = null,
   mobileOpen,
   onToggleMobile,
@@ -78,6 +81,14 @@ export default function AdminSidebar({
       description: 'Add, edit & delete sectors',
       icon: FolderTree,
       badge: `${categoryCount}`,
+    },
+    {
+      id: 'deals' as AdminModule,
+      label: 'Deals & Coupons',
+      description: 'Promo codes & discounts',
+      icon: Tag,
+      badge: dealsCount > 0 ? `${dealsCount}` : 'Deals',
+      badgeColor: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
     },
     {
       id: 'reviews' as AdminModule,

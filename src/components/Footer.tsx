@@ -118,6 +118,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/deals" className="text-amber-400 hover:text-amber-300 transition font-mono text-xs flex items-center gap-1.5">
+                  <span>🏷️ Tech Deals & Coupons</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/publish" className="text-tech-emerald hover:underline font-mono text-xs">
                   ⚡ Writer & Admin Studio
                 </Link>

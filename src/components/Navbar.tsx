@@ -16,7 +16,8 @@ import {
   PlusCircle, 
   ShieldCheck,
   ChevronDown,
-  Lock
+  Lock,
+  Tag
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -114,6 +115,19 @@ export default function Navbar() {
               }`}
             >
               Editorial Standards
+            </Link>
+
+            <Link
+              href="/deals"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                pathname === '/deals' ? 'text-amber-400 bg-amber-400/10' : 'text-slate-300 hover:text-amber-300 hover:bg-white/5'
+              }`}
+            >
+              <Tag className="w-3.5 h-3.5 text-amber-400" />
+              <span>Deals</span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                PROMO
+              </span>
             </Link>
 
             <Link
@@ -227,6 +241,19 @@ export default function Navbar() {
               className="block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-white/5"
             >
               Editorial & Testing Ethics
+            </Link>
+            <Link
+              href="/deals"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-amber-300 hover:bg-amber-400/10"
+            >
+              <div className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-amber-400" />
+                <span>Deals & Coupons</span>
+              </div>
+              <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-400/20 text-amber-300">
+                PROMO
+              </span>
             </Link>
             <Link
               href="/contact"

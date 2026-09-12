@@ -33,6 +33,7 @@ const ALL_MODULES_LIST = [
   { id: 'overview', label: 'Command Center' },
   { id: 'articles', label: 'All Articles' },
   { id: 'publish', label: 'Publish Studio' },
+  { id: 'deals', label: 'Deals & Coupons' },
   { id: 'reviews', label: 'Reviews & Lab Matrix' },
   { id: 'enquiries', label: 'Contact Inquiries' },
   { id: 'categories', label: 'Category Manager' },
