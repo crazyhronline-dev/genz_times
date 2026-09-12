@@ -149,19 +149,19 @@ export default function AdminDashboardPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle Logout
+  // Handle Logout: land directly on /admin and show login gate
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('genz_current_user');
-        localStorage.removeItem('genz_time_admin_auth');
-      }
     } catch (e) {
       console.error(e);
-    } finally {
-      router.push('/admin/login');
     }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('genz_current_user');
+      localStorage.removeItem('genz_time_admin_auth');
+    }
+    setCurrentUser(null);
+    window.location.href = '/admin';
   };
 
   const avgScore = posts.length > 0
@@ -193,7 +193,12 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <AdminGuard>
+    <AdminGuard onAuthSuccess={(user) => {
+      setCurrentUser(user);
+      if (!hasModuleAccess(user.role, activeModule)) {
+        setActiveModule('overview');
+      }
+    }}>
       <div className="min-h-screen bg-tech-950 text-slate-100 flex">
         {/* Sidebar Navigation */}
         <AdminSidebar

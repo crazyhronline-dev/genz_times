@@ -10,18 +10,23 @@ import {
   User, 
   Sparkles, 
   CheckCircle2, 
-  AlertCircle 
+  AlertCircle,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { ADMIN_CREDENTIALS, AUTH_STORAGE_KEY } from '@/lib/auth';
+import { UserSession } from '@/types/user';
 
 interface Props {
   children: React.ReactNode;
+  onAuthSuccess?: (user: UserSession) => void;
 }
 
-export default function AdminGuard({ children }: Props) {
+export default function AdminGuard({ children, onAuthSuccess }: Props) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -32,13 +37,16 @@ export default function AdminGuard({ children }: Props) {
       .then((data) => {
         if (data.authenticated && data.user) {
           localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+          if (onAuthSuccess) {
+            onAuthSuccess(data.user);
+          }
         }
         setIsAuthenticated(Boolean(data.authenticated));
       })
       .catch(() => {
         setIsAuthenticated(false);
       });
-  }, []);
+  }, [onAuthSuccess]);
 
   const handleLogin = async (u = username, p = password) => {
     setError('');
@@ -56,6 +64,9 @@ export default function AdminGuard({ children }: Props) {
         localStorage.setItem(AUTH_STORAGE_KEY, 'true');
         if (data.user) {
           localStorage.setItem('genz_current_user', JSON.stringify(data.user));
+          if (onAuthSuccess) {
+            onAuthSuccess(data.user);
+          }
         }
         setIsAuthenticated(true);
       } else {
@@ -98,9 +109,14 @@ export default function AdminGuard({ children }: Props) {
             <span>Editorial Staff Login</span>
           </div>
 
-          <p className="text-xs text-slate-400 font-mono">
-            Enter your credentials to access your designated workspace (Super Admin, Senior Editor, or Staff Writer).
-          </p>
+          <div>
+            <h2 className="text-xl font-black text-white tracking-tight">
+              Sign In to Command Center
+            </h2>
+            <p className="text-xs text-slate-400 font-mono mt-1.5 leading-relaxed">
+              Please log in with your assigned credentials to access your designated workspace (Super Admin, Senior Editor, or Staff Writer).
+            </p>
+          </div>
 
           {error && (
             <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono flex items-center gap-2 text-left">
@@ -140,13 +156,21 @@ export default function AdminGuard({ children }: Props) {
               <div className="relative">
                 <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-tech-cyan"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-tech-cyan"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
