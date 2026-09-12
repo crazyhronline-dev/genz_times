@@ -40,11 +40,16 @@ export interface BlogPost {
   publishedAt: string;
   updatedAt?: string;
   readingTime: string;
-  verdictScore: number; // e.g. 9.3 out of 10
-  verdictSummary: string;
-  pros: string[];
-  cons: string[];
-  specs: GadgetSpecs;
+  postType?: 'article' | 'review'; // 'article' for editorial news/guides, 'review' for hardware tests
+  subtitle?: string; // For articles: Dek or summary hook
+  keyTakeaways?: string[]; // For articles: Key Bullet points / Highlights
+  sources?: { title: string; url: string }[]; // For articles: References and sources
+  faqs?: { question: string; answer: string }[]; // For articles & explainers: FAQ pairs
+  verdictScore?: number; // e.g. 9.3 out of 10 (optional for standard articles)
+  verdictSummary?: string; // (optional for standard articles)
+  pros?: string[]; // (optional for standard articles)
+  cons?: string[]; // (optional for standard articles)
+  specs?: GadgetSpecs; // (optional for standard articles)
   seo: SeoMeta;
   isFeatured?: boolean;
   isTrending?: boolean;

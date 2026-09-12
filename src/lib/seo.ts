@@ -11,9 +11,9 @@ export const SITE_CONFIG = {
 };
 
 export function generateArticleSchema(post: BlogPost) {
-  return {
+  const schema: Record<string, any> = {
     "@context": "https://schema.org",
-    "@type": "TechArticle",
+    "@type": post.postType === 'review' || post.verdictScore ? "TechArticle" : "Article",
     headline: post.seo?.metaTitle || post.title,
     description: post.seo?.metaDescription || post.excerpt,
     image: [post.featuredImage],
@@ -37,8 +37,11 @@ export function generateArticleSchema(post: BlogPost) {
       "@type": "WebPage",
       "@id": `${SITE_CONFIG.url}/blog/${post.slug}`,
     },
-    keywords: post.tags.join(", "),
-    review: {
+    keywords: post.tags ? post.tags.join(", ") : "",
+  };
+
+  if (post.verdictScore && post.postType !== 'article') {
+    schema.review = {
       "@type": "Review",
       reviewRating: {
         "@type": "Rating",
@@ -52,7 +55,7 @@ export function generateArticleSchema(post: BlogPost) {
       },
       positiveNotes: {
         "@type": "ItemList",
-        itemListElement: post.pros.map((pro, index) => ({
+        itemListElement: (post.pros || []).map((pro, index) => ({
           "@type": "ListItem",
           position: index + 1,
           name: pro,
@@ -60,14 +63,16 @@ export function generateArticleSchema(post: BlogPost) {
       },
       negativeNotes: {
         "@type": "ItemList",
-        itemListElement: post.cons.map((con, index) => ({
+        itemListElement: (post.cons || []).map((con, index) => ({
           "@type": "ListItem",
           position: index + 1,
           name: con,
         })),
       },
-    },
-  };
+    };
+  }
+
+  return schema;
 }
 
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {

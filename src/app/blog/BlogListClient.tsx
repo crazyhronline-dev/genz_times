@@ -29,7 +29,7 @@ export default function BlogListClient({ initialPosts }: Props) {
         post.excerpt.toLowerCase().includes(q) ||
         post.category.toLowerCase().includes(q) ||
         post.tags.some((t) => t.toLowerCase().includes(q)) ||
-        (post.specs.processor && post.specs.processor.toLowerCase().includes(q));
+        Boolean(post.specs?.processor && post.specs.processor.toLowerCase().includes(q));
 
       return matchesCategory && matchesSearch;
     }).sort((a, b) => {

@@ -21,7 +21,13 @@ import {
   Tag, 
   MessageSquare, 
   UserCheck,
-  Send
+  Send,
+  FileText,
+  Sparkles,
+  CheckCircle2,
+  HelpCircle,
+  ExternalLink,
+  Link as LinkIcon
 } from 'lucide-react';
 
 interface PageProps {
@@ -197,19 +203,41 @@ export default async function SinglePostPage({ params }: PageProps) {
           >
             {post.category}
           </Link>
-          <span className="flex items-center gap-1 text-xs font-mono bg-tech-emerald/10 text-tech-emerald border border-tech-emerald/30 px-3 py-1 rounded-full font-bold">
-            <Star className="w-3.5 h-3.5 fill-tech-emerald" />
-            <span>Score: {post.verdictScore.toFixed(1)} / 10</span>
-          </span>
-          <span className="text-xs font-mono text-slate-500 flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-tech-cyan" />
-            Verified Hardware Lab Test
-          </span>
+
+          {post.postType === 'article' || !post.verdictScore ? (
+            <>
+              <span className="flex items-center gap-1 text-xs font-mono bg-tech-cyan/10 text-tech-cyan border border-tech-cyan/30 px-3 py-1 rounded-full font-bold">
+                <FileText className="w-3.5 h-3.5" />
+                <span>Editorial Deep-Dive</span>
+              </span>
+              <span className="text-xs font-mono text-slate-500 flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-tech-emerald" />
+                Verified Editorial Integrity
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="flex items-center gap-1 text-xs font-mono bg-tech-emerald/10 text-tech-emerald border border-tech-emerald/30 px-3 py-1 rounded-full font-bold">
+                <Star className="w-3.5 h-3.5 fill-tech-emerald" />
+                <span>Score: {post.verdictScore.toFixed(1)} / 10</span>
+              </span>
+              <span className="text-xs font-mono text-slate-500 flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-tech-cyan" />
+                Verified Hardware Lab Test
+              </span>
+            </>
+          )}
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
           {post.title}
         </h1>
+
+        {post.subtitle && (
+          <p className="text-lg sm:text-xl text-slate-200 font-semibold border-l-2 border-tech-cyan pl-4 my-2 italic">
+            {post.subtitle}
+          </p>
+        )}
 
         <p className="text-lg text-slate-300 leading-relaxed font-normal">
           {post.excerpt}
@@ -252,6 +280,24 @@ export default async function SinglePostPage({ params }: PageProps) {
         />
       </div>
 
+      {/* Key Takeaways / Executive Highlights (For Articles) */}
+      {post.keyTakeaways && post.keyTakeaways.length > 0 && (
+        <div className="my-8 p-6 rounded-3xl bg-tech-900/60 border border-tech-cyan/30 shadow-glow space-y-3">
+          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-tech-cyan">
+            <Sparkles className="w-4 h-4" />
+            <span>Key Takeaways & Executive Summary</span>
+          </div>
+          <ul className="space-y-2">
+            {post.keyTakeaways.map((item, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-200">
+                <CheckCircle2 className="w-4 h-4 text-tech-emerald shrink-0 mt-1" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* 4. Social Sharing Toolbar */}
       <ShareButtons url={postUrl} title={post.title} />
 
@@ -260,25 +306,70 @@ export default async function SinglePostPage({ params }: PageProps) {
         {renderContent(post.content)}
       </div>
 
-      {/* 6. Gadget Technical Specifications Sheet */}
-      {post.specs && Object.keys(post.specs).length > 0 && (
+      {/* 6. Gadget Technical Specifications Sheet (Reviews only) */}
+      {post.postType !== 'article' && post.specs && Object.keys(post.specs).length > 0 && (
         <GadgetSpecsBox specs={post.specs} gadgetTitle={post.title.split(':')[0]} />
       )}
 
-      {/* 7. Pros & Cons Comparison */}
-      {(post.pros?.length > 0 || post.cons?.length > 0) && (
-        <ProsConsBox pros={post.pros} cons={post.cons} />
+      {/* 7. Pros & Cons Comparison (Reviews only) */}
+      {post.postType !== 'article' && ((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
+        <ProsConsBox pros={post.pros || []} cons={post.cons || []} />
       )}
 
-      {/* 8. Google E-E-A-T Quality & Hardware Lab Audit Badge */}
+      {/* 8. FAQs Accordion (If provided) */}
+      {post.faqs && post.faqs.length > 0 && (
+        <div className="my-10 p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-4">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-tech-cyan font-bold mb-2">
+            <HelpCircle className="w-4 h-4" />
+            <span>Frequently Asked Questions</span>
+          </div>
+          <div className="divide-y divide-slate-800/80">
+            {post.faqs.map((faq, idx) => (
+              <div key={idx} className="py-4 space-y-1.5">
+                <h4 className="font-bold text-white text-base">{faq.question}</h4>
+                <p className="text-sm text-slate-300 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 9. Citations & Reference Sources (If provided) */}
+      {post.sources && post.sources.length > 0 && (
+        <div className="my-8 p-5 rounded-2xl bg-tech-950/60 border border-slate-800/80 space-y-2">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
+            <LinkIcon className="w-3.5 h-3.5 text-tech-cyan" />
+            <span>References & Verified Sources</span>
+          </div>
+          <div className="space-y-1.5">
+            {post.sources.map((src, i) => (
+              <div key={i} className="text-xs font-mono">
+                <a
+                  href={src.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-tech-cyan hover:underline flex items-center gap-1.5"
+                >
+                  <span>{src.title}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 10. Google E-E-A-T Quality & Hardware Lab Audit Badge */}
       <EeatBadge audit={eeatAudit} deviceTitle={post.title} />
 
-      {/* 9. Official GenZ Time Verdict Badge */}
-      <VerdictBadge
-        score={post.verdictScore}
-        summary={post.verdictSummary}
-        gadgetName={post.title}
-      />
+      {/* 11. Official GenZ Time Verdict Badge (Reviews only) */}
+      {post.postType !== 'article' && post.verdictScore && (
+        <VerdictBadge
+          score={post.verdictScore}
+          summary={post.verdictSummary || ''}
+          gadgetName={post.title}
+        />
+      )}
 
       {/* 9. Tags & Keywords */}
       <div className="pt-6 border-t border-slate-800 my-8">
