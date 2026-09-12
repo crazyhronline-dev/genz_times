@@ -1,0 +1,38 @@
+[
+  {
+    "id": "enq-1789204000001",
+    "name": "Marcus Vance",
+    "email": "marcus.vance@audio-pulse.tech",
+    "inquiryType": "review_pitch",
+    "deviceOrCompany": "AudioPulse Apex ANC Earbuds",
+    "message": "Hi GenZ Time Editorial Team, We are launching the AudioPulse Apex Wireless ANC earbuds with custom dual-driver planar drivers and lossless LDAC support on Oct 1st. We would love to send loaner review units to your hardware testing lab for frequency curve benchmarking and ANC isolation testing ahead of our embargo date.",
+    "status": "unread",
+    "starred": true,
+    "createdAt": "2026-09-12T07:45:00.000Z",
+    "notes": "Embargo: Oct 1. High priority loaner unit pitch."
+  },
+  {
+    "id": "enq-1789204000002",
+    "name": "Elena Rostova",
+    "email": "elena@lumina-robotics.io",
+    "inquiryType": "press_release",
+    "deviceOrCompany": "Lumina Core AI Smart Pin",
+    "message": "Greetings from Lumina! We have just published our official technical whitepaper detailing our edge-AI wearable camera pin with 120-fps optical tracking. Sharing the press kit and technical breakdown for your team's coverage.",
+    "status": "read",
+    "starred": false,
+    "createdAt": "2026-09-11T16:20:00.000Z",
+    "notes": ""
+  },
+  {
+    "id": "enq-1789204000003",
+    "name": "David Chen",
+    "email": "dchen@nexusmedia-partners.com",
+    "inquiryType": "advertising",
+    "deviceOrCompany": "Nexus Media Group",
+    "message": "Hello, We manage digital campaign placement for premium consumer electronics brands. We noticed your impressive organic reach on flagship smartphone reviews and would like to explore sponsored spotlight placements and newsletter features for Q4.",
+    "status": "replied",
+    "starred": true,
+    "createdAt": "2026-09-10T11:15:00.000Z",
+    "notes": "Sent media kit and rate card."
+  }
+]

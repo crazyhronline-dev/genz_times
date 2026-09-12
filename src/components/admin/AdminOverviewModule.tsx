@@ -16,7 +16,9 @@ import {
   CheckCircle2, 
   TrendingUp,
   Activity,
-  ArrowRight
+  ArrowRight,
+  Inbox,
+  Mail
 } from 'lucide-react';
 import { BlogPost, CategoryInfo } from '@/types/blog';
 import { AdminModule } from './AdminSidebar';
@@ -24,6 +26,7 @@ import { AdminModule } from './AdminSidebar';
 interface AdminOverviewModuleProps {
   posts: BlogPost[];
   categories: CategoryInfo[];
+  unreadEnquiries?: number;
   onSelectModule: (module: AdminModule) => void;
   onEditPost: (postId: string) => void;
 }
@@ -31,6 +34,7 @@ interface AdminOverviewModuleProps {
 export default function AdminOverviewModule({
   posts,
   categories,
+  unreadEnquiries = 0,
   onSelectModule,
   onEditPost,
 }: AdminOverviewModuleProps) {
@@ -114,6 +118,38 @@ export default function AdminOverviewModule({
         <div className="p-3.5 rounded-xl bg-tech-emerald/10 border border-tech-emerald/30 text-tech-emerald text-xs font-mono flex items-center gap-2 animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{purgeMessage}</span>
+        </div>
+      )}
+
+      {/* Unread Inquiries Notification */}
+      {unreadEnquiries > 0 && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-tech-cyan/15 via-tech-950 to-slate-900 border border-tech-cyan/40 shadow-glow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-tech-cyan/20 border border-tech-cyan/40 text-tech-cyan flex items-center justify-center shrink-0">
+              <Mail className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white">
+                  {unreadEnquiries} New Contact {unreadEnquiries === 1 ? 'Inquiry' : 'Inquiries'} Awaiting Review
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-tech-cyan text-tech-950">
+                  ACTION REQUIRED
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">
+                Hardware review pitches, embargo briefings, or partnership requests received via /contact.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => onSelectModule('enquiries')}
+            className="px-4 py-2 rounded-xl text-xs font-mono font-bold text-tech-950 bg-tech-cyan hover:bg-tech-cyan/90 transition shadow-glow flex items-center gap-1.5 shrink-0 self-end sm:self-center"
+          >
+            <span>Open Inbox</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
 

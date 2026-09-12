@@ -10,8 +10,10 @@ import AdminArticlesModule from '@/components/admin/AdminArticlesModule';
 import AdminCategoriesModule from '@/components/admin/AdminCategoriesModule';
 import AdminReviewsModule from '@/components/admin/AdminReviewsModule';
 import AdminSystemModule from '@/components/admin/AdminSystemModule';
+import AdminEnquiriesModule from '@/components/admin/AdminEnquiriesModule';
 import PublishStudio from '@/components/admin/PublishStudio';
 import { BlogPost, CategoryInfo } from '@/types/blog';
+import { ContactEnquiry } from '@/types/enquiry';
 import { CATEGORIES } from '@/lib/categories';
 import { 
   Menu, 
@@ -34,22 +36,26 @@ export default function AdminDashboardPage() {
   // Data state
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
+  const [enquiries, setEnquiries] = useState<ContactEnquiry[]>([]);
+  const [unreadEnquiryCount, setUnreadEnquiryCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   // Editing state passed to Publish Studio
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
-  // Fetch all posts and categories
+  // Fetch all posts, categories, and enquiries
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [postsRes, catRes] = await Promise.all([
+      const [postsRes, catRes, enqRes] = await Promise.all([
         fetch('/api/posts'),
         fetch('/api/categories'),
+        fetch('/api/enquiries'),
       ]);
 
       const postsData = await postsRes.json();
       const catData = await catRes.json();
+      const enqData = await enqRes.json();
 
       if (postsData.success && Array.isArray(postsData.posts)) {
         setPosts(postsData.posts);
@@ -57,6 +63,11 @@ export default function AdminDashboardPage() {
 
       if (catData.success && Array.isArray(catData.categories) && catData.categories.length > 0) {
         setCategories(catData.categories);
+      }
+
+      if (enqData.success && Array.isArray(enqData.enquiries)) {
+        setEnquiries(enqData.enquiries);
+        setUnreadEnquiryCount(enqData.unreadCount ?? 0);
       }
     } catch (err) {
       console.error('Error fetching admin data:', err);
@@ -104,6 +115,7 @@ export default function AdminDashboardPage() {
     publish: editingPostId ? 'Edit Article Review' : 'Publishing Studio',
     categories: 'Category Manager',
     reviews: 'Reviews & Lab Matrix',
+    enquiries: 'Contact Inquiries & Inbox',
     system: 'System Diagnostics & Cache',
   };
 
@@ -122,6 +134,7 @@ export default function AdminDashboardPage() {
           postCount={posts.length}
           categoryCount={categories.length}
           avgScore={avgScore}
+          unreadEnquiryCount={unreadEnquiryCount}
           mobileOpen={mobileSidebarOpen}
           onToggleMobile={() => setMobileSidebarOpen(!mobileSidebarOpen)}
           onLogout={handleLogout}
@@ -181,6 +194,7 @@ export default function AdminDashboardPage() {
               <AdminOverviewModule
                 posts={posts}
                 categories={categories}
+                unreadEnquiries={unreadEnquiryCount}
                 onSelectModule={setActiveModule}
                 onEditPost={handleEditPost}
               />
@@ -229,6 +243,13 @@ export default function AdminDashboardPage() {
               <AdminReviewsModule
                 posts={posts}
                 onEditPost={handleEditPost}
+                onRefresh={fetchData}
+              />
+            )}
+
+            {activeModule === 'enquiries' && (
+              <AdminEnquiriesModule
+                enquiries={enquiries}
                 onRefresh={fetchData}
               />
             )}

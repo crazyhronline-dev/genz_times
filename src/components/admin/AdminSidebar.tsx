@@ -15,10 +15,11 @@ import {
   Menu, 
   X,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  Inbox
 } from 'lucide-react';
 
-export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'reviews' | 'system';
+export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'reviews' | 'enquiries' | 'system';
 
 interface AdminSidebarProps {
   activeModule: AdminModule;
@@ -26,6 +27,7 @@ interface AdminSidebarProps {
   postCount: number;
   categoryCount: number;
   avgScore: string;
+  unreadEnquiryCount?: number;
   mobileOpen: boolean;
   onToggleMobile: () => void;
   onLogout: () => void;
@@ -37,6 +39,7 @@ export default function AdminSidebar({
   postCount,
   categoryCount,
   avgScore,
+  unreadEnquiryCount = 0,
   mobileOpen,
   onToggleMobile,
   onLogout,
@@ -78,6 +81,14 @@ export default function AdminSidebar({
       icon: Star,
       badge: `${avgScore}★`,
       badgeColor: 'bg-amber-400/20 text-amber-300 border border-amber-400/40',
+    },
+    {
+      id: 'enquiries' as AdminModule,
+      label: 'Enquiries & Inbox',
+      description: 'Contact form submissions',
+      icon: Inbox,
+      badge: unreadEnquiryCount > 0 ? `${unreadEnquiryCount} New` : null,
+      badgeColor: 'bg-tech-cyan/25 text-tech-cyan border border-tech-cyan/50 font-black animate-pulse',
     },
     {
       id: 'system' as AdminModule,
