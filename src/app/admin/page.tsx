@@ -11,9 +11,12 @@ import AdminCategoriesModule from '@/components/admin/AdminCategoriesModule';
 import AdminReviewsModule from '@/components/admin/AdminReviewsModule';
 import AdminSystemModule from '@/components/admin/AdminSystemModule';
 import AdminEnquiriesModule from '@/components/admin/AdminEnquiriesModule';
+import AdminTeamModule from '@/components/admin/AdminTeamModule';
 import PublishStudio from '@/components/admin/PublishStudio';
 import { BlogPost, CategoryInfo } from '@/types/blog';
 import { ContactEnquiry } from '@/types/enquiry';
+import { UserSession } from '@/types/user';
+import { hasModuleAccess } from '@/lib/auth';
 import { CATEGORIES } from '@/lib/categories';
 import { 
   Menu, 
@@ -38,24 +41,27 @@ export default function AdminDashboardPage() {
   const [categories, setCategories] = useState<CategoryInfo[]>(CATEGORIES);
   const [enquiries, setEnquiries] = useState<ContactEnquiry[]>([]);
   const [unreadEnquiryCount, setUnreadEnquiryCount] = useState<number>(0);
+  const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Editing state passed to Publish Studio
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
-  // Fetch all posts, categories, and enquiries
+  // Fetch all posts, categories, enquiries, and user session
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [postsRes, catRes, enqRes] = await Promise.all([
+      const [postsRes, catRes, enqRes, authRes] = await Promise.all([
         fetch('/api/posts'),
         fetch('/api/categories'),
         fetch('/api/enquiries'),
+        fetch('/api/auth/check'),
       ]);
 
       const postsData = await postsRes.json();
       const catData = await catRes.json();
       const enqData = await enqRes.json();
+      const authData = await authRes.json();
 
       if (postsData.success && Array.isArray(postsData.posts)) {
         setPosts(postsData.posts);
@@ -68,6 +74,10 @@ export default function AdminDashboardPage() {
       if (enqData.success && Array.isArray(enqData.enquiries)) {
         setEnquiries(enqData.enquiries);
         setUnreadEnquiryCount(enqData.unreadCount ?? 0);
+      }
+
+      if (authData.authenticated && authData.user) {
+        setCurrentUser(authData.user);
       }
     } catch (err) {
       console.error('Error fetching admin data:', err);
@@ -116,7 +126,19 @@ export default function AdminDashboardPage() {
     categories: 'Category Manager',
     reviews: 'Reviews & Lab Matrix',
     enquiries: 'Contact Inquiries & Inbox',
+    team: 'Editorial Team & Access Roles',
     system: 'System Diagnostics & Cache',
+  };
+
+  const handleSelectModule = (m: AdminModule) => {
+    if (currentUser && !hasModuleAccess(currentUser.role, m)) {
+      setActiveModule('overview');
+      return;
+    }
+    if (m === 'publish' && activeModule !== 'publish') {
+      setEditingPostId(null);
+    }
+    setActiveModule(m);
   };
 
   return (
@@ -125,16 +147,12 @@ export default function AdminDashboardPage() {
         {/* Sidebar Navigation */}
         <AdminSidebar
           activeModule={activeModule}
-          onSelectModule={(m) => {
-            if (m === 'publish' && activeModule !== 'publish') {
-              setEditingPostId(null);
-            }
-            setActiveModule(m);
-          }}
+          onSelectModule={handleSelectModule}
           postCount={posts.length}
           categoryCount={categories.length}
           avgScore={avgScore}
           unreadEnquiryCount={unreadEnquiryCount}
+          currentUser={currentUser}
           mobileOpen={mobileSidebarOpen}
           onToggleMobile={() => setMobileSidebarOpen(!mobileSidebarOpen)}
           onLogout={handleLogout}
@@ -250,6 +268,13 @@ export default function AdminDashboardPage() {
             {activeModule === 'enquiries' && (
               <AdminEnquiriesModule
                 enquiries={enquiries}
+                onRefresh={fetchData}
+              />
+            )}
+
+            {activeModule === 'team' && (
+              <AdminTeamModule
+                currentUserRole={currentUser?.role || 'admin'}
                 onRefresh={fetchData}
               />
             )}

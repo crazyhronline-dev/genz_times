@@ -89,11 +89,11 @@ export default function AdminGuard({ children }: Props) {
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-tech-cyan/10 text-tech-cyan border border-tech-cyan/30">
             <Lock className="w-3.5 h-3.5" />
-            <span>Admin Authorization Required</span>
+            <span>Editorial Staff Login</span>
           </div>
 
           <p className="text-xs text-slate-400 font-mono">
-            This area is restricted to GenZ Time editorial staff for publishing and hardware management.
+            Enter your credentials to access your designated workspace (Super Admin, Senior Editor, or Staff Writer).
           </p>
 
           {error && (
@@ -112,7 +112,7 @@ export default function AdminGuard({ children }: Props) {
           >
             <div>
               <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">
-                Admin Username
+                Username
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -122,14 +122,14 @@ export default function AdminGuard({ children }: Props) {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-tech-cyan"
-                  placeholder="admin"
+                  placeholder="admin, alex_reviewer, or maya_writer"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">
-                Admin Password / Key
+                Password / Key
               </label>
               <div className="relative">
                 <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -150,30 +150,55 @@ export default function AdminGuard({ children }: Props) {
               className="w-full py-3 rounded-xl font-bold text-xs text-tech-950 bg-gradient-to-r from-tech-cyan to-tech-emerald shadow-glow hover:opacity-90 transition font-mono flex items-center justify-center gap-2"
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>{loading ? 'Verifying...' : 'Unlock Admin Studio'}</span>
+              <span>{loading ? 'Verifying Credentials...' : 'Sign In to Workspace'}</span>
             </button>
           </form>
 
-          <div className="pt-3 border-t border-slate-800 space-y-3">
-            <button
-              type="button"
-              onClick={handleQuickDemoAccess}
-              className="w-full py-2.5 px-3 rounded-xl bg-tech-cyan/10 hover:bg-tech-cyan/20 border border-tech-cyan/30 text-tech-cyan text-xs font-mono font-semibold transition flex items-center justify-center gap-2"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>⚡ 1-Click Instant Unlock (Admin Demo)</span>
-            </button>
+          {/* Role-Based Demo Switchers */}
+          <div className="pt-3 border-t border-slate-800 space-y-2.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block font-bold">
+              ⚡ Quick Test Credentials (Select Role):
+            </span>
 
-            <div className="p-3 rounded-xl bg-tech-950/90 border border-slate-800 text-[11px] font-mono text-slate-400 text-left space-y-1">
-              <span className="text-slate-300 font-bold block mb-1">Access Credentials:</span>
-              <div className="flex justify-between">
-                <span>User:</span>
-                <span className="text-tech-cyan">admin</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Pass:</span>
-                <span className="text-tech-emerald">genztime2026</span>
-              </div>
+            <div className="grid grid-cols-3 gap-2 text-left">
+              <button
+                type="button"
+                onClick={() => {
+                  setUsername('admin');
+                  setPassword('genztime2026');
+                  handleLogin('admin', 'genztime2026');
+                }}
+                className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-[10px] font-mono transition text-center"
+              >
+                <span className="font-bold block">👑 Admin</span>
+                <span className="text-[9px] text-slate-400 block">All 8 modules</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setUsername('alex_reviewer');
+                  setPassword('reviewer2026');
+                  handleLogin('alex_reviewer', 'reviewer2026');
+                }}
+                className="p-2 rounded-xl bg-tech-cyan/10 hover:bg-tech-cyan/20 border border-tech-cyan/30 text-tech-cyan text-[10px] font-mono transition text-center"
+              >
+                <span className="font-bold block">✒️ Editor</span>
+                <span className="text-[9px] text-slate-400 block">Reviews & Inbox</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setUsername('maya_writer');
+                  setPassword('writer2026');
+                  handleLogin('maya_writer', 'writer2026');
+                }}
+                className="p-2 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] font-mono transition text-center"
+              >
+                <span className="font-bold block">📝 Writer</span>
+                <span className="text-[9px] text-slate-400 block">Publish Studio</span>
+              </button>
             </div>
           </div>
         </div>

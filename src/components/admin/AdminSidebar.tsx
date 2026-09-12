@@ -16,10 +16,13 @@ import {
   X,
   Sparkles,
   ChevronRight,
-  Inbox
+  Inbox,
+  Users
 } from 'lucide-react';
+import { UserSession } from '@/types/user';
+import { hasModuleAccess, ROLE_CONFIG } from '@/lib/auth';
 
-export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'reviews' | 'enquiries' | 'system';
+export type AdminModule = 'overview' | 'articles' | 'publish' | 'categories' | 'reviews' | 'enquiries' | 'team' | 'system';
 
 interface AdminSidebarProps {
   activeModule: AdminModule;
@@ -28,6 +31,7 @@ interface AdminSidebarProps {
   categoryCount: number;
   avgScore: string;
   unreadEnquiryCount?: number;
+  currentUser?: UserSession | null;
   mobileOpen: boolean;
   onToggleMobile: () => void;
   onLogout: () => void;
@@ -40,6 +44,7 @@ export default function AdminSidebar({
   categoryCount,
   avgScore,
   unreadEnquiryCount = 0,
+  currentUser = null,
   mobileOpen,
   onToggleMobile,
   onLogout,
@@ -91,6 +96,14 @@ export default function AdminSidebar({
       badgeColor: 'bg-tech-cyan/25 text-tech-cyan border border-tech-cyan/50 font-black animate-pulse',
     },
     {
+      id: 'team' as AdminModule,
+      label: 'Editorial Team',
+      description: 'Roster, credentials & RBAC',
+      icon: Users,
+      badge: 'Staff',
+      badgeColor: 'bg-purple-500/20 text-purple-300 border border-purple-500/40',
+    },
+    {
       id: 'system' as AdminModule,
       label: 'System & Live Cache',
       description: 'LiteSpeed & SSR purge',
@@ -99,6 +112,11 @@ export default function AdminSidebar({
       badgeColor: 'bg-tech-emerald/20 text-tech-emerald border border-tech-emerald/40',
     },
   ];
+
+  const visibleNavItems = navItems.filter((item) => {
+    if (!currentUser) return true;
+    return hasModuleAccess(currentUser.role, item.id);
+  });
 
   return (
     <>
@@ -143,15 +161,37 @@ export default function AdminSidebar({
             </button>
           </div>
 
+          {/* Current User Session Bar */}
+          {currentUser && (
+            <div className="px-5 py-3 border-b border-slate-800/60 bg-tech-900/40 flex items-center justify-between">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-tech-cyan/20 to-tech-emerald/20 border border-tech-cyan/40 flex items-center justify-center text-[11px] font-bold text-tech-cyan font-mono shrink-0">
+                  {currentUser.name.slice(0, 2).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <span className="text-xs font-bold text-slate-200 block truncate leading-tight">
+                    {currentUser.name}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-500 block truncate">
+                    @{currentUser.username}
+                  </span>
+                </div>
+              </div>
+              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shrink-0 ${ROLE_CONFIG[currentUser.role]?.badgeColor || 'bg-white/10 text-slate-300'}`}>
+                {ROLE_CONFIG[currentUser.role]?.label || currentUser.role}
+              </span>
+            </div>
+          )}
+
           {/* Live Node Status Pill */}
-          <div className="px-5 py-3 border-b border-slate-800/50 bg-tech-900/30">
+          <div className="px-5 py-2.5 border-b border-slate-800/50 bg-tech-900/20">
             <div className="flex items-center justify-between text-[11px] font-mono">
-              <div className="flex items-center gap-2 text-slate-300">
+              <div className="flex items-center gap-2 text-slate-400">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tech-emerald opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-tech-emerald"></span>
                 </span>
-                <span>Node.js / LiteSpeed</span>
+                <span>LiteSpeed Edge</span>
               </div>
               <span className="text-tech-cyan font-bold">ONLINE</span>
             </div>
@@ -163,7 +203,7 @@ export default function AdminSidebar({
               Management Modules
             </div>
 
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeModule === item.id;
 

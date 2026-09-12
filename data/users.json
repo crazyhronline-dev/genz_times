@@ -1,0 +1,38 @@
+[
+  {
+    "id": "usr-superadmin-01",
+    "name": "GenZ Editorial Team",
+    "username": "admin",
+    "email": "admin@genztime.com",
+    "password": "genztime2026",
+    "role": "admin",
+    "designation": "Editor-in-Chief & Super Admin",
+    "active": true,
+    "createdAt": "2026-09-01T00:00:00.000Z",
+    "lastLogin": "2026-09-12T15:00:00.000Z"
+  },
+  {
+    "id": "usr-editor-02",
+    "name": "Alex Rivera",
+    "username": "alex_reviewer",
+    "email": "alex@genztime.com",
+    "password": "reviewer2026",
+    "role": "editor",
+    "designation": "Senior Hardware Reviewer",
+    "active": true,
+    "createdAt": "2026-09-05T10:00:00.000Z",
+    "lastLogin": "2026-09-12T12:30:00.000Z"
+  },
+  {
+    "id": "usr-author-03",
+    "name": "Maya Patel",
+    "username": "maya_writer",
+    "email": "maya@genztime.com",
+    "password": "writer2026",
+    "role": "author",
+    "designation": "Staff Tech Writer & Contributor",
+    "active": true,
+    "createdAt": "2026-09-08T14:00:00.000Z",
+    "lastLogin": "2026-09-11T18:00:00.000Z"
+  }
+]
