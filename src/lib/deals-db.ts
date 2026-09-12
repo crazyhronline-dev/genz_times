@@ -11,7 +11,7 @@ export const DEFAULT_DEALS: PromoDeal[] = [
     title: 'Hostinger Web & Cloud Hosting 45% OFF Exclusive Promo Code',
     store: 'Hostinger',
     description: 'Claim 45% instant discount on Hostinger Premium, Business, and Cloud web hosting plans with free domain, SSL, unlimited bandwidth, and NVMe LiteSpeed servers. Tested & verified working promo code.',
-    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://cdn.lovesavingsgroup.com/logos/hostinger.png',
     category: 'vpn',
     discountText: '45% OFF',
     promoCode: 'SAHCRAZYHOWP',

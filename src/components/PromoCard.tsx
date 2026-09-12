@@ -91,15 +91,21 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
       {deal.expiresAt && <meta itemProp="priceValidUntil" content={deal.expiresAt} />}
 
       {/* Top Banner Image with Badges */}
-      <div className="relative aspect-[16/9] w-full bg-tech-950 overflow-hidden">
+      <div className={`relative aspect-[16/9] w-full overflow-hidden flex items-center justify-center ${
+        deal.imageUrl.includes('logos') || deal.imageUrl.includes('.png') ? 'bg-slate-900/90' : 'bg-tech-950'
+      }`}>
         <img
           src={deal.imageUrl}
           alt={deal.metaTitle || deal.title}
           itemProp="image"
           loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className={`transition-transform duration-500 group-hover:scale-105 ${
+            deal.imageUrl.includes('logos') || deal.imageUrl.includes('.png')
+              ? 'w-auto h-auto max-w-[75%] max-h-[65%] object-contain drop-shadow-md'
+              : 'w-full h-full object-cover'
+          }`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-tech-950 via-tech-950/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-tech-950 via-tech-950/30 to-transparent pointer-events-none" />
 
         {/* Store Name Badge */}
         <div className="absolute top-3.5 left-3.5 z-10" itemProp="seller" itemScope itemType="https://schema.org/Organization">
