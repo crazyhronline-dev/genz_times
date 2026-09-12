@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CATEGORIES, getCategoryBySlug } from '@/lib/categories';
+import { getCategoryBySlug as getCategoryBySlugDb, getAllCategories } from '@/lib/categories-db';
+import { getCategoryIcon } from '@/lib/category-icons';
 import { getPostsByCategory } from '@/lib/posts-db';
 import PostCard from '@/components/PostCard';
 import { ChevronRight, Cpu, Sparkles, ArrowLeft } from 'lucide-react';
@@ -15,7 +17,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const category = getCategoryBySlug(params.slug);
+  const category = (await getCategoryBySlugDb(params.slug)) || getCategoryBySlug(params.slug);
   if (!category) {
     return {
       title: 'Category Not Found | GenZ Time',
@@ -89,18 +91,20 @@ export const revalidate = 0;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return CATEGORIES.map((cat) => ({
+  const categories = await getAllCategories();
+  return categories.map((cat) => ({
     slug: cat.slug,
   }));
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const category = getCategoryBySlug(params.slug);
+  const category = (await getCategoryBySlugDb(params.slug)) || getCategoryBySlug(params.slug);
   if (!category) {
     notFound();
   }
 
   const posts = await getPostsByCategory(category.slug);
+  const CategoryIcon = getCategoryIcon(category.iconName);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -115,9 +119,12 @@ export default async function CategoryPage({ params }: Props) {
 
       {/* Category Header */}
       <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-tech-900 via-tech-950 to-tech-900 border border-slate-800 relative overflow-hidden shadow-glow">
+        <div className="absolute -right-8 -bottom-8 opacity-5 pointer-events-none">
+          <CategoryIcon className="w-72 h-72 text-white" />
+        </div>
         <div className="max-w-2xl relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider mb-4 bg-tech-cyan/15 text-tech-cyan border border-tech-cyan/30">
-            <Cpu className="w-3.5 h-3.5" />
+            <CategoryIcon className="w-3.5 h-3.5" />
             <span>Product Category</span>
           </div>
 

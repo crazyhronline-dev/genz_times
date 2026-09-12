@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   FolderTree, 
@@ -10,37 +10,16 @@ import {
   ExternalLink, 
   Check, 
   AlertCircle, 
-  Smartphone, 
-  Laptop, 
-  Headphones, 
-  Glasses, 
-  Camera, 
-  Cpu, 
-  Gamepad2, 
-  Home, 
-  Watch, 
-  Radio, 
-  Wifi, 
-  Zap, 
+  Search,
   Sparkles,
   Layers
 } from 'lucide-react';
 import { CategoryInfo, BlogPost } from '@/types/blog';
-
-const AVAILABLE_ICONS: Record<string, React.ElementType> = {
-  Smartphone,
-  Laptop,
-  Headphones,
-  Glasses,
-  Camera,
-  Cpu,
-  Gamepad2,
-  Home,
-  Watch,
-  Radio,
-  Wifi,
-  Zap,
-};
+import { 
+  CATEGORY_ICONS_LIST, 
+  CATEGORY_ICON_GROUPS, 
+  getCategoryIcon 
+} from '@/lib/category-icons';
 
 const COLOR_PRESETS = [
   { name: 'Cyan / Blue', value: 'from-cyan-500 to-blue-600' },
@@ -76,6 +55,20 @@ export default function AdminCategoriesModule({
   const [description, setDescription] = useState('');
   const [iconName, setIconName] = useState('Cpu');
   const [featuredColor, setFeaturedColor] = useState('from-cyan-500 to-blue-600');
+  const [iconSearch, setIconSearch] = useState('');
+  const [iconGroup, setIconGroup] = useState('all');
+
+  const filteredIcons = useMemo(() => {
+    const q = iconSearch.trim().toLowerCase();
+    return CATEGORY_ICONS_LIST.filter((item) => {
+      const matchGroup = iconGroup === 'all' || item.group === iconGroup;
+      const matchSearch =
+        !q ||
+        item.name.toLowerCase().includes(q) ||
+        item.keywords.some((k) => k.toLowerCase().includes(q));
+      return matchGroup && matchSearch;
+    });
+  }, [iconSearch, iconGroup]);
 
   const showNotice = (msg: string) => {
     setNotice(msg);
@@ -89,6 +82,8 @@ export default function AdminCategoriesModule({
     setDescription('');
     setIconName('Cpu');
     setFeaturedColor('from-cyan-500 to-blue-600');
+    setIconSearch('');
+    setIconGroup('all');
     setIsCreating(true);
   };
 
@@ -100,6 +95,8 @@ export default function AdminCategoriesModule({
     setDescription(cat.description);
     setIconName(cat.iconName || 'Cpu');
     setFeaturedColor(cat.featuredColor || 'from-cyan-500 to-blue-600');
+    setIconSearch('');
+    setIconGroup('all');
   };
 
   const handleCancelForm = () => {
@@ -274,29 +271,99 @@ export default function AdminCategoriesModule({
 
             {/* Icon Picker */}
             <div>
-              <label className="block text-xs font-mono text-slate-400 mb-2">
-                Select Lucide Icon
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {Object.keys(AVAILABLE_ICONS).map((iKey) => {
-                  const IconComp = AVAILABLE_ICONS[iKey];
-                  const isSelected = iconName === iKey;
-                  return (
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <label className="block text-xs font-mono text-slate-400">
+                  Select Lucide Icon ({filteredIcons.length} of {CATEGORY_ICONS_LIST.length})
+                </label>
+                {iconName && (
+                  <div className="flex items-center gap-2 bg-tech-950 px-3 py-1 rounded-xl border border-purple-500/40 shadow-sm">
+                    <span className="text-[10px] font-mono text-slate-400">Selected:</span>
+                    <span className={`w-5 h-5 rounded-lg flex items-center justify-center bg-gradient-to-r ${featuredColor} text-white`}>
+                      {React.createElement(getCategoryIcon(iconName), { className: 'w-3 h-3' })}
+                    </span>
+                    <span className="text-xs font-mono font-bold text-white">{iconName}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Search & Filter Bar */}
+              <div className="space-y-2 mb-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={iconSearch}
+                    onChange={(e) => setIconSearch(e.target.value)}
+                    placeholder="Search 77 Lucide icons (e.g. phone, wifi, robot, drone, audio, controller)..."
+                    className="w-full pl-9 pr-8 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"
+                  />
+                  {iconSearch && (
                     <button
                       type="button"
-                      key={iKey}
-                      onClick={() => setIconName(iKey)}
-                      className={`p-2.5 rounded-xl border flex items-center gap-1.5 text-xs transition ${
-                        isSelected
-                          ? 'bg-purple-500/20 border-purple-400 text-purple-300'
-                          : 'bg-tech-950 border-slate-800 text-slate-400 hover:text-white'
-                      }`}
+                      onClick={() => setIconSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400 hover:text-white px-1.5 py-0.5 rounded"
+                      title="Clear search"
                     >
-                      <IconComp className="w-4 h-4" />
-                      <span className="text-[11px] font-mono">{iKey}</span>
+                      ✕
                     </button>
-                  );
-                })}
+                  )}
+                </div>
+
+                {/* Category Group Tabs */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                  {CATEGORY_ICON_GROUPS.map((grp) => {
+                    const isActive = iconGroup === grp.id;
+                    return (
+                      <button
+                        type="button"
+                        key={grp.id}
+                        onClick={() => setIconGroup(grp.id)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-mono whitespace-nowrap transition flex items-center gap-1 flex-shrink-0 ${
+                          isActive
+                            ? 'bg-purple-500/20 border border-purple-400 text-purple-300 font-bold'
+                            : 'bg-tech-950 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                        }`}
+                      >
+                        <span>{grp.iconEmoji}</span>
+                        <span>{grp.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Scrollable Icon Grid */}
+              <div className="max-h-56 overflow-y-auto p-2 bg-tech-950/70 border border-slate-800 rounded-xl">
+                {filteredIcons.length > 0 ? (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                    {filteredIcons.map((item) => {
+                      const IconComp = item.icon;
+                      const isSelected = iconName === item.name;
+                      return (
+                        <button
+                          type="button"
+                          key={item.name}
+                          onClick={() => setIconName(item.name)}
+                          title={`${item.name} (${item.keywords.join(', ')})`}
+                          className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 text-center transition ${
+                            isSelected
+                              ? 'bg-purple-500/25 border-purple-400 text-white shadow-glow ring-1 ring-purple-400'
+                              : 'bg-tech-900/60 border-slate-800/80 text-slate-400 hover:text-white hover:border-slate-700 hover:bg-tech-900'
+                          }`}
+                        >
+                          <IconComp className={`w-4 h-4 ${isSelected ? 'text-tech-cyan' : 'text-slate-300'}`} />
+                          <span className="text-[10px] font-mono truncate w-full px-0.5">
+                            {item.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="py-8 text-center text-xs text-slate-500 font-mono">
+                    No Lucide icons match &quot;{iconSearch}&quot;. Try searching for &quot;camera&quot;, &quot;audio&quot;, &quot;chip&quot;, or click &quot;All Icons&quot;.
+                  </div>
+                )}
               </div>
             </div>
 
@@ -353,7 +420,7 @@ export default function AdminCategoriesModule({
       {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {categories.map((cat) => {
-          const IconComp = AVAILABLE_ICONS[cat.iconName] || Cpu;
+          const IconComp = getCategoryIcon(cat.iconName);
           const assignedPosts = posts.filter((p) => p.categorySlug === cat.slug);
 
           return (

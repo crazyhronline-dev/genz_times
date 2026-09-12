@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { getAllPosts, getFeaturedPosts, getTrendingPosts } from '@/lib/posts-db';
-import { CATEGORIES } from '@/lib/categories';
+import { getAllCategories } from '@/lib/categories-db';
+import { getCategoryIcon } from '@/lib/category-icons';
 import PostCard from '@/components/PostCard';
 import NewsletterBox from '@/components/NewsletterBox';
 import { 
@@ -12,34 +13,19 @@ import {
   ShieldCheck, 
   Gauge, 
   Microscope, 
-  Smartphone, 
-  Laptop, 
-  Headphones, 
-  Glasses, 
-  Camera, 
-  Gamepad2, 
-  Home as HomeIcon,
   Star
 } from 'lucide-react';
-
-const iconMap: Record<string, React.ElementType> = {
-  Smartphone,
-  Laptop,
-  Headphones,
-  Glasses,
-  Camera,
-  Cpu,
-  Gamepad2,
-  Home: HomeIcon,
-};
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const posts = await getAllPosts();
-  const featuredPosts = await getFeaturedPosts();
-  const trendingPosts = await getTrendingPosts();
+  const [posts, featuredPosts, trendingPosts, categories] = await Promise.all([
+    getAllPosts(),
+    getFeaturedPosts(),
+    getTrendingPosts(),
+    getAllCategories(),
+  ]);
   const heroPost = featuredPosts[0] || posts[0];
   const secondaryFeatured = featuredPosts.slice(1, 3);
   const latestPosts = posts.filter((p) => p.id !== heroPost.id).slice(0, 6);
@@ -191,8 +177,8 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {CATEGORIES.map((cat) => {
-            const Icon = iconMap[cat.iconName] || Cpu;
+          {categories.map((cat) => {
+            const Icon = getCategoryIcon(cat.iconName);
             const count = posts.filter((p) => p.categorySlug === cat.slug).length;
 
             return (
@@ -202,7 +188,7 @@ export default async function HomePage() {
                 className="group p-5 rounded-2xl bg-tech-900/60 border border-slate-800/80 hover:border-tech-cyan/40 hover:bg-tech-900 transition duration-300 flex flex-col justify-between shadow-lg"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 rounded-xl bg-tech-950 border border-slate-800 text-tech-cyan group-hover:scale-110 group-hover:border-tech-cyan/40 transition-all">
+                  <div className={`p-3 rounded-xl bg-gradient-to-br ${cat.featuredColor || 'from-cyan-500 to-blue-600'} text-white group-hover:scale-110 group-hover:shadow-glow transition-all shadow-md`}>
                     <Icon className="w-5 h-5" />
                   </div>
                   <span className="text-xs font-mono text-slate-500 bg-white/5 px-2 py-0.5 rounded">
