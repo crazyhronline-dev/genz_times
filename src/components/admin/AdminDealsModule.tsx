@@ -37,7 +37,7 @@ const CATEGORY_OPTIONS = [
   { id: 'laptops', label: 'Laptops & Computing' },
   { id: 'audio', label: 'Audio & Earbuds' },
   { id: 'gaming', label: 'Gaming Consoles & Gear' },
-  { id: 'vpn', label: 'VPN, Cloud & Software' },
+  { id: 'vpn', label: 'Web Hosting, Cloud & VPN' },
   { id: 'wearables', label: 'VR & Smart Wearables' },
   { id: 'accessories', label: 'Peripherals & Accessories' },
 ];
