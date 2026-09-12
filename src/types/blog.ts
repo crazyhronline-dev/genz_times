@@ -26,6 +26,18 @@ export interface Author {
   bio: string;
 }
 
+export interface ComparedGadget {
+  id: string;
+  name: string;
+  badge?: string; // e.g. "Overall Winner", "Best Value", "Runner Up", "Editor's Choice"
+  price?: string;
+  verdictScore: number; // e.g. 9.4
+  verdictSummary?: string;
+  specs: GadgetSpecs;
+  pros: string[];
+  cons: string[];
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -50,6 +62,9 @@ export interface BlogPost {
   pros?: string[]; // (optional for standard articles)
   cons?: string[]; // (optional for standard articles)
   specs?: GadgetSpecs; // (optional for standard articles)
+  isComparison?: boolean; // True if this review compares multiple products
+  comparisonCount?: number; // Number of compared products (1, 2, 3, etc.)
+  comparedProducts?: ComparedGadget[]; // Detailed specs and verdicts for each compared product
   seo: SeoMeta;
   isFeatured?: boolean;
   isTrending?: boolean;

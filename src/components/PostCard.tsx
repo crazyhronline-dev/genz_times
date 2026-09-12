@@ -42,13 +42,17 @@ export default function PostCard({ post, featured = false }: Props) {
           </Link>
         </div>
 
-        {/* Rating Score Badge */}
-        {post.verdictScore && (
+        {/* Rating Score Badge or Comparison Badge */}
+        {post.isComparison && post.comparedProducts && post.comparedProducts.length > 1 ? (
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-purple-950/85 backdrop-blur-md text-purple-300 border border-purple-400/40 shadow-md">
+            <span>⚔️ {post.comparedProducts.length}-Way VS</span>
+          </div>
+        ) : post.verdictScore ? (
           <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-tech-950/80 backdrop-blur-md text-white border border-slate-700 shadow-md">
             <Star className="w-3.5 h-3.5 text-tech-cyan fill-tech-cyan" />
             <span>{post.verdictScore.toFixed(1)}</span>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* Content Container */}

@@ -7,6 +7,7 @@ import { generateArticleSchema, generateBreadcrumbSchema, SITE_CONFIG } from '@/
 import GadgetSpecsBox from '@/components/GadgetSpecsBox';
 import ProsConsBox from '@/components/ProsConsBox';
 import VerdictBadge from '@/components/VerdictBadge';
+import ComparisonMatrix from '@/components/ComparisonMatrix';
 import ShareButtons from '@/components/ShareButtons';
 import PostCard from '@/components/PostCard';
 import CommentSection from '@/components/CommentSection';
@@ -306,14 +307,21 @@ export default async function SinglePostPage({ params }: PageProps) {
         {renderContent(post.content)}
       </div>
 
-      {/* 6. Gadget Technical Specifications Sheet (Reviews only) */}
-      {post.postType !== 'article' && post.specs && Object.keys(post.specs).length > 0 && (
-        <GadgetSpecsBox specs={post.specs} gadgetTitle={post.title.split(':')[0]} />
-      )}
+      {/* 6. Hardware Specifications & Benchmark Matrix (Reviews only) */}
+      {post.postType !== 'article' && post.isComparison && post.comparedProducts && post.comparedProducts.length > 1 ? (
+        <ComparisonMatrix products={post.comparedProducts} reviewTitle={post.title} />
+      ) : (
+        <>
+          {/* Single Gadget Technical Specifications Sheet */}
+          {post.postType !== 'article' && post.specs && Object.keys(post.specs).length > 0 && (
+            <GadgetSpecsBox specs={post.specs} gadgetTitle={post.title.split(':')[0]} />
+          )}
 
-      {/* 7. Pros & Cons Comparison (Reviews only) */}
-      {post.postType !== 'article' && ((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
-        <ProsConsBox pros={post.pros || []} cons={post.cons || []} />
+          {/* Single Gadget Pros & Cons Comparison */}
+          {post.postType !== 'article' && ((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
+            <ProsConsBox pros={post.pros || []} cons={post.cons || []} />
+          )}
+        </>
       )}
 
       {/* 8. FAQs Accordion (If provided) */}
@@ -362,8 +370,8 @@ export default async function SinglePostPage({ params }: PageProps) {
       {/* 10. Google E-E-A-T Quality & Hardware Lab Audit Badge */}
       <EeatBadge audit={eeatAudit} deviceTitle={post.title} />
 
-      {/* 11. Official GenZ Time Verdict Badge (Reviews only) */}
-      {post.postType !== 'article' && post.verdictScore && (
+      {/* 11. Official GenZ Time Verdict Badge (Reviews only - for single product reviews) */}
+      {post.postType !== 'article' && (!post.isComparison || !post.comparedProducts || post.comparedProducts.length <= 1) && post.verdictScore && (
         <VerdictBadge
           score={post.verdictScore}
           summary={post.verdictSummary || ''}

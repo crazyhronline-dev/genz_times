@@ -9,7 +9,7 @@ import { checkPlagiarism, removePlagiarismAndHumanize } from '@/lib/plagiarism';
 import { evaluateEeat } from '@/lib/eeat';
 import { generateHighLevelSeo } from '@/lib/auto-seo';
 import { applyWatermark, WatermarkOptions } from '@/lib/watermark';
-import { BlogPost, GadgetSpecs } from '@/types/blog';
+import { BlogPost, GadgetSpecs, ComparedGadget } from '@/types/blog';
 import { 
   Sparkles, 
   Send, 
@@ -46,7 +46,10 @@ import {
   Bold,
   List,
   Layers,
-  Award
+  Award,
+  Scale,
+  Copy,
+  Trophy
 } from 'lucide-react';
 
 const PRESET_IMAGES = [
@@ -140,6 +143,180 @@ export default function PublishStudio({
   const [verdictScore, setVerdictScore] = useState(9.2);
   const [verdictSummary, setVerdictSummary] = useState('An exceptional piece of technology delivering benchmark-topping capabilities.');
 
+  // Multi-Product Comparison State (Hardware Reviews)
+  const [isComparison, setIsComparison] = useState(false);
+  const [comparedProducts, setComparedProducts] = useState<ComparedGadget[]>([
+    {
+      id: 'comp-1',
+      name: 'Primary Gadget',
+      badge: 'Overall Winner',
+      verdictScore: 9.2,
+      verdictSummary: 'An exceptional piece of technology delivering benchmark-topping capabilities.',
+      specs: {
+        processor: '',
+        display: '',
+        ram: '',
+        storage: '',
+        battery: '',
+        camera: '',
+        os: '',
+        weight: '',
+        price: '',
+        connectivity: '',
+      },
+      pros: ['Class-leading build quality', 'Breakthrough hardware efficiency'],
+      cons: ['Premium flagship pricing'],
+    },
+  ]);
+  const [activeProductTab, setActiveProductTab] = useState(0);
+  const [viewAllStacked, setViewAllStacked] = useState(false);
+  const [newProInputs, setNewProInputs] = useState<Record<number, string>>({});
+  const [newConInputs, setNewConInputs] = useState<Record<number, string>>({});
+
+  const updateProduct = (index: number, updates: Partial<ComparedGadget>) => {
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      copy[index] = { ...copy[index], ...updates };
+      if (index === 0) {
+        if (updates.specs) setSpecs(updates.specs);
+        if (updates.pros) setPros(updates.pros);
+        if (updates.cons) setCons(updates.cons);
+        if (updates.verdictScore !== undefined) setVerdictScore(updates.verdictScore);
+        if (updates.verdictSummary !== undefined) setVerdictSummary(updates.verdictSummary);
+      }
+      return copy;
+    });
+  };
+
+  const updateProductSpec = (index: number, key: keyof GadgetSpecs, val: string) => {
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      const newSpecs = { ...copy[index].specs, [key]: val };
+      copy[index] = { ...copy[index], specs: newSpecs };
+      if (index === 0) setSpecs(newSpecs);
+      return copy;
+    });
+  };
+
+  const addProductPro = (index: number) => {
+    const text = (newProInputs[index] || '').trim();
+    if (!text) return;
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      const newPros = [...copy[index].pros, text];
+      copy[index] = { ...copy[index], pros: newPros };
+      if (index === 0) setPros(newPros);
+      return copy;
+    });
+    setNewProInputs((prev) => ({ ...prev, [index]: '' }));
+  };
+
+  const removeProductPro = (index: number, proIdx: number) => {
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      const newPros = copy[index].pros.filter((_, i) => i !== proIdx);
+      copy[index] = { ...copy[index], pros: newPros };
+      if (index === 0) setPros(newPros);
+      return copy;
+    });
+  };
+
+  const addProductCon = (index: number) => {
+    const text = (newConInputs[index] || '').trim();
+    if (!text) return;
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      const newCons = [...copy[index].cons, text];
+      copy[index] = { ...copy[index], cons: newCons };
+      if (index === 0) setCons(newCons);
+      return copy;
+    });
+    setNewConInputs((prev) => ({ ...prev, [index]: '' }));
+  };
+
+  const removeProductCon = (index: number, conIdx: number) => {
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      if (!copy[index]) return prev;
+      const newCons = copy[index].cons.filter((_, i) => i !== conIdx);
+      copy[index] = { ...copy[index], cons: newCons };
+      if (index === 0) setCons(newCons);
+      return copy;
+    });
+  };
+
+  const handleSelectCount = (count: number) => {
+    if (count === 1) {
+      setIsComparison(false);
+      return;
+    }
+    setIsComparison(true);
+    setComparedProducts((prev) => {
+      const copy = [...prev];
+      while (copy.length < count) {
+        const nextIdx = copy.length + 1;
+        copy.push({
+          id: `comp-${Date.now()}-${nextIdx}`,
+          name: `Compared Device #${nextIdx}`,
+          badge: nextIdx === 2 ? 'Key Challenger' : nextIdx === 3 ? 'Alternative Value' : 'Contender',
+          verdictScore: 8.8,
+          verdictSummary: 'Solid performance with competitive trade-offs in its price tier.',
+          specs: { ...(copy[0]?.specs || {}) },
+          pros: ['Strong competitive value', 'Reliable performance'],
+          cons: ['Minor thermal throttling under peak load'],
+        });
+      }
+      return copy;
+    });
+    if (activeProductTab >= count) setActiveProductTab(0);
+  };
+
+  const handleAddComparedProduct = () => {
+    setIsComparison(true);
+    const nextIdx = comparedProducts.length + 1;
+    const newProduct: ComparedGadget = {
+      id: `comp-${Date.now()}-${nextIdx}`,
+      name: `Compared Device #${nextIdx}`,
+      badge: nextIdx === 2 ? 'Key Challenger' : nextIdx === 3 ? 'Alternative Value' : 'Contender',
+      verdictScore: 8.9,
+      verdictSummary: 'Competitive hardware package with notable class-leading features.',
+      specs: { ...(comparedProducts[0]?.specs || {}) },
+      pros: ['Impressive build and finish', 'Great ergonomics'],
+      cons: ['Premium price point'],
+    };
+    setComparedProducts((prev) => [...prev, newProduct]);
+    setActiveProductTab(comparedProducts.length);
+    showToast(`Added Compared Device #${nextIdx}!`);
+  };
+
+  const handleRemoveComparedProduct = (index: number) => {
+    if (comparedProducts.length <= 1) {
+      setIsComparison(false);
+      return;
+    }
+    const filtered = comparedProducts.filter((_, i) => i !== index);
+    setComparedProducts(filtered);
+    if (filtered.length <= 1) {
+      setIsComparison(false);
+    }
+    if (activeProductTab >= filtered.length) {
+      setActiveProductTab(Math.max(0, filtered.length - 1));
+    }
+    showToast(`Removed device #${index + 1}`);
+  };
+
+  const handleCopySpecsFromPrimary = (targetIndex: number) => {
+    if (targetIndex === 0) return;
+    const primarySpecs = comparedProducts[0]?.specs || {};
+    updateProduct(targetIndex, { specs: { ...primarySpecs } });
+    showToast(`Copied specifications from Device #1 to Device #${targetIndex + 1}!`);
+  };
+
   // Body Content
   const [content, setContent] = useState(`## Executive Overview\n\nIn our continuous testing and editorial analysis, this development marks a pivotal shift in consumer tech architecture.\n\n### Architectural Innovations & Core Metrics\n\nUnder rigorous stress testing, key efficiencies were unlocked without compromising thermal boundaries.\n\n### Practical Implications for Everyday Users\n\nBeyond raw synthetic data, daily usability demonstrates refined ergonomics and sustained efficiency across modern creator workflows.\n\n### The Final Verdict & Outlook\n\nFor power users and tech enthusiasts considering this generation, the enhancements justify serious attention.`);
 
@@ -196,12 +373,36 @@ export default function PublishStudio({
     setFaqs(post.faqs || []);
     setSources(post.sources || []);
 
-    // Load Review specifics
-    setSpecs(post.specs || {});
-    setPros(post.pros || []);
-    setCons(post.cons || []);
-    setVerdictScore(post.verdictScore || 9.2);
-    setVerdictSummary(post.verdictSummary || '');
+    // Load Review & Comparison specifics
+    const hasComparison = Boolean(post.isComparison && post.comparedProducts && post.comparedProducts.length > 1);
+    setIsComparison(hasComparison);
+    if (post.comparedProducts && post.comparedProducts.length > 0) {
+      setComparedProducts(post.comparedProducts);
+      const first = post.comparedProducts[0];
+      setSpecs(first.specs || {});
+      setPros(first.pros || []);
+      setCons(first.cons || []);
+      setVerdictScore(first.verdictScore || 9.2);
+      setVerdictSummary(first.verdictSummary || '');
+    } else {
+      setSpecs(post.specs || {});
+      setPros(post.pros || []);
+      setCons(post.cons || []);
+      setVerdictScore(post.verdictScore || 9.2);
+      setVerdictSummary(post.verdictSummary || '');
+      setComparedProducts([
+        {
+          id: 'comp-1',
+          name: post.title ? post.title.split(':')[0].trim() : 'Primary Gadget',
+          badge: 'Overall Winner',
+          verdictScore: post.verdictScore || 9.2,
+          verdictSummary: post.verdictSummary || '',
+          specs: post.specs || {},
+          pros: post.pros || ['Class-leading build quality', 'Breakthrough hardware efficiency'],
+          cons: post.cons || ['Premium flagship pricing'],
+        },
+      ]);
+    }
 
     // Load SEO
     setFocusKeyword(post.seo?.focusKeyword || '');
@@ -392,11 +593,27 @@ export default function PublishStudio({
 
     // Include review-only fields if postType is review
     if (postType === 'review') {
-      payload.verdictScore = Number(verdictScore);
-      payload.verdictSummary = verdictSummary;
-      payload.specs = specs;
-      payload.pros = pros.filter(Boolean);
-      payload.cons = cons.filter(Boolean);
+      const isMulti = isComparison && comparedProducts.length > 1;
+      payload.isComparison = isMulti;
+      payload.comparisonCount = isMulti ? comparedProducts.length : 1;
+      payload.comparedProducts = isMulti ? comparedProducts : [comparedProducts[0] || {
+        id: 'comp-1',
+        name: title ? title.split(':')[0].trim() : 'Primary Gadget',
+        badge: 'Overall Winner',
+        verdictScore: Number(verdictScore),
+        verdictSummary,
+        specs,
+        pros: pros.filter(Boolean),
+        cons: cons.filter(Boolean),
+      }];
+
+      // Synchronize primary device to root fields for backwards compatibility
+      const primary = comparedProducts[0];
+      payload.verdictScore = primary ? Number(primary.verdictScore) : Number(verdictScore);
+      payload.verdictSummary = primary ? primary.verdictSummary : verdictSummary;
+      payload.specs = primary ? primary.specs : specs;
+      payload.pros = primary ? primary.pros.filter(Boolean) : pros.filter(Boolean);
+      payload.cons = primary ? primary.cons.filter(Boolean) : cons.filter(Boolean);
     } else {
       // Include article-only fields
       payload.keyTakeaways = keyTakeaways.filter(Boolean);
@@ -945,251 +1162,550 @@ export default function PublishStudio({
           </div>
         )}
 
-        {/* 5. Review-Specific Modules (Only in Review Mode) */}
+        {/* 5. Review-Specific Modules (Hardware Reviews & Multi-Device Comparison) */}
         {postType === 'review' && (
           <div className="space-y-8">
-            {/* Hardware Specifications Sheet */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-4">
-              <div className="border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-tech-cyan" />
-                  <span>Hardware Technical Specifications (10-Point Sheet)</span>
-                </h3>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">
-                  Standardized metrics for hardware comparisons and benchmark tables.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs font-mono">
-                <div>
-                  <label className="block text-slate-400 mb-1">Processor / SoC</label>
-                  <input
-                    type="text"
-                    value={specs.processor || ''}
-                    onChange={(e) => setSpecs({ ...specs, processor: e.target.value })}
-                    placeholder="e.g. Snapdragon 8 Gen 4 / M4 Pro"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Display & Refresh</label>
-                  <input
-                    type="text"
-                    value={specs.display || ''}
-                    onChange={(e) => setSpecs({ ...specs, display: e.target.value })}
-                    placeholder={'e.g. 6.82" AMOLED 120Hz 4500 nits'}
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Memory (RAM)</label>
-                  <input
-                    type="text"
-                    value={specs.ram || ''}
-                    onChange={(e) => setSpecs({ ...specs, ram: e.target.value })}
-                    placeholder="e.g. 16GB LPDDR5X"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Storage</label>
-                  <input
-                    type="text"
-                    value={specs.storage || ''}
-                    onChange={(e) => setSpecs({ ...specs, storage: e.target.value })}
-                    placeholder="e.g. 512GB UFS 4.0 / PCIe 5.0"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Battery & Charging</label>
-                  <input
-                    type="text"
-                    value={specs.battery || ''}
-                    onChange={(e) => setSpecs({ ...specs, battery: e.target.value })}
-                    placeholder="e.g. 5,400 mAh • 100W SuperVOOC"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Camera Sensors</label>
-                  <input
-                    type="text"
-                    value={specs.camera || ''}
-                    onChange={(e) => setSpecs({ ...specs, camera: e.target.value })}
-                    placeholder="e.g. 50MP 1-inch LYT-900 + 50MP Periscope"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Operating System</label>
-                  <input
-                    type="text"
-                    value={specs.os || ''}
-                    onChange={(e) => setSpecs({ ...specs, os: e.target.value })}
-                    placeholder="e.g. Android 15 / macOS Sequoia"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Weight & Chassis</label>
-                  <input
-                    type="text"
-                    value={specs.weight || ''}
-                    onChange={(e) => setSpecs({ ...specs, weight: e.target.value })}
-                    placeholder="e.g. 219g • Titanium Frame"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Price</label>
-                  <input
-                    type="text"
-                    value={specs.price || ''}
-                    onChange={(e) => setSpecs({ ...specs, price: e.target.value })}
-                    placeholder="e.g. $899 / ₹79,999"
-                    className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Pros & Cons Builder */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-6">
-              <div className="border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-tech-emerald" />
-                  <span>Pros & Cons Comparison</span>
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Pros */}
-                <div className="space-y-3">
-                  <span className="text-xs font-mono font-bold text-tech-emerald block">
-                    ✓ Strongest Pros ({pros.length})
-                  </span>
-                  <div className="space-y-2">
-                    {pros.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-tech-emerald/20 text-xs text-slate-200">
-                        <span>{p}</span>
-                        <button
-                          type="button"
-                          onClick={() => setPros(pros.filter((_, idx) => idx !== i))}
-                          className="text-slate-500 hover:text-rose-400"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
+            {/* Review Scope & Multi-Product Comparison Prompt */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-tech-950 via-tech-900 to-tech-950 border border-slate-800 shadow-glow space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-tech-cyan">
+                    <Scale className="w-4 h-4" />
+                    <span>Hardware Review Scope & Comparison Selector</span>
                   </div>
+                  <h3 className="text-lg font-bold text-white tracking-tight">
+                    Is this review for a Single Product, or a Comparison between multiple gadgets?
+                  </h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    Select 1, 2, or 3 products, or click the <span className="text-tech-cyan font-bold">+ icon</span> to add more devices with identical specifications and benchmark scorecards.
+                  </p>
+                </div>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={newPro}
-                      onChange={(e) => setNewPro(e.target.value)}
-                      placeholder="Add a pro point..."
-                      className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-tech-emerald"
-                    />
+                {isComparison && comparedProducts.length > 1 && (
+                  <div className="flex items-center gap-2 bg-tech-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
+                    <span className="text-xs font-mono text-slate-400">View:</span>
                     <button
                       type="button"
-                      onClick={addPro}
-                      className="px-3 py-2 bg-tech-emerald/20 text-tech-emerald rounded-xl text-xs font-mono font-bold border border-tech-emerald/40"
+                      onClick={() => setViewAllStacked(false)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono transition ${
+                        !viewAllStacked ? 'bg-tech-cyan/20 text-tech-cyan font-bold border border-tech-cyan/40' : 'text-slate-400 hover:text-white'
+                      }`}
                     >
-                      + Pro
+                      Tabs
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewAllStacked(true)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono transition ${
+                        viewAllStacked ? 'bg-tech-cyan/20 text-tech-cyan font-bold border border-tech-cyan/40' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Stack All
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Scope Selection Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {/* 1 Product (Single Review) */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectCount(1)}
+                  className={`p-4 rounded-2xl border text-left transition flex items-center justify-between group ${
+                    !isComparison || comparedProducts.length <= 1
+                      ? 'bg-tech-cyan/15 border-tech-cyan shadow-glow text-white'
+                      : 'bg-tech-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center gap-2 font-bold text-sm text-white mb-0.5">
+                      <Smartphone className="w-4 h-4 text-tech-cyan" />
+                      <span>1 Product</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-400 block">Single Device In-Depth</span>
+                  </div>
+                  {(!isComparison || comparedProducts.length <= 1) && (
+                    <CheckCircle2 className="w-4 h-4 text-tech-cyan shrink-0" />
+                  )}
+                </button>
+
+                {/* 2 Products (Head-to-Head) */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectCount(2)}
+                  className={`p-4 rounded-2xl border text-left transition flex items-center justify-between group ${
+                    isComparison && comparedProducts.length === 2
+                      ? 'bg-purple-500/15 border-purple-400 shadow-glow text-white'
+                      : 'bg-tech-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center gap-2 font-bold text-sm text-white mb-0.5">
+                      <Scale className="w-4 h-4 text-purple-400" />
+                      <span>2 Products</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-400 block">Head-to-Head Battle</span>
+                  </div>
+                  {isComparison && comparedProducts.length === 2 && (
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
+                  )}
+                </button>
+
+                {/* 3 Products (Triple Shootout) */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectCount(3)}
+                  className={`p-4 rounded-2xl border text-left transition flex items-center justify-between group ${
+                    isComparison && comparedProducts.length === 3
+                      ? 'bg-tech-emerald/15 border-tech-emerald shadow-glow text-white'
+                      : 'bg-tech-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center gap-2 font-bold text-sm text-white mb-0.5">
+                      <Layers className="w-4 h-4 text-tech-emerald" />
+                      <span>3 Products</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-400 block">Triple Showdown</span>
+                  </div>
+                  {isComparison && comparedProducts.length === 3 && (
+                    <CheckCircle2 className="w-4 h-4 text-tech-emerald shrink-0" />
+                  )}
+                </button>
+
+                {/* + Add Product / Gadget Button */}
+                <button
+                  type="button"
+                  onClick={handleAddComparedProduct}
+                  className="p-4 rounded-2xl border border-tech-cyan/40 bg-gradient-to-r from-tech-cyan/20 to-purple-500/20 hover:from-tech-cyan/30 hover:to-purple-500/30 text-white text-left transition flex items-center justify-between group shadow-lg"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 font-bold text-sm text-white mb-0.5">
+                      <Plus className="w-4 h-4 text-tech-cyan group-hover:rotate-90 transition-transform" />
+                      <span>+ Add Product</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-tech-cyan block">
+                      Add Device #{comparedProducts.length + 1}
+                    </span>
+                  </div>
+                  <span className="w-6 h-6 rounded-full bg-tech-cyan/20 flex items-center justify-center text-tech-cyan text-xs font-bold">
+                    +
+                  </span>
+                </button>
+              </div>
+
+              {/* Active Comparison Tabs (when in multi-device mode and tabs view) */}
+              {isComparison && comparedProducts.length > 1 && !viewAllStacked && (
+                <div className="pt-3 border-t border-slate-800/80">
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+                    {comparedProducts.map((prod, pIdx) => {
+                      const isActive = activeProductTab === pIdx;
+                      return (
+                        <div
+                          key={prod.id || pIdx}
+                          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border transition shrink-0 ${
+                            isActive
+                              ? 'bg-tech-cyan/15 border-tech-cyan text-white shadow-glow'
+                              : 'bg-tech-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setActiveProductTab(pIdx)}
+                            className="flex items-center gap-2 text-left"
+                          >
+                            <span className="w-5 h-5 rounded-md bg-white/10 flex items-center justify-center font-mono text-[10px] font-bold">
+                              #{pIdx + 1}
+                            </span>
+                            <span className="font-bold text-xs max-w-[140px] truncate">
+                              {prod.name || `Device #${pIdx + 1}`}
+                            </span>
+                            <span className="text-[10px] font-mono text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">
+                              {(prod.verdictScore || 0).toFixed(1)}★
+                            </span>
+                          </button>
+
+                          {comparedProducts.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveComparedProduct(pIdx)}
+                              className="text-slate-500 hover:text-rose-400 p-0.5 rounded transition"
+                              title="Remove this device from comparison"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+
+                    <button
+                      type="button"
+                      onClick={handleAddComparedProduct}
+                      className="px-3 py-2 rounded-xl border border-dashed border-slate-700 hover:border-tech-cyan text-slate-400 hover:text-white flex items-center gap-1.5 text-xs font-mono transition shrink-0"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-tech-cyan" />
+                      <span>Add Device</span>
                     </button>
                   </div>
                 </div>
+              )}
+            </div>
 
-                {/* Cons */}
-                <div className="space-y-3">
-                  <span className="text-xs font-mono font-bold text-rose-400 block">
-                    ✗ Drawbacks & Trade-offs ({cons.length})
-                  </span>
-                  <div className="space-y-2">
-                    {cons.map((c, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-rose-500/20 text-xs text-slate-200">
-                        <span>{c}</span>
+            {/* Compared Products Editor Cards */}
+            {comparedProducts.map((product, pIdx) => {
+              // In tabs view, only show the active tab (unless viewAllStacked is true or single product)
+              if (isComparison && comparedProducts.length > 1 && !viewAllStacked && activeProductTab !== pIdx) {
+                return null;
+              }
+
+              return (
+                <div
+                  key={product.id || pIdx}
+                  className="p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-6 shadow-xl relative"
+                >
+                  {/* Device Header Bar */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-tech-cyan to-purple-500 text-tech-950 font-black font-mono flex items-center justify-center text-sm shadow-md">
+                        #{pIdx + 1}
+                      </span>
+                      <div>
+                        <h4 className="text-lg font-bold text-white">
+                          {isComparison && comparedProducts.length > 1
+                            ? `Device #${pIdx + 1}: ${product.name || 'Untitled Hardware'}`
+                            : 'Hardware Specifications & Lab Verdict'}
+                        </h4>
+                        <span className="text-xs font-mono text-slate-400">
+                          {isComparison ? 'Independent 10-Point Technical Sheet & Scorecard' : 'Standardized metrics for hardware evaluation and benchmark tables.'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {pIdx > 0 && (
                         <button
                           type="button"
-                          onClick={() => setCons(cons.filter((_, idx) => idx !== i))}
-                          className="text-slate-500 hover:text-rose-400"
+                          onClick={() => handleCopySpecsFromPrimary(pIdx)}
+                          className="px-3 py-1.5 rounded-xl bg-tech-950 border border-slate-700 hover:border-tech-cyan text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition"
+                          title="Copy specs from Device #1 as a baseline"
+                        >
+                          <Copy className="w-3.5 h-3.5 text-tech-cyan" />
+                          <span>Copy Specs from #1</span>
+                        </button>
+                      )}
+
+                      {isComparison && comparedProducts.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveComparedProduct(pIdx)}
+                          className="px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-rose-400 text-xs font-mono flex items-center gap-1.5 transition"
+                          title="Delete this compared device"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
+                          <span>Remove Device</span>
                         </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Device Name & Award Badge Inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-slate-400 mb-1">
+                        Device Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={product.name || ''}
+                        onChange={(e) => updateProduct(pIdx, { name: e.target.value })}
+                        placeholder={pIdx === 0 ? (title ? title.split(':')[0].trim() : 'e.g. Samsung Galaxy S25 Ultra') : 'e.g. Apple iPhone 16 Pro Max'}
+                        className="w-full px-3.5 py-2.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-tech-cyan font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-mono text-slate-400">
+                          Comparison Award / Badge
+                        </label>
+                        <span className="text-[10px] font-mono text-slate-500">Optional</span>
                       </div>
-                    ))}
+                      <input
+                        type="text"
+                        value={product.badge || ''}
+                        onChange={(e) => updateProduct(pIdx, { badge: e.target.value })}
+                        placeholder="e.g. Overall Winner, Best Value, Top Camera, Runner-Up"
+                        className="w-full px-3.5 py-2.5 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 font-mono"
+                      />
+                      {/* Badge Suggestion Chips */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                        {['Overall Winner', 'Best Value', 'Top Camera', 'Runner-Up', 'Flagship Choice'].map((chip) => (
+                          <button
+                            type="button"
+                            key={chip}
+                            onClick={() => updateProduct(pIdx, { badge: chip })}
+                            className="px-2 py-0.5 rounded-md bg-tech-950 border border-slate-800 text-[10px] font-mono text-slate-400 hover:text-white hover:border-slate-700 transition"
+                          >
+                            + {chip}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={newCon}
-                      onChange={(e) => setNewCon(e.target.value)}
-                      placeholder="Add a con point..."
-                      className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-rose-400"
-                    />
-                    <button
-                      type="button"
-                      onClick={addCon}
-                      className="px-3 py-2 bg-rose-500/20 text-rose-400 rounded-xl text-xs font-mono font-bold border border-rose-500/40"
-                    >
-                      + Con
-                    </button>
+                  {/* 10-Point Hardware Specifications Sheet */}
+                  <div className="space-y-3 pt-3 border-t border-slate-800/80">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+                        <Cpu className="w-3.5 h-3.5 text-tech-cyan" />
+                        <span>10-Point Technical Specifications Sheet</span>
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs font-mono">
+                      <div>
+                        <label className="block text-slate-400 mb-1">Processor / SoC</label>
+                        <input
+                          type="text"
+                          value={product.specs?.processor || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'processor', e.target.value)}
+                          placeholder="e.g. Snapdragon 8 Gen 4 / M4 Pro"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Display & Refresh</label>
+                        <input
+                          type="text"
+                          value={product.specs?.display || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'display', e.target.value)}
+                          placeholder={'e.g. 6.82" AMOLED 120Hz 4500 nits'}
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Memory (RAM)</label>
+                        <input
+                          type="text"
+                          value={product.specs?.ram || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'ram', e.target.value)}
+                          placeholder="e.g. 16GB LPDDR5X"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Storage</label>
+                        <input
+                          type="text"
+                          value={product.specs?.storage || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'storage', e.target.value)}
+                          placeholder="e.g. 512GB UFS 4.0 / PCIe 5.0"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Battery & Charging</label>
+                        <input
+                          type="text"
+                          value={product.specs?.battery || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'battery', e.target.value)}
+                          placeholder="e.g. 5,400 mAh • 100W SuperVOOC"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Camera Sensors</label>
+                        <input
+                          type="text"
+                          value={product.specs?.camera || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'camera', e.target.value)}
+                          placeholder="e.g. 50MP 1-inch LYT-900 + 50MP Periscope"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Operating System</label>
+                        <input
+                          type="text"
+                          value={product.specs?.os || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'os', e.target.value)}
+                          placeholder="e.g. Android 15 / macOS Sequoia"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Weight & Chassis</label>
+                        <input
+                          type="text"
+                          value={product.specs?.weight || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'weight', e.target.value)}
+                          placeholder="e.g. 219g • Titanium Frame"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1">Price</label>
+                        <input
+                          type="text"
+                          value={product.specs?.price || ''}
+                          onChange={(e) => updateProductSpec(pIdx, 'price', e.target.value)}
+                          placeholder="e.g. $899 / ₹79,999"
+                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pros & Cons Builder for this Device */}
+                  <div className="pt-4 border-t border-slate-800/80 space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-tech-emerald">
+                      <Sliders className="w-3.5 h-3.5" />
+                      <span>{product.name || `Device #${pIdx + 1}`} Pros & Cons Breakdown</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Pros */}
+                      <div className="space-y-3">
+                        <span className="text-xs font-mono font-bold text-tech-emerald block">
+                          ✓ Strengths ({(product.pros || []).length})
+                        </span>
+                        <div className="space-y-2">
+                          {(product.pros || []).map((p, proIdx) => (
+                            <div key={proIdx} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-tech-emerald/20 text-xs text-slate-200">
+                              <span>{p}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeProductPro(pIdx, proIdx)}
+                                className="text-slate-500 hover:text-rose-400"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={newProInputs[pIdx] || ''}
+                            onChange={(e) => setNewProInputs({ ...newProInputs, [pIdx]: e.target.value })}
+                            placeholder="Add a pro point..."
+                            className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-tech-emerald"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                addProductPro(pIdx);
+                              }
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => addProductPro(pIdx)}
+                            className="px-3 py-2 bg-tech-emerald/20 text-tech-emerald rounded-xl text-xs font-mono font-bold border border-tech-emerald/40 hover:bg-tech-emerald/30 transition"
+                          >
+                            + Pro
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Cons */}
+                      <div className="space-y-3">
+                        <span className="text-xs font-mono font-bold text-rose-400 block">
+                          ✗ Trade-offs & Drawbacks ({(product.cons || []).length})
+                        </span>
+                        <div className="space-y-2">
+                          {(product.cons || []).map((c, conIdx) => (
+                            <div key={conIdx} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-rose-500/20 text-xs text-slate-200">
+                              <span>{c}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeProductCon(pIdx, conIdx)}
+                                className="text-slate-500 hover:text-rose-400"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={newConInputs[pIdx] || ''}
+                            onChange={(e) => setNewConInputs({ ...newConInputs, [pIdx]: e.target.value })}
+                            placeholder="Add a con point..."
+                            className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-rose-400"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                addProductCon(pIdx);
+                              }
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => addProductCon(pIdx)}
+                            className="px-3 py-2 bg-rose-500/20 text-rose-400 rounded-xl text-xs font-mono font-bold border border-rose-500/40 hover:bg-rose-500/30 transition"
+                          >
+                            + Con
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Verdict Rating & Conclusion for this Device */}
+                  <div className="pt-4 border-t border-slate-800/80 space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
+                      <Star className="w-3.5 h-3.5" />
+                      <span>{product.name || `Device #${pIdx + 1}`} Hardware Verdict Rating</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+                      <div className="p-4 rounded-2xl bg-tech-950 border border-slate-800 text-center space-y-2">
+                        <span className="text-xs font-mono text-slate-400 block">Final Lab Score</span>
+                        <div className="text-4xl font-black font-mono text-amber-300">
+                          {(product.verdictScore || 0).toFixed(1)}{' '}
+                          <span className="text-sm text-slate-500">/ 10</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="1.0"
+                          max="10.0"
+                          step="0.1"
+                          value={product.verdictScore || 9.2}
+                          onChange={(e) => updateProduct(pIdx, { verdictScore: parseFloat(e.target.value) })}
+                          className="w-full accent-amber-400 cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+                          Verdict Executive Conclusion
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={product.verdictSummary || ''}
+                          onChange={(e) => updateProduct(pIdx, { verdictSummary: e.target.value })}
+                          placeholder="Summary sentence explaining whether this device is recommended and for whom..."
+                          className="w-full px-4 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs leading-relaxed focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Verdict Score & Summary */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-4">
-              <div className="border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Star className="w-4 h-4 text-amber-400" />
-                  <span>Official Hardware Verdict Rating</span>
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
-                <div className="p-4 rounded-2xl bg-tech-950 border border-slate-800 text-center space-y-2">
-                  <span className="text-xs font-mono text-slate-400 block">Final Lab Score</span>
-                  <div className="text-4xl font-black font-mono text-amber-300">
-                    {verdictScore.toFixed(1)} <span className="text-sm text-slate-500">/ 10</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="1.0"
-                    max="10.0"
-                    step="0.1"
-                    value={verdictScore}
-                    onChange={(e) => setVerdictScore(parseFloat(e.target.value))}
-                    className="w-full accent-amber-400 cursor-pointer"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                    Verdict Executive Conclusion
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={verdictSummary}
-                    onChange={(e) => setVerdictSummary(e.target.value)}
-                    placeholder="Summary sentence explaining whether this device is recommended and for whom..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs leading-relaxed focus:outline-none focus:border-amber-400"
-                  />
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         )}
 
