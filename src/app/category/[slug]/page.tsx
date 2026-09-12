@@ -25,41 +25,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Human-touch, E-E-A-T descriptions per category
   const categoryMeta: Record<string, { title: string; description: string }> = {
     smartphones: {
-      title: `Best Smartphones Reviewed & Benchmarked in ${new Date().getFullYear()} — GenZ Time`,
+      title: `Best Smartphones Reviewed & Benchmarked in ${new Date().getFullYear()}`,
       description: `Our editors have personally used and stress-tested every phone listed here. From flagship foldables to budget killers — real camera shootouts, battery drain tests, and drop tests. No PR bias.`,
     },
     'laptops-computing': {
-      title: `Laptop & PC Reviews with Real Benchmark Data — GenZ Time`,
+      title: `Laptop & PC Reviews with Real Benchmark Data`,
       description: `We run standardized CPU, GPU, and thermal benchmarks on every machine. Whether you're a creator, gamer, or student — find out which laptop actually delivers what it promises before you spend a rupee.`,
     },
     'audio-earbuds': {
-      title: `Best Earbuds & Headphones Actually Worth Buying — GenZ Time`,
+      title: `Best Earbuds & Headphones Actually Worth Buying`,
       description: `We measure frequency response, ANC depth, and mic clarity in our own audio lab. Find the best wireless earbuds, noise-cancelling headphones, and open-ear alternatives for Gen Z lifestyles.`,
     },
     'vr-wearables': {
-      title: `VR Headsets, Smartwatches & Wearables Reviewed — GenZ Time`,
+      title: `VR Headsets, Smartwatches & Wearables Reviewed`,
       description: `We've strapped on every major VR headset, spatial computer, and smartwatch so you don't have to. Honest takes on comfort, latency, and real-world usability from people who actually use this stuff daily.`,
     },
     'drones-cameras': {
-      title: `Drones & Cameras Reviewed for Creators & Hobbyists — GenZ Time`,
+      title: `Drones & Cameras Reviewed for Creators & Hobbyists`,
       description: `Our team shoots real footage and analyzes it frame by frame. From DJI Mini drones to mirrorless cinema cameras — we tell you what actually performs under real lighting, wind, and movement conditions.`,
     },
     'ai-gadgets': {
-      title: `AI Gadgets & Future Tech — Honest Reviews for Gen Z — GenZ Time`,
+      title: `AI Gadgets & Future Tech — Honest Reviews for Gen Z`,
       description: `Wearable AI pins, ambient computing devices, autonomous agents, and experimental next-gen hardware. We test the future so you know whether the hype is real before it becomes mainstream.`,
     },
     'gaming-gear': {
-      title: `Gaming Gear Benchmarks — Handhelds, GPUs & Peripherals — GenZ Time`,
+      title: `Gaming Gear Benchmarks — Handhelds, GPUs & Peripherals`,
       description: `Frame rates don't lie. We run real gaming benchmarks on handheld consoles, gaming laptops, OLED monitors, mechanical keyboards, and GPUs. Every score is reproducible and documented.`,
     },
     'smart-home': {
-      title: `Smart Home Gadgets That Actually Work — Tested by GenZ Time`,
+      title: `Smart Home Gadgets That Actually Work — Tested by Editors`,
       description: `We've set up and lived with dozens of smart home devices — from Matter-compatible routers to robotic vacuums to smart lighting ecosystems. We tell you what simplifies your home and what's just expensive plastic.`,
     },
   };
 
   const meta = categoryMeta[category.slug] || {
-    title: `${category.name} Reviews, Benchmarks & Buying Guides — GenZ Time`,
+    title: `${category.name} Reviews, Benchmarks & Buying Guides`,
     description: `We've personally tested every ${category.name} product listed here. ${category.description} No sponsored rankings — just real data.`,
   };
 
