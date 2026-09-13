@@ -87,7 +87,10 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
       <meta itemProp="price" content={deal.discountText} />
       <meta itemProp="priceCurrency" content="USD" />
       <meta itemProp="availability" content="https://schema.org/InStock" />
-      {deal.expiresAt && <meta itemProp="priceValidUntil" content={deal.expiresAt} />}
+      <meta itemProp="priceValidUntil" content={deal.expiresAt || "2026-12-31"} />
+      <meta itemProp="validFrom" content={deal.verifiedAt || deal.createdAt || "2026-09-01"} />
+      {deal.promoCode && <meta itemProp="couponCode" content={deal.promoCode} />}
+      <meta itemProp="url" content={deal.referralUrl || `https://genztime.com/deals#${deal.id}`} />
 
       {/* Top Banner Image with Badges */}
       <div className={`relative aspect-[16/9] w-full overflow-hidden flex items-center justify-center ${

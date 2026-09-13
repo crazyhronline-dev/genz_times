@@ -1,4 +1,4 @@
-import { BlogPost } from "@/types/blog";
+import { BlogPost, GadgetSpecs } from "@/types/blog";
 
 export const SITE_CONFIG = {
   name: "GenZ Time",
@@ -10,83 +10,417 @@ export const SITE_CONFIG = {
   author: "GenZ Editorial Team",
 };
 
-export function generateArticleSchema(post: BlogPost) {
-  const schema: Record<string, any> = {
-    "@context": "https://schema.org",
-    "@type": post.postType === 'review' || post.verdictScore ? "TechArticle" : "Article",
-    headline: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
-    image: [post.featuredImage],
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt || post.publishedAt,
-    author: {
-      "@type": "Person",
-      name: post.author.name,
-      jobTitle: post.author.role,
-      url: `${SITE_CONFIG.url}/about`,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_CONFIG.name,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_CONFIG.url}/logo.png`,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_CONFIG.url}/blog/${post.slug}`,
-    },
-    keywords: post.tags ? post.tags.join(", ") : "",
-  };
-
-  if (post.verdictScore && post.postType !== 'article') {
-    schema.review = {
-      "@type": "Review",
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: post.verdictScore,
-        bestRating: 10,
-        worstRating: 1,
-      },
-      author: {
-        "@type": "Person",
-        name: post.author.name,
-      },
-      positiveNotes: {
-        "@type": "ItemList",
-        itemListElement: (post.pros || []).map((pro, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: pro,
-        })),
-      },
-      negativeNotes: {
-        "@type": "ItemList",
-        itemListElement: (post.cons || []).map((con, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: con,
-        })),
-      },
-    };
-  }
-
-  return schema;
+/**
+ * Extracts a clean gadget / product name from review headlines
+ * (e.g. "Apple Vision Pro 2 In-Depth Review: The Spatial Computing Evolution" -> "Apple Vision Pro 2")
+ */
+export function cleanProductName(title: string): string {
+  if (!title) return "Tech Gadget";
+  const withoutPrefix = title.replace(/^(Hands-On|In-Depth|Exclusive|Full)\s+/i, '');
+  const parts = withoutPrefix.split(/:\s+|—\s+|-\s+|\s+Review|\s+Benchmark|\s+Tested/i);
+  return parts[0]?.trim() || title;
 }
 
-export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
+/**
+ * Converts GadgetSpecs key-value pairs into Schema.org PropertyValue objects
+ */
+export function convertSpecsToProperties(specs?: GadgetSpecs): Array<{
+  "@type": "PropertyValue";
+  name: string;
+  value: string;
+}> {
+  if (!specs) return [];
+  const propertyLabels: Record<keyof GadgetSpecs, string> = {
+    display: "Display & Screen",
+    processor: "Processor / SoC",
+    ram: "RAM / Memory",
+    storage: "Internal Storage",
+    battery: "Battery & Charging",
+    camera: "Camera System",
+    os: "Operating System",
+    price: "MSRP / Launch Price",
+    weight: "Weight & Ergonomics",
+    connectivity: "Wireless Connectivity",
+  };
+
+  const properties: Array<{ "@type": "PropertyValue"; name: string; value: string }> = [];
+
+  for (const [key, label] of Object.entries(propertyLabels)) {
+    const val = specs[key as keyof GadgetSpecs];
+    if (val && typeof val === 'string' && val.trim()) {
+      properties.push({
+        "@type": "PropertyValue",
+        name: label,
+        value: val.trim(),
+      });
+    }
+  }
+
+  return properties;
+}
+
+/**
+ * Generate rich connected Schema.org @graph for all post types:
+ * - Editorial News & Articles (TechArticle / NewsArticle / Article)
+ * - Single Product Hardware Reviews (Review with Product, Rating, Pros & Cons, Specs)
+ * - Multi-Product Benchmark Comparisons (ItemList of Product Reviews with Lab Scores & Awards)
+ * - FAQPage Schema (when FAQs are present)
+ * - BreadcrumbList Schema
+ */
+export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
+  const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
+  const wordCount = (post.content || '').split(/\s+/).filter(Boolean).length;
+  const isReview = post.postType === 'review' || Boolean(post.verdictScore) || Boolean(post.isComparison);
+  const articleType = isReview ? 'TechArticle' : 'Article';
+
+  const graph: any[] = [];
+
+  // 1. BreadcrumbList Schema
+  graph.push({
+    "@type": "BreadcrumbList",
+    "@id": `${postUrl}#breadcrumb`,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": isReview ? "Hardware Reviews" : "Articles & News",
+        "item": `${SITE_CONFIG.url}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.category,
+        "item": `${SITE_CONFIG.url}/category/${post.categorySlug}`,
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": post.title,
+        "item": postUrl,
+      },
+    ],
+  });
+
+  // 2. Main Article / TechArticle Schema
+  const articleSchema: Record<string, any> = {
+    "@type": articleType,
+    "@id": `${postUrl}#article`,
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": `${SITE_CONFIG.url}/#website`,
+      "name": SITE_CONFIG.name,
+      "url": SITE_CONFIG.url,
+    },
+    "headline": post.seo?.metaTitle || post.title,
+    "description": post.seo?.metaDescription || post.excerpt,
+    "image": [post.featuredImage],
+    "datePublished": post.publishedAt,
+    "dateModified": post.updatedAt || post.publishedAt,
+    "inLanguage": "en-US",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
+    "wordCount": wordCount,
+    "articleSection": post.category,
+    "keywords": post.tags && post.tags.length > 0 ? post.tags.join(", ") : undefined,
+    "author": {
+      "@type": "Person",
+      "name": post.author.name,
+      "jobTitle": post.author.role,
+      "url": `${SITE_CONFIG.url}/about`,
+      "image": post.author.avatar,
+      "description": post.author.bio,
+    },
+    "publisher": {
+      "@type": "NewsMediaOrganization",
+      "name": SITE_CONFIG.name,
+      "url": SITE_CONFIG.url,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE_CONFIG.url}/logo.png`,
+        "width": 512,
+        "height": 512,
+      },
+      "publishingPrinciples": `${SITE_CONFIG.url}/editorial-disclosure`,
+    },
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["h1", "article header p", ".verdict-summary"],
+    },
+  };
+
+  // Add citations if sources are provided
+  if (post.sources && post.sources.length > 0) {
+    articleSchema.citation = post.sources.map((s) => s.url || s.title);
+  }
+
+  // Add abstract if subtitle or key takeaways exist
+  if (post.keyTakeaways && post.keyTakeaways.length > 0) {
+    articleSchema.abstract = post.keyTakeaways.join(". ");
+  } else if (post.subtitle) {
+    articleSchema.abstract = post.subtitle;
+  }
+
+  graph.push(articleSchema);
+
+  // 3. Review & Benchmark Schemas
+  if (post.isComparison && post.comparedProducts && post.comparedProducts.length > 0) {
+    // --- CASE A: Multi-Product Benchmark Comparison Review ---
+    post.comparedProducts.forEach((gadget, idx) => {
+      const cleanPrice = gadget.price ? gadget.price.replace(/[^0-9.]/g, '') : '';
+      const gadgetReview: Record<string, any> = {
+        "@type": "Review",
+        "@id": `${postUrl}#review-product-${idx + 1}`,
+        "name": `${gadget.name} Lab Benchmark & Review`,
+        "reviewBody": gadget.verdictSummary || post.verdictSummary || post.excerpt,
+        "datePublished": post.publishedAt,
+        "dateModified": post.updatedAt || post.publishedAt,
+        "author": {
+          "@type": "Person",
+          "name": post.author.name,
+          "url": `${SITE_CONFIG.url}/about`,
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": SITE_CONFIG.name,
+          "url": SITE_CONFIG.url,
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": gadget.verdictScore,
+          "bestRating": 10,
+          "worstRating": 1,
+        },
+        "itemReviewed": {
+          "@type": "Product",
+          "name": gadget.name,
+          "image": post.featuredImage,
+          "description": gadget.verdictSummary || `${gadget.name} tested and benchmarked by GenZ Time lab.`,
+          "category": post.category,
+          "additionalProperty": convertSpecsToProperties(gadget.specs),
+          ...(cleanPrice ? {
+            "offers": {
+              "@type": "Offer",
+              "price": cleanPrice,
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock",
+              "url": postUrl,
+            }
+          } : {}),
+        },
+      };
+
+      if (gadget.badge) {
+        gadgetReview.award = gadget.badge;
+      }
+
+      if (gadget.pros && gadget.pros.length > 0) {
+        gadgetReview.positiveNotes = {
+          "@type": "ItemList",
+          "itemListElement": gadget.pros.map((pro, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": pro,
+          })),
+        };
+      }
+
+      if (gadget.cons && gadget.cons.length > 0) {
+        gadgetReview.negativeNotes = {
+          "@type": "ItemList",
+          "itemListElement": gadget.cons.map((con, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": con,
+          })),
+        };
+      }
+
+      graph.push(gadgetReview);
+    });
+
+    // Output comparison summary ranking ItemList
+    graph.push({
+      "@type": "ItemList",
+      "@id": `${postUrl}#benchmark-ranking`,
+      "name": `${post.title} — Compared Gadgets Benchmark Ranking`,
+      "numberOfItems": post.comparedProducts.length,
+      "itemListElement": post.comparedProducts.map((p, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": p.name,
+        "description": `${p.badge ? `[${p.badge}] ` : ''}Lab Score: ${p.verdictScore}/10`,
+        "url": `${postUrl}#product-${p.id || i + 1}`,
+      })),
+    });
+
+  } else if (isReview && post.verdictScore) {
+    // --- CASE B: Single Product Review & Lab Benchmark ---
+    const prodName = cleanProductName(post.title);
+    const cleanPrice = post.specs?.price ? post.specs.price.replace(/[^0-9.]/g, '') : '';
+
+    const reviewSchema: Record<string, any> = {
+      "@type": "Review",
+      "@id": `${postUrl}#review`,
+      "name": `${prodName} Lab Review & Benchmarks`,
+      "reviewBody": post.verdictSummary || post.excerpt,
+      "datePublished": post.publishedAt,
+      "dateModified": post.updatedAt || post.publishedAt,
+      "author": {
+        "@type": "Person",
+        "name": post.author.name,
+        "url": `${SITE_CONFIG.url}/about`,
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": SITE_CONFIG.name,
+        "url": SITE_CONFIG.url,
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": post.verdictScore,
+        "bestRating": 10,
+        "worstRating": 1,
+      },
+      "itemReviewed": {
+        "@type": "Product",
+        "name": prodName,
+        "image": post.featuredImage,
+        "description": post.excerpt,
+        "category": post.category,
+        "additionalProperty": convertSpecsToProperties(post.specs),
+        ...(cleanPrice ? {
+          "offers": {
+            "@type": "Offer",
+            "price": cleanPrice,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": postUrl,
+          }
+        } : {}),
+      },
+    };
+
+    if (post.pros && post.pros.length > 0) {
+      reviewSchema.positiveNotes = {
+        "@type": "ItemList",
+        "itemListElement": post.pros.map((pro, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": pro,
+        })),
+      };
+    }
+
+    if (post.cons && post.cons.length > 0) {
+      reviewSchema.negativeNotes = {
+        "@type": "ItemList",
+        "itemListElement": post.cons.map((con, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": con,
+        })),
+      };
+    }
+
+    graph.push(reviewSchema);
+  }
+
+  // 4. FAQPage Schema (if FAQs are published in article/review)
+  if (post.faqs && post.faqs.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${postUrl}#faq`,
+      "mainEntity": post.faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer,
+        },
+      })),
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
+/**
+ * Backwards-compatible generateArticleSchema returning full @graph structure
+ */
+export function generateArticleSchema(post: BlogPost): Record<string, any> {
+  return generatePostGraphSchema(post);
+}
+
+/**
+ * Direct Breadcrumb schema generator
+ */
+export function generateBreadcrumbSchema(items: { name: string; url: string }[]): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
+    "itemListElement": items.map((item, index) => ({
       "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.url,
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url,
     })),
   };
 }
+
+/**
+ * CollectionPage and ItemList schema for archive and category pages
+ */
+export function generateCollectionSchema(params: {
+  title: string;
+  description: string;
+  url: string;
+  items: Array<{ name: string; url: string; image?: string; score?: number }>;
+}): Record<string, any> {
+  const { title, description, url, items } = params;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#collection`,
+        "name": title,
+        "description": description,
+        "url": url,
+        "publisher": {
+          "@type": "Organization",
+          "name": SITE_CONFIG.name,
+          "url": SITE_CONFIG.url,
+        },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${url}#itemlist`,
+        "name": title,
+        "numberOfItems": items.length,
+        "itemListElement": items.map((item, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": item.name,
+          "url": item.url,
+          ...(item.image ? { "image": item.image } : {}),
+          ...(item.score ? { "description": `Lab Score: ${item.score}/10` } : {}),
+        })),
+      },
+    ],
+  };
+}
+
 
 export function calculateSeoScore(params: {
   title: string;

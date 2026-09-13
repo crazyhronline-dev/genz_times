@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllPosts, getRelatedPosts } from '@/lib/posts-db';
-import { generateArticleSchema, generateBreadcrumbSchema, SITE_CONFIG } from '@/lib/seo';
+import { generatePostGraphSchema, SITE_CONFIG } from '@/lib/seo';
 import GadgetSpecsBox from '@/components/GadgetSpecsBox';
 import ProsConsBox from '@/components/ProsConsBox';
 import VerdictBadge from '@/components/VerdictBadge';
@@ -102,13 +102,7 @@ export default async function SinglePostPage({ params }: PageProps) {
   }
 
   const relatedPosts = await getRelatedPosts(post.id, post.categorySlug, 3);
-  const articleSchema = generateArticleSchema(post);
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: SITE_CONFIG.url },
-    { name: 'Reviews', url: `${SITE_CONFIG.url}/blog` },
-    { name: post.category, url: `${SITE_CONFIG.url}/category/${post.categorySlug}` },
-    { name: post.title, url: `${SITE_CONFIG.url}/blog/${post.slug}` },
-  ]);
+  const postSchema = generatePostGraphSchema(post);
 
   const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
     month: 'long',
@@ -177,11 +171,7 @@ export default async function SinglePostPage({ params }: PageProps) {
       {/* Search Engine Schema.org Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(postSchema) }}
       />
 
       {/* 1. Breadcrumbs */}

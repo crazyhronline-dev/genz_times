@@ -1,6 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { getAllPosts } from '@/lib/posts-db';
+import { generateCollectionSchema, SITE_CONFIG } from '@/lib/seo';
 import BlogListClient from './BlogListClient';
 import { Cpu, Shield } from 'lucide-react';
 
@@ -21,9 +22,26 @@ export const revalidate = 0;
 
 export default async function BlogPage() {
   const posts = await getAllPosts();
+  const collectionSchema = generateCollectionSchema({
+    title: "Tech Gadget Reviews & Benchmark Field Tests Archive",
+    description: "Comprehensive, unbiased analysis of today's most influential consumer hardware tested by GenZ Time lab.",
+    url: `${SITE_CONFIG.url}/blog`,
+    items: posts.map((p) => ({
+      name: p.title,
+      url: `${SITE_CONFIG.url}/blog/${p.slug}`,
+      image: p.featuredImage,
+      score: p.verdictScore,
+    })),
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Search Engine Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+
       {/* Header Banner */}
       <div className="max-w-3xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider mb-3 bg-tech-cyan/10 border border-tech-cyan/30 text-tech-cyan">

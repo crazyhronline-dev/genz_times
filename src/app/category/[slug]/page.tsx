@@ -8,7 +8,7 @@ import { getCategoryIcon } from '@/lib/category-icons';
 import { getPostsByCategory } from '@/lib/posts-db';
 import PostCard from '@/components/PostCard';
 import { ChevronRight, Cpu, Sparkles, ArrowLeft } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/seo';
+import { generateCollectionSchema, generateBreadcrumbSchema, SITE_CONFIG } from '@/lib/seo';
 
 interface Props {
   params: {
@@ -105,9 +105,37 @@ export default async function CategoryPage({ params }: Props) {
 
   const posts = await getPostsByCategory(category.slug);
   const CategoryIcon = getCategoryIcon(category.iconName);
+  const categoryUrl = `${SITE_CONFIG.url}/category/${category.slug}`;
+
+  const categorySchema = generateCollectionSchema({
+    title: `${category.name} Reviews & Benchmarks`,
+    description: category.description,
+    url: categoryUrl,
+    items: posts.map((p) => ({
+      name: p.title,
+      url: `${SITE_CONFIG.url}/blog/${p.slug}`,
+      image: p.featuredImage,
+      score: p.verdictScore,
+    })),
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: SITE_CONFIG.url },
+    { name: 'Reviews', url: `${SITE_CONFIG.url}/blog` },
+    { name: category.name, url: categoryUrl },
+  ]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      {/* Search Engine Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categorySchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-slate-400">
         <Link href="/" className="hover:text-white transition">Home</Link>
