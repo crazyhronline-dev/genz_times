@@ -299,12 +299,12 @@ export default async function SinglePostPage({ params }: PageProps) {
 
       {/* 6. Hardware Specifications & Benchmark Matrix (Reviews only) */}
       {post.postType !== 'article' && post.isComparison && post.comparedProducts && post.comparedProducts.length > 1 ? (
-        <ComparisonMatrix products={post.comparedProducts} reviewTitle={post.title} />
+        <ComparisonMatrix products={post.comparedProducts} reviewTitle={post.title} categorySlug={post.categorySlug} />
       ) : (
         <>
           {/* Single Gadget Technical Specifications Sheet */}
           {post.postType !== 'article' && post.specs && Object.keys(post.specs).length > 0 && (
-            <GadgetSpecsBox specs={post.specs} gadgetTitle={post.title.split(':')[0]} />
+            <GadgetSpecsBox specs={post.specs} gadgetTitle={post.title.split(':')[0]} categorySlug={post.categorySlug} />
           )}
 
           {/* Single Gadget Pros & Cons Comparison */}

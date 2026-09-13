@@ -51,6 +51,7 @@ import {
   Copy,
   Trophy
 } from 'lucide-react';
+import { getCategorySpecConfig } from '@/lib/category-specs';
 
 const PRESET_IMAGES = [
   { name: 'Smartphone', url: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=1400&q=80' },
@@ -97,6 +98,7 @@ export default function PublishStudio({
   const [slug, setSlug] = useState('');
   const [isSlugCustom, setIsSlugCustom] = useState(false);
   const [categorySlug, setCategorySlug] = useState('smartphones');
+  const currentSpecConfig = getCategorySpecConfig(categorySlug);
   const [excerpt, setExcerpt] = useState('');
   const [tagsInput, setTagsInput] = useState('Tech, GenZ, NextGen');
   const [authorName, setAuthorName] = useState('GenZ Editorial Team');
@@ -1455,114 +1457,43 @@ export default function PublishStudio({
                     </div>
                   </div>
 
-                  {/* 10-Point Hardware Specifications Sheet */}
+                  {/* Category-Adaptive Technical Specifications Sheet */}
                   <div className="space-y-3 pt-3 border-t border-slate-800/80">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
-                        <Cpu className="w-3.5 h-3.5 text-tech-cyan" />
-                        <span>10-Point Technical Specifications Sheet</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-tech-cyan/15 border border-tech-cyan/30 flex items-center justify-center text-tech-cyan">
+                          <Cpu className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <span className="text-xs font-mono uppercase tracking-wider text-white font-bold block">
+                            {currentSpecConfig.title}
+                          </span>
+                          <span className="text-[11px] text-slate-400 font-mono">
+                            {currentSpecConfig.description}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-tech-cyan/10 text-tech-cyan border border-tech-cyan/30 self-start sm:self-auto flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-tech-cyan" />
+                        <span>Adaptive for {currentSpecConfig.categoryName}</span>
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs font-mono">
-                      <div>
-                        <label className="block text-slate-400 mb-1">Processor / SoC</label>
-                        <input
-                          type="text"
-                          value={product.specs?.processor || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'processor', e.target.value)}
-                          placeholder="e.g. Snapdragon 8 Gen 4 / M4 Pro"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Display & Refresh</label>
-                        <input
-                          type="text"
-                          value={product.specs?.display || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'display', e.target.value)}
-                          placeholder={'e.g. 6.82" AMOLED 120Hz 4500 nits'}
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Memory (RAM)</label>
-                        <input
-                          type="text"
-                          value={product.specs?.ram || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'ram', e.target.value)}
-                          placeholder="e.g. 16GB LPDDR5X"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Storage</label>
-                        <input
-                          type="text"
-                          value={product.specs?.storage || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'storage', e.target.value)}
-                          placeholder="e.g. 512GB UFS 4.0 / PCIe 5.0"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Battery & Charging</label>
-                        <input
-                          type="text"
-                          value={product.specs?.battery || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'battery', e.target.value)}
-                          placeholder="e.g. 5,400 mAh • 100W SuperVOOC"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Camera Sensors</label>
-                        <input
-                          type="text"
-                          value={product.specs?.camera || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'camera', e.target.value)}
-                          placeholder="e.g. 50MP 1-inch LYT-900 + 50MP Periscope"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Operating System</label>
-                        <input
-                          type="text"
-                          value={product.specs?.os || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'os', e.target.value)}
-                          placeholder="e.g. Android 15 / macOS Sequoia"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Weight & Chassis</label>
-                        <input
-                          type="text"
-                          value={product.specs?.weight || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'weight', e.target.value)}
-                          placeholder="e.g. 219g • Titanium Frame"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-400 mb-1">Price</label>
-                        <input
-                          type="text"
-                          value={product.specs?.price || ''}
-                          onChange={(e) => updateProductSpec(pIdx, 'price', e.target.value)}
-                          placeholder="e.g. $899 / ₹79,999"
-                          className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-tech-cyan"
-                        />
-                      </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs font-mono pt-1">
+                      {currentSpecConfig.fields.map((field) => (
+                        <div key={field.key}>
+                          <label className="block text-slate-300 font-medium mb-1">
+                            {field.label}
+                          </label>
+                          <input
+                            type="text"
+                            value={(product.specs as any)?.[field.key] || ''}
+                            onChange={(e) => updateProductSpec(pIdx, field.key as any, e.target.value)}
+                            placeholder={field.placeholder}
+                            className="w-full px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-tech-cyan transition"
+                          />
+                        </div>
+                      ))}
                     </div>
                   </div>
 

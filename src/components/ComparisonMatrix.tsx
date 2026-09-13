@@ -17,26 +17,77 @@ import {
   Scale
 } from 'lucide-react';
 
+import { getCategorySpecConfig, getSpecFieldLabel } from '@/lib/category-specs';
+
 interface ComparisonMatrixProps {
   products: ComparedGadget[];
   reviewTitle?: string;
+  categorySlug?: string;
 }
 
-const SPEC_ROWS: { key: keyof ComparedGadget['specs']; label: string; icon: string }[] = [
-  { key: 'processor', label: 'Processor / SoC', icon: '⚡' },
-  { key: 'display', label: 'Display & Refresh', icon: '📱' },
-  { key: 'ram', label: 'Memory (RAM)', icon: '💾' },
-  { key: 'storage', label: 'Storage', icon: '💽' },
-  { key: 'battery', label: 'Battery & Charging', icon: '🔋' },
-  { key: 'camera', label: 'Camera System', icon: '📷' },
-  { key: 'os', label: 'Operating System', icon: '⚙️' },
-  { key: 'weight', label: 'Weight & Chassis', icon: '⚖️' },
-  { key: 'connectivity', label: 'Connectivity', icon: '📡' },
-  { key: 'price', label: 'Retail Price', icon: '🏷️' },
-];
+const SPEC_EMOJIS: Record<string, string> = {
+  processor: '⚡',
+  display: '📱',
+  ram: '💾',
+  storage: '💽',
+  battery: '🔋',
+  camera: '📷',
+  os: '⚙️',
+  weight: '⚖️',
+  price: '🏷️',
+  gpu: '🎮',
+  ports: '🔌',
+  driver: '🎧',
+  frequency: '〰️',
+  anc: '🛡️',
+  codecs: '📻',
+  mics: '🎙️',
+  waterproof: '💧',
+  fov: '👁️',
+  tracking: '🎯',
+  audio: '🔊',
+  sensors: '📡',
+  video: '📹',
+  lens: '🔍',
+  flightTime: '⏱️',
+  transmission: '📶',
+  gimbal: '🕹️',
+  controls: '🕹️',
+  thermals: '❄️',
+  ecosystem: '🏠',
+  dimensions: '📐',
+  connectivity: '🌐',
+};
 
-export default function ComparisonMatrix({ products, reviewTitle }: ComparisonMatrixProps) {
+export default function ComparisonMatrix({ products, reviewTitle, categorySlug }: ComparisonMatrixProps) {
   if (!products || products.length === 0) return null;
+
+  const config = getCategorySpecConfig(categorySlug);
+  const configuredKeys = new Set(config.fields.map((f) => f.key));
+  const configuredRows = config.fields.map((f) => ({
+    key: f.key,
+    label: f.label,
+    icon: SPEC_EMOJIS[f.key] || '⚙️',
+  }));
+
+  const extraKeys: string[] = [];
+  products.forEach((p) => {
+    if (p.specs) {
+      Object.keys(p.specs).forEach((k) => {
+        if (!configuredKeys.has(k) && !extraKeys.includes(k)) {
+          extraKeys.push(k);
+        }
+      });
+    }
+  });
+
+  const extraRows = extraKeys.map((k) => ({
+    key: k,
+    label: getSpecFieldLabel(k, categorySlug),
+    icon: SPEC_EMOJIS[k] || '⚙️',
+  }));
+
+  const specRows = [...configuredRows, ...extraRows];
 
   // Find top scoring device as recommended pick
   const topProduct = [...products].sort((a, b) => (b.verdictScore || 0) - (a.verdictScore || 0))[0];
@@ -148,7 +199,7 @@ export default function ComparisonMatrix({ products, reviewTitle }: ComparisonMa
         <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-white uppercase tracking-wider">
             <Cpu className="w-4 h-4 text-tech-cyan" />
-            <span>Specifications Shootout Matrix</span>
+            <span>{config.categoryName} Specifications Shootout Matrix</span>
           </div>
           <span className="text-[11px] font-mono text-slate-500">
             Scroll horizontally on smaller screens →
@@ -173,9 +224,9 @@ export default function ComparisonMatrix({ products, reviewTitle }: ComparisonMa
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono">
-              {SPEC_ROWS.map((row) => {
+              {specRows.map((row) => {
                 // Check if any product has this spec
-                const hasAnyValue = products.some((p) => p.specs && p.specs[row.key]);
+                const hasAnyValue = products.some((p) => p.specs && (p.specs as any)[row.key]);
                 if (!hasAnyValue) return null;
 
                 return (
@@ -186,8 +237,8 @@ export default function ComparisonMatrix({ products, reviewTitle }: ComparisonMa
                     </td>
                     {products.map((p, i) => (
                       <td key={p.id || i} className="p-4 sm:p-5 text-slate-200">
-                        {(p.specs && p.specs[row.key]) ? (
-                          <span className="font-sans text-xs sm:text-[13px]">{p.specs[row.key]}</span>
+                        {(p.specs && (p.specs as any)[row.key]) ? (
+                          <span className="font-sans text-xs sm:text-[13px]">{(p.specs as any)[row.key]}</span>
                         ) : (
                           <span className="text-slate-600 font-mono italic">—</span>
                         )}

@@ -1,4 +1,5 @@
 import { BlogPost, GadgetSpecs } from "@/types/blog";
+import { getSpecFieldLabel } from "@/lib/category-specs";
 
 export const SITE_CONFIG = {
   name: "GenZ Time",
@@ -16,41 +17,29 @@ export const SITE_CONFIG = {
  */
 export function cleanProductName(title: string): string {
   if (!title) return "Tech Gadget";
-  const withoutPrefix = title.replace(/^(Hands-On|In-Depth|Exclusive|Full)\s+/i, '');
+  const withoutPrefix = title.replace(/^(Hands-On|In-Depth|Exclusive|Full|Review:\s*|Benchmark:\s*|Shootout:\s*|Tested:\s*)\s*/i, "");
   const parts = withoutPrefix.split(/:\s+|—\s+|-\s+|\s+Review|\s+Benchmark|\s+Tested/i);
   return parts[0]?.trim() || title;
 }
 
+export const extractProductName = cleanProductName;
+
 /**
  * Converts GadgetSpecs key-value pairs into Schema.org PropertyValue objects
  */
-export function convertSpecsToProperties(specs?: GadgetSpecs): Array<{
+export function convertSpecsToProperties(specs?: GadgetSpecs, categorySlug?: string): Array<{
   "@type": "PropertyValue";
   name: string;
   value: string;
 }> {
   if (!specs) return [];
-  const propertyLabels: Record<keyof GadgetSpecs, string> = {
-    display: "Display & Screen",
-    processor: "Processor / SoC",
-    ram: "RAM / Memory",
-    storage: "Internal Storage",
-    battery: "Battery & Charging",
-    camera: "Camera System",
-    os: "Operating System",
-    price: "MSRP / Launch Price",
-    weight: "Weight & Ergonomics",
-    connectivity: "Wireless Connectivity",
-  };
-
   const properties: Array<{ "@type": "PropertyValue"; name: string; value: string }> = [];
 
-  for (const [key, label] of Object.entries(propertyLabels)) {
-    const val = specs[key as keyof GadgetSpecs];
+  for (const [key, val] of Object.entries(specs)) {
     if (val && typeof val === 'string' && val.trim()) {
       properties.push({
         "@type": "PropertyValue",
-        name: label,
+        name: getSpecFieldLabel(key, categorySlug),
         value: val.trim(),
       });
     }
@@ -204,7 +193,7 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
           "image": post.featuredImage,
           "description": gadget.verdictSummary || `${gadget.name} tested and benchmarked by GenZ Time lab.`,
           "category": post.category,
-          "additionalProperty": convertSpecsToProperties(gadget.specs),
+          "additionalProperty": convertSpecsToProperties(gadget.specs, post.categorySlug),
           ...(cleanPrice ? {
             "offers": {
               "@type": "Offer",
@@ -295,7 +284,7 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
         "image": post.featuredImage,
         "description": post.excerpt,
         "category": post.category,
-        "additionalProperty": convertSpecsToProperties(post.specs),
+        "additionalProperty": convertSpecsToProperties(post.specs, post.categorySlug),
         ...(cleanPrice ? {
           "offers": {
             "@type": "Offer",

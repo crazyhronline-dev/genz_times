@@ -9,6 +9,28 @@ export interface GadgetSpecs {
   price?: string;
   connectivity?: string;
   weight?: string;
+  gpu?: string;
+  ports?: string;
+  driver?: string;
+  frequency?: string;
+  anc?: string;
+  codecs?: string;
+  mics?: string;
+  waterproof?: string;
+  fov?: string;
+  tracking?: string;
+  audio?: string;
+  sensors?: string;
+  video?: string;
+  lens?: string;
+  flightTime?: string;
+  transmission?: string;
+  gimbal?: string;
+  controls?: string;
+  thermals?: string;
+  ecosystem?: string;
+  dimensions?: string;
+  [key: string]: string | undefined;
 }
 
 export interface SeoMeta {
