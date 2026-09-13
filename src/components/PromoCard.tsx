@@ -98,7 +98,7 @@ export default function PromoCard({ deal, onSelectTag }: PromoCardProps) {
       }`}>
         <img
           src={deal.imageUrl}
-          alt={deal.metaTitle || deal.title}
+          alt={deal.imageAlt || deal.metaTitle || `${deal.title} - ${deal.store} discount coupon`}
           itemProp="image"
           loading="lazy"
           className={`transition-transform duration-500 group-hover:scale-105 ${

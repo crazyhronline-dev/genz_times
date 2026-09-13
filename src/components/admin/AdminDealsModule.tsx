@@ -60,6 +60,14 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
   const [store, setStore] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=800&q=80');
+  const [imageAlt, setImageAlt] = useState('');
+  const [isAltCustom, setIsAltCustom] = useState(false);
+
+  const generateDealAutoAlt = (dTitle: string, dStore: string) => {
+    if (dTitle && dStore) return `${dTitle.trim()} - ${dStore.trim()} discount promo code | GenZ Time`;
+    if (dTitle) return `${dTitle.trim()} - verified tech deal promo code | GenZ Time`;
+    return 'GenZ Time Tech Deal & Promo Code';
+  };
   const [category, setCategory] = useState('smartphones');
   const [discountText, setDiscountText] = useState('50% OFF');
   const [promoCode, setPromoCode] = useState('');
@@ -113,6 +121,8 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     setStore('');
     setDescription('');
     setImageUrl('https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=800&q=80');
+    setImageAlt('');
+    setIsAltCustom(false);
     setCategory('smartphones');
     setDiscountText('50% OFF');
     setPromoCode('');
@@ -135,6 +145,8 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
     setStore(deal.store);
     setDescription(deal.description);
     setImageUrl(deal.imageUrl);
+    setImageAlt(deal.imageAlt || '');
+    setIsAltCustom(Boolean(deal.imageAlt));
     setCategory(deal.category);
     setDiscountText(deal.discountText);
     setPromoCode(deal.promoCode || '');
@@ -189,6 +201,9 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
       const data = await res.json();
       if (data.success && data.url) {
         setImageUrl(data.url);
+        if (!isAltCustom || !imageAlt) {
+          setImageAlt(generateDealAutoAlt(title || file.name.replace(/\.[^/.]+$/, ''), store));
+        }
         showNotice('Deal thumbnail uploaded & branded successfully!');
       } else {
         alert(data.error || 'Upload failed');
@@ -216,6 +231,7 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
         store: store.trim(),
         description: description.trim(),
         imageUrl: imageUrl.trim(),
+        imageAlt: imageAlt.trim() || generateDealAutoAlt(title, store),
         category,
         discountText: discountText.trim(),
         promoCode: promoCode.trim() || undefined,
@@ -724,6 +740,36 @@ export default function AdminDealsModule({ deals, onRefresh }: AdminDealsModuleP
                         <span>{uploading ? 'Uploading...' : 'Upload'}</span>
                       </button>
                     </div>
+                  </div>
+
+                  {/* Image Alt Text (SEO) */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-tech-cyan" />
+                        <span>Image Alt Text (SEO)</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImageAlt(generateDealAutoAlt(title, store));
+                          setIsAltCustom(false);
+                        }}
+                        className="text-[10px] font-mono text-tech-cyan hover:underline"
+                      >
+                        Auto-Generate
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={imageAlt || (title ? generateDealAutoAlt(title, store) : '')}
+                      onChange={(e) => {
+                        setImageAlt(e.target.value);
+                        setIsAltCustom(true);
+                      }}
+                      placeholder="e.g. Samsung Galaxy S25 Ultra 50% OFF promo coupon | GenZ Time"
+                      className="w-full px-3 py-2 bg-tech-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-tech-cyan font-mono"
+                    />
                   </div>
 
                   {/* Description */}

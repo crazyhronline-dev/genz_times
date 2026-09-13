@@ -108,7 +108,12 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
     },
     "headline": post.seo?.metaTitle || post.title,
     "description": post.seo?.metaDescription || post.excerpt,
-    "image": [post.featuredImage],
+    "image": {
+      "@type": "ImageObject",
+      "url": post.featuredImage,
+      "caption": post.featuredImageAlt || `${post.title} - GenZ Time`,
+      "description": post.featuredImageAlt || `${post.title} - GenZ Time`,
+    },
     "datePublished": post.publishedAt,
     "dateModified": post.updatedAt || post.publishedAt,
     "inLanguage": "en-US",
@@ -190,7 +195,11 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
         "itemReviewed": {
           "@type": "Product",
           "name": gadget.name,
-          "image": post.featuredImage,
+          "image": {
+            "@type": "ImageObject",
+            "url": post.featuredImage,
+            "caption": post.featuredImageAlt || `${gadget.name} - GenZ Time hardware review`,
+          },
           "description": gadget.verdictSummary || `${gadget.name} tested and benchmarked by GenZ Time lab.`,
           "category": post.category,
           "additionalProperty": convertSpecsToProperties(gadget.specs, post.categorySlug),
@@ -281,7 +290,11 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
       "itemReviewed": {
         "@type": "Product",
         "name": prodName,
-        "image": post.featuredImage,
+        "image": {
+          "@type": "ImageObject",
+          "url": post.featuredImage,
+          "caption": post.featuredImageAlt || `${prodName} - GenZ Time hardware review`,
+        },
         "description": post.excerpt,
         "category": post.category,
         "additionalProperty": convertSpecsToProperties(post.specs, post.categorySlug),

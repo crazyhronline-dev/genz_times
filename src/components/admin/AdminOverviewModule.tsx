@@ -275,7 +275,7 @@ export default function AdminOverviewModule({
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={post.featuredImage}
-                    alt={post.title}
+                    alt={post.featuredImageAlt || post.title}
                     className="w-12 h-12 rounded-xl object-cover border border-slate-800 shrink-0 group-hover:scale-105 transition"
                   />
                   <div className="min-w-0">

@@ -220,7 +220,7 @@ export default function AdminArticlesModule({
                       <div className="flex items-center gap-3">
                         <img
                           src={post.featuredImage}
-                          alt={post.title}
+                          alt={post.featuredImageAlt || post.title}
                           className="w-12 h-12 rounded-xl object-cover border border-slate-800 shrink-0"
                         />
                         <div className="min-w-0">

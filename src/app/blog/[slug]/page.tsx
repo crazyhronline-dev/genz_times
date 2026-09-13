@@ -123,11 +123,37 @@ export default async function SinglePostPage({ params }: PageProps) {
 
   const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
 
-  // Simple parser to render markdown-like content into clean HTML sections
+  // Parser to render markdown content with rich sections & auto-fallback image alt text
   const renderContent = (content: string) => {
     const paragraphs = content.split('\n\n');
     return paragraphs.map((block, idx) => {
       const trimmed = block.trim();
+      if (!trimmed) return null;
+
+      // 1. Markdown Image: ![alt](url)
+      const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (imgMatch) {
+        const rawAlt = imgMatch[1]?.trim();
+        const imgUrl = imgMatch[2]?.trim();
+        // Auto-set fallback alt text if alt is blank
+        const finalAlt = rawAlt || `${post.title} - GenZ Time hardware testing`;
+        return (
+          <figure key={idx} className="my-8 rounded-3xl overflow-hidden border border-slate-800 bg-tech-950 shadow-2xl">
+            <img
+              src={imgUrl}
+              alt={finalAlt}
+              loading="lazy"
+              className="w-full h-auto object-cover max-h-[560px]"
+            />
+            {rawAlt && (
+              <figcaption className="p-3 text-center text-xs font-mono text-slate-400 bg-tech-900/60 border-t border-slate-800/80">
+                {rawAlt}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
+
       if (trimmed.startsWith('### ')) {
         return (
           <h3 key={idx} className="text-xl font-bold text-tech-cyan mt-8 mb-3">
@@ -140,6 +166,13 @@ export default async function SinglePostPage({ params }: PageProps) {
           <h2 key={idx} className="text-2xl font-black text-white mt-10 mb-4 pb-2 border-b border-slate-800">
             {trimmed.replace('## ', '')}
           </h2>
+        );
+      }
+      if (trimmed.startsWith('> ')) {
+        return (
+          <blockquote key={idx} className="my-6 pl-4 border-l-4 border-tech-cyan text-slate-300 italic bg-tech-900/40 p-4 rounded-r-2xl border-y border-r border-slate-800/50">
+            {trimmed.replace(/^>\s*/, '')}
+          </blockquote>
         );
       }
       if (trimmed.startsWith('- ')) {
@@ -266,7 +299,7 @@ export default async function SinglePostPage({ params }: PageProps) {
       <div className="relative rounded-3xl overflow-hidden aspect-[16/9] mb-10 border border-slate-800 shadow-2xl bg-tech-950">
         <img
           src={post.featuredImage}
-          alt={post.title}
+          alt={post.featuredImageAlt || `${post.title} - GenZ Time hardware lab review`}
           className="w-full h-full object-cover"
         />
       </div>

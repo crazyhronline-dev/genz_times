@@ -4,6 +4,7 @@ export interface PromoDeal {
   store: string; // e.g. "Samsung", "NordVPN", "Amazon", "Apple", "Sony"
   description: string;
   imageUrl: string;
+  imageAlt?: string;
   category: string; // e.g. "smartphones", "laptops", "audio", "gaming", "vpn", "accessories"
   discountText: string; // e.g. "50% OFF", "$150 OFF", "Flat ₹10,000 OFF", "FREE TRIAL"
   promoCode?: string; // Optional promo code (e.g. "GENZ50")

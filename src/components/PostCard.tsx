@@ -25,7 +25,7 @@ export default function PostCard({ post, featured = false }: Props) {
       <div className={`relative overflow-hidden aspect-[16/9] bg-tech-950 ${featured ? 'md:col-span-7 md:aspect-auto md:h-full' : ''}`}>
         <img
           src={post.featuredImage}
-          alt={post.title}
+          alt={post.featuredImageAlt || `${post.title} - GenZ Time`}
           loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />

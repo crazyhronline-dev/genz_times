@@ -145,7 +145,7 @@ export default async function HomePage() {
             <div className="lg:col-span-6 relative min-h-[340px] lg:min-h-full overflow-hidden bg-tech-950">
               <img
                 src={heroPost.featuredImage}
-                alt={heroPost.title}
+                alt={heroPost.featuredImageAlt || `${heroPost.title} - GenZ Time`}
                 className="w-full h-full object-cover object-center lg:absolute inset-0 hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-tech-900 via-transparent to-transparent lg:bg-gradient-to-r lg:from-tech-900 lg:via-transparent lg:to-transparent" />

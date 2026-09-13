@@ -74,6 +74,7 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
     excerpt: postData.excerpt || postData.content.slice(0, 160).replace(/[#*`_]/g, '') + '...',
     content: postData.content,
     featuredImage: postData.featuredImage || 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1400&q=80',
+    featuredImageAlt: postData.featuredImageAlt?.trim() || `${postData.title} - GenZ Time hardware lab review`,
     category: postData.category || 'Smartphones',
     categorySlug: postData.categorySlug || 'smartphones',
     tags: postData.tags && postData.tags.length > 0 ? postData.tags : ['Tech', 'Gadgets'],

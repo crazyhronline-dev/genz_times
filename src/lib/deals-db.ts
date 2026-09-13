@@ -262,6 +262,7 @@ export async function saveDeal(dealData: Partial<PromoDeal> & { title: string; s
     store: dealData.store.trim(),
     description: dealData.description?.trim() || '',
     imageUrl: dealData.imageUrl?.trim() || 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+    imageAlt: dealData.imageAlt?.trim() || `${dealData.title.trim()} - ${dealData.store.trim()} discount promo code | GenZ Time`,
     category: dealData.category || 'smartphones',
     discountText: dealData.discountText.trim(),
     promoCode: dealData.promoCode?.trim() || undefined,

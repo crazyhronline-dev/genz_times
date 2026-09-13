@@ -107,9 +107,26 @@ export default function PublishStudio({
   // Featured Image State
   const [imageMode, setImageMode] = useState<'upload' | 'url' | 'presets'>('upload');
   const [featuredImage, setFeaturedImage] = useState(PRESET_IMAGES[0].url);
+  const [featuredImageAlt, setFeaturedImageAlt] = useState('');
+  const [isAltManuallyEdited, setIsAltManuallyEdited] = useState(false);
   const [watermarking, setWatermarking] = useState(false);
   const [watermarkPosition, setWatermarkPosition] = useState<'bottom-right' | 'bottom-left' | 'top-right'>('bottom-right');
   const [watermarkNotice, setWatermarkNotice] = useState<string | null>(null);
+
+  const generateAutoAlt = (currentTitle: string, currentCategory?: string, extraHint?: string) => {
+    const cleanTitle = (currentTitle || '').replace(/^(Review:\s*|Benchmark:\s*|Shootout:\s*|Tested:\s*)/i, '').trim();
+    if (cleanTitle) {
+      if (extraHint) {
+        return `${cleanTitle} - ${extraHint} | GenZ Time`;
+      }
+      return `${cleanTitle} hardware lab overview and specs testing - GenZ Time`;
+    }
+    if (extraHint) {
+      return `${extraHint} hardware photography - GenZ Time`;
+    }
+    const catName = availableCategories.find((c) => c.slug === currentCategory)?.name || 'Tech Hardware';
+    return `${catName} Lab Evaluation - GenZ Time`;
+  };
 
   // Article-Specific State
   const [keyTakeaways, setKeyTakeaways] = useState<string[]>([
@@ -361,6 +378,8 @@ export default function PublishStudio({
     setCategorySlug(post.categorySlug);
     setExcerpt(post.excerpt);
     setFeaturedImage(post.featuredImage);
+    setFeaturedImageAlt(post.featuredImageAlt || (post.title ? `${post.title} - GenZ Time` : ''));
+    setIsAltManuallyEdited(Boolean(post.featuredImageAlt));
     setTagsInput((post.tags || []).join(', '));
     setAuthorName(post.author?.name || 'GenZ Editorial Team');
     setAuthorRole(post.author?.role || 'Senior Tech Analyst');
@@ -422,6 +441,9 @@ export default function PublishStudio({
     if (!metaTitle || metaTitle.startsWith(title)) {
       setMetaTitle(val ? `${val} | GenZ Time` : '');
     }
+    if (!isAltManuallyEdited || !featuredImageAlt) {
+      setFeaturedImageAlt(val ? generateAutoAlt(val, categorySlug) : '');
+    }
   };
 
   // Auto-fill meta description when excerpt changes
@@ -439,6 +461,20 @@ export default function PublishStudio({
     setWatermarkNotice('Applying official GenZ Time logo watermark...');
 
     try {
+      const cleanFileName = file.name
+        .replace(/\.[^/.]+$/, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const formattedFileName = cleanFileName
+        .split(' ')
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(' ');
+
+      if (!isAltManuallyEdited || !featuredImageAlt) {
+        setFeaturedImageAlt(generateAutoAlt(title, categorySlug, formattedFileName));
+      }
+
       // 1. Client-side canvas watermarking with official GenZ Time emblem
       const { dataUrl, blob } = await applyWatermark(file, {
         position: watermarkPosition,
@@ -458,7 +494,7 @@ export default function PublishStudio({
       if (data.success && data.url) {
         setFeaturedImage(data.url);
         setWatermarkNotice('Logo watermark applied and saved to /uploads!');
-        showToast('Image uploaded & auto-watermarked with GenZ Time logo!');
+        showToast('Image uploaded, auto-watermarked & alt text generated!');
       } else {
         // Fallback to dataUrl directly
         setFeaturedImage(dataUrl);
@@ -506,7 +542,10 @@ export default function PublishStudio({
     setTagsInput(pkg.tags.join(', '));
     setMetaTitle(pkg.metaTitle);
     setMetaDescription(pkg.metaDescription);
-    showToast('Auto-generated genuine SEO meta package');
+    if (!isAltManuallyEdited || !featuredImageAlt) {
+      setFeaturedImageAlt(generateAutoAlt(title, categorySlug, pkg.focusKeyword));
+    }
+    showToast('Auto-generated genuine SEO meta & image alt package');
   };
 
   // Add Takeaway
@@ -572,6 +611,7 @@ export default function PublishStudio({
       excerpt: excerpt || content.slice(0, 160) + '...',
       content,
       featuredImage,
+      featuredImageAlt: featuredImageAlt.trim() || generateAutoAlt(title, categorySlug),
       category: categoryObj ? categoryObj.name : 'Smartphones',
       categorySlug,
       tags,
@@ -957,7 +997,12 @@ export default function PublishStudio({
                 <button
                   type="button"
                   key={preset.name}
-                  onClick={() => setFeaturedImage(preset.url)}
+                  onClick={() => {
+                    setFeaturedImage(preset.url);
+                    if (!isAltManuallyEdited || !featuredImageAlt) {
+                      setFeaturedImageAlt(generateAutoAlt(title, categorySlug, preset.name));
+                    }
+                  }}
                   className={`relative rounded-2xl overflow-hidden aspect-video border transition group ${
                     featuredImage === preset.url
                       ? 'border-tech-cyan ring-2 ring-tech-cyan/40 shadow-glow'
@@ -982,7 +1027,7 @@ export default function PublishStudio({
             <div className="relative rounded-3xl overflow-hidden aspect-[16/9] max-h-[340px] border border-slate-800 shadow-xl bg-tech-950">
               <img
                 src={featuredImage}
-                alt="Preview"
+                alt={featuredImageAlt || (title ? `${title} - GenZ Time` : 'Active Featured Media')}
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-tech-950/85 backdrop-blur-md border border-slate-800 text-[11px] font-mono text-slate-300">
@@ -990,6 +1035,51 @@ export default function PublishStudio({
               </div>
             </div>
           )}
+
+          {/* Auto Image Alt Text (SEO & Accessibility) */}
+          <div className="pt-3 border-t border-slate-800/80 space-y-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-tech-cyan" />
+                  <span>Image Alt Text (SEO & Google Images)</span>
+                </label>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-tech-cyan/10 text-tech-cyan border border-tech-cyan/30">
+                  {isAltManuallyEdited ? 'Custom' : 'Auto-Generated'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const auto = generateAutoAlt(title, categorySlug);
+                  setFeaturedImageAlt(auto);
+                  setIsAltManuallyEdited(false);
+                  showToast('Auto-generated fresh SEO alt text!');
+                }}
+                className="px-2.5 py-1 rounded-lg bg-tech-cyan/10 hover:bg-tech-cyan/20 text-tech-cyan border border-tech-cyan/30 text-xs font-mono flex items-center gap-1.5 transition self-start sm:self-auto"
+                title="Regenerate alt text from title and category"
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>Auto-Set Alt Text</span>
+              </button>
+            </div>
+
+            <div className="relative">
+              <input
+                type="text"
+                value={featuredImageAlt || (title ? generateAutoAlt(title, categorySlug) : '')}
+                onChange={(e) => {
+                  setFeaturedImageAlt(e.target.value);
+                  setIsAltManuallyEdited(true);
+                }}
+                placeholder="e.g. Samsung Galaxy S25 Ultra hardware lab review and display test - GenZ Time"
+                className="w-full px-4 py-2.5 rounded-xl bg-tech-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-tech-cyan"
+              />
+            </div>
+            <p className="text-[11px] text-slate-400 font-mono">
+              Auto-synced with title & category for top Google Images ranking. Automatically sets the image <code className="text-tech-cyan">alt</code> attribute.
+            </p>
+          </div>
         </div>
 
         {/* 4. Article-Specific Modules (Only in Article Mode) */}
@@ -1694,6 +1784,21 @@ export default function PublishStudio({
                 title="Blockquote"
               >
                 Quote
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const url = prompt('Enter image URL:');
+                  if (!url) return;
+                  const autoAlt = generateAutoAlt(title, categorySlug, 'Hardware Detail');
+                  const customAlt = prompt('Image Alt Text (auto-generated for SEO):', autoAlt) || autoAlt;
+                  insertMarkdown(`\n\n![${customAlt}](${url})\n\n`);
+                }}
+                className="px-2.5 py-1 rounded-lg bg-tech-950 border border-slate-800 text-tech-cyan hover:text-white hover:border-tech-cyan text-xs font-mono flex items-center gap-1.5 transition"
+                title="Insert image with auto-generated alt text"
+              >
+                <ImageIcon className="w-3.5 h-3.5 text-tech-cyan" />
+                <span>+ Image</span>
               </button>
             </div>
           </div>
