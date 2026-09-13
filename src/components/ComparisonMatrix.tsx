@@ -255,10 +255,10 @@ export default function ComparisonMatrix({ products, reviewTitle, categorySlug }
       {/* 4. Side-by-Side Pros & Cons Comparison */}
       <div className="p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-6">
         <div className="border-b border-slate-800 pb-3">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Layers className="w-4 h-4 text-tech-emerald" />
+          <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <Layers className="w-5 h-5 text-tech-emerald" />
             <span>Pros & Cons Comparison Breakdown</span>
-          </h3>
+          </h2>
           <p className="text-xs text-slate-400 font-mono mt-0.5">
             Key advantages and trade-offs observed during hands-on evaluation.
           </p>
@@ -269,7 +269,7 @@ export default function ComparisonMatrix({ products, reviewTitle, categorySlug }
             <div key={product.id || idx} className="p-5 rounded-2xl bg-tech-950 border border-slate-800/80 space-y-5">
               <div className="border-b border-slate-800 pb-2">
                 <span className="text-[10px] font-mono text-slate-500 uppercase">Device #{idx + 1}</span>
-                <h4 className="text-base font-bold text-white">{product.name}</h4>
+                <h3 className="text-base font-bold text-white">{product.name}</h3>
               </div>
 
               {/* Pros */}

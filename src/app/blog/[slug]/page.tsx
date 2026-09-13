@@ -28,7 +28,8 @@ import {
   CheckCircle2,
   HelpCircle,
   ExternalLink,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Sliders
 } from 'lucide-react';
 
 interface PageProps {
@@ -154,17 +155,40 @@ export default async function SinglePostPage({ params }: PageProps) {
         );
       }
 
+      // 2. Headings hierarchy
+      if (trimmed.startsWith('##### ')) {
+        return (
+          <h5 key={idx} className="text-base font-semibold text-slate-300 mt-4 mb-2">
+            {trimmed.replace('##### ', '')}
+          </h5>
+        );
+      }
+      if (trimmed.startsWith('#### ')) {
+        return (
+          <h4 key={idx} className="text-lg font-bold text-slate-200 mt-6 mb-2">
+            {trimmed.replace('#### ', '')}
+          </h4>
+        );
+      }
       if (trimmed.startsWith('### ')) {
         return (
-          <h3 key={idx} className="text-xl font-bold text-tech-cyan mt-8 mb-3">
+          <h3 key={idx} className="text-xl sm:text-2xl font-bold text-tech-cyan mt-8 mb-3">
             {trimmed.replace('### ', '')}
           </h3>
         );
       }
       if (trimmed.startsWith('## ')) {
         return (
-          <h2 key={idx} className="text-2xl font-black text-white mt-10 mb-4 pb-2 border-b border-slate-800">
+          <h2 key={idx} className="text-2xl sm:text-3xl font-black text-white mt-10 mb-4 pb-2 border-b border-slate-800">
             {trimmed.replace('## ', '')}
+          </h2>
+        );
+      }
+      // If single '#' was used inside body, normalize to H2 so the page strictly has 1 H1 (post.title)
+      if (trimmed.startsWith('# ')) {
+        return (
+          <h2 key={idx} className="text-2xl sm:text-3xl font-black text-white mt-10 mb-4 pb-2 border-b border-slate-800">
+            {trimmed.replace('# ', '')}
           </h2>
         );
       }
@@ -307,10 +331,10 @@ export default async function SinglePostPage({ params }: PageProps) {
       {/* Key Takeaways / Executive Highlights (For Articles) */}
       {post.keyTakeaways && post.keyTakeaways.length > 0 && (
         <div className="my-8 p-6 rounded-3xl bg-tech-900/60 border border-tech-cyan/30 shadow-glow space-y-3">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-tech-cyan">
+          <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-tech-cyan flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
             <span>Key Takeaways & Executive Summary</span>
-          </div>
+          </h2>
           <ul className="space-y-2">
             {post.keyTakeaways.map((item, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-200">
@@ -342,7 +366,13 @@ export default async function SinglePostPage({ params }: PageProps) {
 
           {/* Single Gadget Pros & Cons Comparison */}
           {post.postType !== 'article' && ((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
-            <ProsConsBox pros={post.pros || []} cons={post.cons || []} />
+            <div className="my-8">
+              <h2 className="text-xl sm:text-2xl font-black text-white mb-4 flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-tech-emerald" />
+                <span>Lab Pros & Cons Verdict</span>
+              </h2>
+              <ProsConsBox pros={post.pros || []} cons={post.cons || []} />
+            </div>
           )}
         </>
       )}
@@ -350,14 +380,14 @@ export default async function SinglePostPage({ params }: PageProps) {
       {/* 8. FAQs Accordion (If provided) */}
       {post.faqs && post.faqs.length > 0 && (
         <div className="my-10 p-6 sm:p-8 rounded-3xl bg-tech-900/40 border border-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-tech-cyan font-bold mb-2">
-            <HelpCircle className="w-4 h-4" />
+          <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 mb-3">
+            <HelpCircle className="w-5 h-5 text-tech-cyan" />
             <span>Frequently Asked Questions</span>
-          </div>
+          </h2>
           <div className="divide-y divide-slate-800/80">
             {post.faqs.map((faq, idx) => (
               <div key={idx} className="py-4 space-y-1.5">
-                <h4 className="font-bold text-white text-base">{faq.question}</h4>
+                <h3 className="font-bold text-white text-base">{faq.question}</h3>
                 <p className="text-sm text-slate-300 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
@@ -368,10 +398,10 @@ export default async function SinglePostPage({ params }: PageProps) {
       {/* 9. Citations & Reference Sources (If provided) */}
       {post.sources && post.sources.length > 0 && (
         <div className="my-8 p-5 rounded-2xl bg-tech-950/60 border border-slate-800/80 space-y-2">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
+          <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center gap-2">
             <LinkIcon className="w-3.5 h-3.5 text-tech-cyan" />
             <span>References & Verified Sources</span>
-          </div>
+          </h2>
           <div className="space-y-1.5">
             {post.sources.map((src, i) => (
               <div key={i} className="text-xs font-mono">
@@ -446,7 +476,7 @@ export default async function SinglePostPage({ params }: PageProps) {
       {relatedPosts.length > 0 && (
         <section className="my-16 pt-10 border-t border-slate-800">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-black text-white">More Related Gadget Reviews</h3>
+            <h2 className="text-xl font-black text-white">More Related Gadget Reviews</h2>
             <Link href="/blog" className="text-xs font-mono text-tech-cyan hover:underline">
               Browse All →
             </Link>

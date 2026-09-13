@@ -198,9 +198,9 @@ export default function ContactForm() {
         {/* Sidebar Info: 5 Cols */}
         <div className="lg:col-span-5 space-y-6">
           <div className="p-6 rounded-3xl bg-tech-900/60 border border-slate-800 space-y-6">
-            <h3 className="text-base font-bold text-white uppercase font-mono tracking-wider">
+            <h2 className="text-base font-bold text-white uppercase font-mono tracking-wider">
               Direct Contact Channels
-            </h3>
+            </h2>
 
             <div className="space-y-4 text-xs font-mono">
               <div className="flex items-start gap-3">

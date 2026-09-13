@@ -772,9 +772,14 @@ export default function PublishStudio({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                {postType === 'article' ? 'Article Headline *' : 'Device / Review Title *'}
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400">
+                  {postType === 'article' ? 'Article Headline *' : 'Device / Review Title *'}
+                </label>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-tech-cyan bg-tech-cyan/10 px-2 py-0.5 rounded border border-tech-cyan/20">
+                  H1 • Main Document Headline
+                </span>
+              </div>
               <input
                 type="text"
                 required
@@ -1745,26 +1750,39 @@ export default function PublishStudio({
 
             {/* Quick Markdown Toolbar */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => insertMarkdown('## ')}
-                className="px-2 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono"
-                title="Heading 2"
-              >
-                H2
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('### ')}
-                className="px-2 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono"
-                title="Heading 3"
-              >
-                H3
-              </button>
+              <div className="flex items-center gap-1 p-0.5 bg-tech-950/80 rounded-lg border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown('## ')}
+                  className="px-2.5 py-1 rounded bg-slate-900 hover:bg-tech-cyan/20 hover:text-tech-cyan text-white text-xs font-mono font-bold transition"
+                  title="Heading 2 (Major Section) — e.g. ## Display & Architecture"
+                >
+                  ## H2
+                </button>
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown('### ')}
+                  className="px-2.5 py-1 rounded bg-slate-900 hover:bg-tech-cyan/20 hover:text-tech-cyan text-slate-300 text-xs font-mono font-semibold transition"
+                  title="Heading 3 (Sub-Topic) — e.g. ### Benchmark Scores"
+                >
+                  ### H3
+                </button>
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown('#### ')}
+                  className="px-2 py-1 rounded bg-slate-900 hover:bg-tech-cyan/20 hover:text-tech-cyan text-slate-400 text-xs font-mono transition"
+                  title="Heading 4 (Deep Detail) — e.g. #### Thermal Throttling"
+                >
+                  #### H4
+                </button>
+              </div>
+
+              <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+
               <button
                 type="button"
                 onClick={() => insertMarkdown('**', '**')}
-                className="px-2 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono font-bold"
+                className="px-2.5 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono font-bold transition"
                 title="Bold text"
               >
                 B
@@ -1772,7 +1790,7 @@ export default function PublishStudio({
               <button
                 type="button"
                 onClick={() => insertMarkdown('- ')}
-                className="px-2 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono"
+                className="px-2.5 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono transition"
                 title="Bullet list"
               >
                 List
@@ -1780,7 +1798,7 @@ export default function PublishStudio({
               <button
                 type="button"
                 onClick={() => insertMarkdown('> ')}
-                className="px-2 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono"
+                className="px-2.5 py-1 rounded-lg bg-tech-950 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono transition"
                 title="Blockquote"
               >
                 Quote
@@ -1801,6 +1819,19 @@ export default function PublishStudio({
                 <span>+ Image</span>
               </button>
             </div>
+          </div>
+
+          {/* Strict SEO Heading Hierarchy Helper */}
+          <div className="flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl bg-tech-950/60 border border-slate-800/80 text-[11px] font-mono text-slate-400">
+            <span className="text-amber-400 font-bold uppercase tracking-wider text-[10px]">Hierarchy Rule:</span>
+            <span className="text-tech-cyan font-bold">H1 (Title)</span>
+            <span className="text-slate-600">➔</span>
+            <span className="text-white font-semibold">## H2 (Major Section)</span>
+            <span className="text-slate-600">➔</span>
+            <span className="text-slate-300">### H3 (Sub-Topic)</span>
+            <span className="text-slate-600">➔</span>
+            <span className="text-slate-400">#### H4 (Detail)</span>
+            <span className="ml-auto text-[10px] text-slate-500 hidden md:inline">Avoid raw `#` in body (only 1 H1 per page for Google SEO)</span>
           </div>
 
           <textarea

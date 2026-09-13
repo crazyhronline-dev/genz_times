@@ -17,9 +17,9 @@ export default function ProsConsBox({ pros = [], cons = [] }: Props) {
           <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">
             <ThumbsUp className="w-4 h-4" />
           </div>
-          <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-400 font-mono">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-400 font-mono">
             The Good / Advantages
-          </h4>
+          </h3>
         </div>
         <ul className="space-y-3">
           {pros.map((pro, idx) => (
@@ -37,9 +37,9 @@ export default function ProsConsBox({ pros = [], cons = [] }: Props) {
           <div className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400">
             <ThumbsDown className="w-4 h-4" />
           </div>
-          <h4 className="text-sm font-bold uppercase tracking-wider text-rose-400 font-mono">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-rose-400 font-mono">
             The Bad / Drawbacks
-          </h4>
+          </h3>
         </div>
         <ul className="space-y-3">
           {cons.map((con, idx) => (

@@ -100,9 +100,9 @@ export default function GadgetSpecsBox({ specs, gadgetTitle, categorySlug }: Pro
             <span className="text-xs font-mono uppercase tracking-widest text-tech-cyan font-semibold block">
               {config.title || 'Lab Specifications Sheet'}
             </span>
-            <h3 className="text-base font-bold text-white">
+            <h2 className="text-base sm:text-lg font-bold text-white">
               {gadgetTitle ? `${gadgetTitle} Tech Specs` : `${config.categoryName} Specifications`}
-            </h3>
+            </h2>
           </div>
         </div>
         <span className="text-xs font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10 hidden sm:inline-flex items-center gap-1.5">

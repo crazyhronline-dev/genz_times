@@ -473,9 +473,13 @@ export function calculateSeoScore(params: {
       tip: `Current word count: ${(content || "").split(/\s+/).filter(Boolean).length}. Comprehensive gadget reviews rank higher.`,
     },
     {
-      label: "Clear section headings (H2/H3 tags)",
-      passed: /##\s+|###\s+/.test(content),
-      tip: "Use ## and ### headings to organize specs, battery, and camera tests.",
+      label: "Strict heading hierarchy (H1 -> H2 -> H3)",
+      passed: Boolean(title && /##\s+[^\n]+/m.test(content) && !/^#\s+[^\n]+/m.test(content)),
+      tip: /^#\s+[^\n]+/m.test(content)
+        ? "Avoid single '#' (H1) in body text. Article title is already the page H1. Convert body headings to ## (H2) to prevent duplicate H1 penalties."
+        : !/##\s+[^\n]+/m.test(content)
+        ? "Include at least one ## (H2) section heading. Follow strict hierarchy: H1 (Title) -> H2 (Major Sections) -> H3 (Subsections)."
+        : "Excellent structure! Follows strict Google-recommended H1 -> H2 -> H3 hierarchy.",
     },
     {
       label: "High-resolution featured image",
