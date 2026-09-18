@@ -43,7 +43,7 @@ export default function AboutPage() {
         </h1>
 
         <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-          Founded by the <strong>GenZ Editorial Team</strong>, <strong>GenZ Time</strong> was created with a single mission: to cut through the PR noise and provide consumers, prosumers, and engineers with uncompromising, lab-tested hardware evaluations.
+          Founded by <strong>Sahil</strong>, <strong>GenZ Time</strong> was created with a single mission: to cut through the PR noise and provide consumers, prosumers, and engineers with uncompromising, lab-tested hardware evaluations.
         </p>
       </section>
 
@@ -155,14 +155,14 @@ export default function AboutPage() {
           <div className="p-6 rounded-2xl bg-tech-900/70 border border-slate-800 flex items-start gap-4">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
-              alt="GenZ Editorial Team"
+              alt="Sahil"
               className="w-16 h-16 rounded-2xl object-cover border-2 border-tech-cyan/40 flex-shrink-0"
             />
             <div>
-              <h3 className="text-lg font-bold text-white">GenZ Editorial Team</h3>
-              <p className="text-xs font-mono text-tech-cyan mb-2">Founding Editors & Hardware Analysts</p>
+              <h3 className="text-lg font-bold text-white">Sahil</h3>
+              <p className="text-xs font-mono text-tech-cyan mb-2">Founder & Lead Hardware Reviewer</p>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Computer hardware architects and veteran tech reviewers specializing in mobile silicon, spatial computing optics, and performance benchmarking.
+                Hardware reviewer and founder of GenZ Time. Rigorously testing smartphones, mobile silicon, spatial computing optics, GPU architectures, and performance benchmarking.
               </p>
             </div>
           </div>

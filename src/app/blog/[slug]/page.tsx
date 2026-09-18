@@ -50,21 +50,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
 
+  const rawMetaTitle = post.seo?.metaTitle || `${post.title} Review & Lab Benchmarks`;
+  const cleanMetaTitle = rawMetaTitle.replace(/\s*\|\s*GenZ Time\s*$/i, '').trim() + ' | GenZ Time';
+  const authorName = post.author?.name || 'Sahil';
+
   return {
-    title: post.seo?.metaTitle || `${post.title} | GenZ Time`,
+    title: {
+      absolute: cleanMetaTitle,
+    },
     description: post.seo?.metaDescription || post.excerpt,
-    keywords: post.tags,
+    keywords: post.tags && post.tags.length > 0 ? post.tags : ['GenZ tech review', 'hardware benchmark', 'GenZ Time'],
     alternates: {
       canonical: post.seo?.canonicalUrl || postUrl,
     },
     openGraph: {
       type: 'article',
       url: postUrl,
-      title: post.seo?.metaTitle || post.title,
+      title: cleanMetaTitle,
       description: post.seo?.metaDescription || post.excerpt,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt || post.publishedAt,
-      authors: [post.author.name],
+      authors: [authorName],
       tags: post.tags,
       images: [
         {
@@ -77,7 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.seo?.metaTitle || post.title,
+      title: cleanMetaTitle,
       description: post.seo?.metaDescription || post.excerpt,
       images: [post.seo?.ogImage || post.featuredImage],
       creator: SITE_CONFIG.twitterHandle,

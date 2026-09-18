@@ -3,12 +3,15 @@ import { getSpecFieldLabel } from "@/lib/category-specs";
 
 export const SITE_CONFIG = {
   name: "GenZ Time",
-  title: "GenZ Time | Real Gadget Reviews, Lab Benchmarks & Next-Gen Tech",
-  description: "We test every device with our own hands before publishing. GenZ Time delivers honest smartphone reviews, laptop benchmarks, AI gadget deep-dives, and next-gen hardware tests built for Gen Z creators and tech enthusiasts who want real data.",
+  alternateName: ["Gen Z Time", "GenZ Tech", "GenZ Reviews"],
+  title: "GenZ Time | Gen Z Tech Reviews, Hands-On Benchmarks & Next-Gen Gadgets",
+  description: "The authoritative Gen Z tech publication. Real hands-on smartphone reviews, laptop benchmarks, AI gadget deep-dives, and gaming hardware guides tested by Sahil at GenZ Time.",
   url: "https://genztime.com",
   ogImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1400&q=80",
   twitterHandle: "@GenZTimeTech",
-  author: "GenZ Editorial Team",
+  author: "Sahil",
+  authorRole: "Founder & Lead Hardware Editor",
+  authorBio: "Founder and lead hardware reviewer at GenZ Time, testing mobile silicon, smartphones, gaming gear, and spatial computing devices with rigorous hands-on lab benchmarks.",
 };
 
 /**
@@ -126,11 +129,11 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
     "keywords": post.tags && post.tags.length > 0 ? post.tags.join(", ") : undefined,
     "author": {
       "@type": "Person",
-      "name": post.author.name,
-      "jobTitle": post.author.role,
+      "name": post.author?.name || SITE_CONFIG.author,
+      "jobTitle": post.author?.role || SITE_CONFIG.authorRole,
       "url": `${SITE_CONFIG.url}/about`,
-      "image": post.author.avatar,
-      "description": post.author.bio,
+      "image": post.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "description": post.author?.bio || SITE_CONFIG.authorBio,
     },
     "publisher": {
       "@type": "NewsMediaOrganization",
@@ -178,7 +181,7 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
         "dateModified": post.updatedAt || post.publishedAt,
         "author": {
           "@type": "Person",
-          "name": post.author.name,
+          "name": post.author?.name || SITE_CONFIG.author,
           "url": `${SITE_CONFIG.url}/about`,
         },
         "publisher": {
@@ -273,7 +276,7 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
       "dateModified": post.updatedAt || post.publishedAt,
       "author": {
         "@type": "Person",
-        "name": post.author.name,
+        "name": post.author?.name || SITE_CONFIG.author,
         "url": `${SITE_CONFIG.url}/about`,
       },
       "publisher": {

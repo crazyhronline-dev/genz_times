@@ -3,6 +3,7 @@ import path from 'path';
 import { BlogPost } from '@/types/blog';
 import { evaluateEeat } from './eeat';
 import { checkPlagiarism } from './plagiarism';
+import { generateHighLevelSeo } from './auto-seo';
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'posts.json');
 
@@ -67,6 +68,25 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
   const wordCount = (postData.content || '').split(/\s+/).length;
   const readingTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
+  const authorName = (postData.author?.name && postData.author.name !== 'GenZ Editorial Team')
+    ? postData.author.name
+    : 'Sahil';
+  const authorRole = (postData.author?.role && postData.author.role !== 'Founder & Tech Editor')
+    ? postData.author.role
+    : 'Founder & Lead Hardware Editor';
+
+  // Auto SEO metadata generation
+  const autoSeo = generateHighLevelSeo({
+    title: postData.title,
+    content: postData.content,
+    category: postData.category || 'Tech Gadgets',
+    specs: postData.specs,
+    authorName,
+  });
+
+  const rawMetaTitle = postData.seo?.metaTitle || autoSeo.metaTitle;
+  const cleanMetaTitle = rawMetaTitle.replace(/\s*\|\s*GenZ\s*Time.*$/i, '').trim() + ' | GenZ Time';
+
   const newPost: BlogPost = {
     id,
     title: postData.title,
@@ -77,12 +97,12 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
     featuredImageAlt: postData.featuredImageAlt?.trim() || `${postData.title} - GenZ Time hardware lab review`,
     category: postData.category || 'Smartphones',
     categorySlug: postData.categorySlug || 'smartphones',
-    tags: postData.tags && postData.tags.length > 0 ? postData.tags : ['Tech', 'Gadgets'],
-    author: postData.author || {
-      name: 'GenZ Editorial Team',
-      role: 'Founder & Tech Editor',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      bio: 'Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years.',
+    tags: postData.tags && postData.tags.length > 0 ? postData.tags : autoSeo.tags,
+    author: {
+      name: authorName,
+      role: authorRole,
+      avatar: postData.author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      bio: postData.author?.bio || 'Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data.',
     },
     publishedAt: postData.publishedAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -93,9 +113,9 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
     cons: postData.cons && postData.cons.length > 0 ? postData.cons : ['Premium pricing'],
     specs: postData.specs || {},
     seo: {
-      metaTitle: postData.seo?.metaTitle || `${postData.title} | GenZ Time`,
-      metaDescription: postData.seo?.metaDescription || postData.excerpt || postData.content.slice(0, 155),
-      focusKeyword: postData.seo?.focusKeyword || postData.tags?.[0] || 'tech gadgets',
+      metaTitle: cleanMetaTitle,
+      metaDescription: postData.seo?.metaDescription?.trim() || autoSeo.metaDescription,
+      focusKeyword: postData.seo?.focusKeyword?.trim() || autoSeo.focusKeyword,
       canonicalUrl: postData.seo?.canonicalUrl || `https://genztime.com/blog/${slug}`,
       ogImage: postData.seo?.ogImage || postData.featuredImage,
     },

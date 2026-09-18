@@ -102,8 +102,8 @@ export default function PublishStudio({
   const currentSpecConfig = getCategorySpecConfig(categorySlug);
   const [excerpt, setExcerpt] = useState('');
   const [tagsInput, setTagsInput] = useState('Tech, GenZ, NextGen');
-  const [authorName, setAuthorName] = useState('GenZ Editorial Team');
-  const [authorRole, setAuthorRole] = useState('Senior Tech Analyst & Hardware Reviewer');
+  const [authorName, setAuthorName] = useState('Sahil');
+  const [authorRole, setAuthorRole] = useState('Founder & Lead Hardware Editor');
 
   // Featured Image State
   const [imageMode, setImageMode] = useState<'upload' | 'url' | 'presets'>('upload');
@@ -382,8 +382,8 @@ export default function PublishStudio({
     setFeaturedImageAlt(post.featuredImageAlt || (post.title ? `${post.title} - GenZ Time` : ''));
     setIsAltManuallyEdited(Boolean(post.featuredImageAlt));
     setTagsInput((post.tags || []).join(', '));
-    setAuthorName(post.author?.name || 'GenZ Editorial Team');
-    setAuthorRole(post.author?.role || 'Senior Tech Analyst');
+    setAuthorName(post.author?.name || 'Sahil');
+    setAuthorRole(post.author?.role || 'Founder & Lead Hardware Editor');
     setContent(post.content);
 
     // Determine type
@@ -618,10 +618,10 @@ export default function PublishStudio({
       tags,
       postType,
       author: {
-        name: authorName || 'GenZ Editorial Team',
-        role: authorRole || 'Senior Tech Analyst',
+        name: authorName || 'Sahil',
+        role: authorRole || 'Founder & Lead Hardware Editor',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-        bio: 'Tech journalist and hardware analyst at GenZ Time.',
+        bio: 'Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data.',
       },
       publishedAt: new Date().toISOString(),
       readingTime: `${Math.ceil(content.split(/\s+/).length / 200)} min read`,

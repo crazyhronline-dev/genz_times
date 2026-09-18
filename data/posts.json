@@ -1,433 +1,433 @@
 [
-    {
-        "id": "post-1789046921664",
-        "title": "Asus ROG Ally X Review: The New Handheld Gaming Benchmark",
-        "slug": "asus-rog-ally-x-review",
-        "excerpt": "Asus doubles the battery capacity to 80Wh, adds 24GB of LPDDR5X-7500 RAM, and perfects handheld ergonomic thermals.",
-        "content": "## Handheld PC Gaming Elevated\n\nThe Asus ROG Ally X addresses nearly every feedback point from generation one.\n\n### 80Wh Battery Endurance\n\nDoubling battery size from 40Wh to 80Wh yields over 3 hours of AAA gaming at 25W turbo.\n\n### 24GB Ultra-Fast Memory\n\nAllocating 8GB to VRAM leaves a comfortable 16GB for system memory.",
-        "featuredImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1400&q=80",
-        "category": "Gaming Gear",
-        "categorySlug": "gaming-gear",
-        "tags": [
-            "Asus",
-            "ROG Ally X",
-            "Handheld Gaming",
-            "PC Gaming",
-            "Steam Deck"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Founder & Tech Editor",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-09-10T13:28:41.664Z",
-        "updatedAt": "2026-09-10T13:28:41.664Z",
-        "readingTime": "1 min read",
-        "verdictScore": 9.1,
-        "verdictSummary": "The definitive Windows gaming handheld with battery endurance that finally lasts long flights.",
-        "pros": [
-            "Massive 80Wh battery doubles runtime",
-            "24GB RAM resolves memory bottlenecks",
-            "Dual USB-C with USB4 support"
-        ],
-        "cons": [
-            "Still runs Windows 11 desktop UI instead of console-first OS",
-            "Heavier than predecessor (678g)"
-        ],
-        "specs": {
-            "display": "7-inch FHD (1920x1080) 120Hz 500 nits IPS FreeSync Premium",
-            "processor": "AMD Ryzen Z1 Extreme (8 cores, 16 threads)",
-            "ram": "24GB LPDDR5X-7500",
-            "storage": "1TB PCIe 4.0 NVMe M.2 2280",
-            "battery": "80Wh 4-cell Li-ion",
-            "price": " USD",
-            "weight": "678g"
-        },
-        "seo": {
-            "metaTitle": "Asus ROG Ally X Review: Battery Champion Handheld | GenZ Time",
-            "metaDescription": "Hands-on review of the Asus ROG Ally X: 80Wh battery benchmarks, 24GB RAM gaming performance, and lab analysis.",
-            "focusKeyword": "Asus ROG Ally X review",
-            "canonicalUrl": "https://genztime.com/blog/asus-rog-ally-x-review",
-            "ogImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": false,
-        "isTrending": false,
-        "views": 144,
-        "eeatScore": 94,
-        "originalityScore": 98
+  {
+    "id": "post-1789046921664",
+    "title": "Asus ROG Ally X Review: The New Handheld Gaming Benchmark",
+    "slug": "asus-rog-ally-x-review",
+    "excerpt": "Asus doubles the battery capacity to 80Wh, adds 24GB of LPDDR5X-7500 RAM, and perfects handheld ergonomic thermals.",
+    "content": "## Handheld PC Gaming Elevated\n\nThe Asus ROG Ally X addresses nearly every feedback point from generation one.\n\n### 80Wh Battery Endurance\n\nDoubling battery size from 40Wh to 80Wh yields over 3 hours of AAA gaming at 25W turbo.\n\n### 24GB Ultra-Fast Memory\n\nAllocating 8GB to VRAM leaves a comfortable 16GB for system memory.",
+    "featuredImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1400&q=80",
+    "category": "Gaming Gear",
+    "categorySlug": "gaming-gear",
+    "tags": [
+      "Asus",
+      "ROG Ally X",
+      "Handheld Gaming",
+      "PC Gaming",
+      "Steam Deck"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
     },
-    {
-        "id": "post-1",
-        "title": "Apple Vision Pro 2 In-Depth Review: The Spatial Computing Evolution",
-        "slug": "apple-vision-pro-2-review",
-        "excerpt": "Apple's second-generation spatial computer tackles weight, battery life, and visual fidelity with dual M4 silicon and micro-OLED 4K panels.",
-        "content": "## The Spatial Computing Revolution Re-Engineered\n\nWhen Apple unveiled the original Vision Pro, it astonished the industry with its breathtaking micro-OLED visual fidelity and near-magical hand-eye tracking. However, heavy front-weight and thermal dissipation were persistent pain points. With the **Apple Vision Pro 2**, Cupertino has delivered a dramatically refined iteration that sheds 28% of its bulk while doubling on-board neural processing power.\n\n### Industrial Design & Ergonomics\n\nThe titanium-alloy chassis has been redesigned with magnesium-carbon composite reinforcement. The Dual Loop band is now integrated with dynamic tension distribution, making 3-hour immersive sessions not just possible, but comfortable. The external EyeSight display has been upgraded to a sharper Lenticular OLED with 120Hz refresh rates, giving bystanders a much more realistic perspective of the wearer's gaze.\n\n### Dual M4 & R2 Silicon Architecture\n\nPowering the Vision Pro 2 is Apple's tandem chip architecture:\n- **M4 Processor (10-core CPU, 10-core GPU)** handles all application logic, 4K rendering pipelines, and spatial audio calculations.\n- **Custom R2 Sensor Co-processor** processes 12 cameras, five sensors, and six microphones with a sub-10-millisecond photon-to-motion latency.\n\nRunning visionOS 3.0, multitasking feels natural. You can anchor twenty floating 4K display windows throughout your room, cast unlimited virtual Mac desktops, and collaborate in hyper-photorealistic spatial Personas.\n\n### Micro-OLED Displays & Optics\n\nFeaturing 25 million pixels across dual custom micro-OLED panels (exceeding 4K per eye), color gamut hits 94% DCI-P3 with custom three-element catadioptric lenses. Edge-to-edge sharpness has visibly improved, with god-rays and internal reflections substantially dampened.\n\n### Battery Performance & Thermal Management\n\nThe external battery pack now features a graphene-enhanced lithium-ion cell capable of 3.5 hours of continuous spatial media playback (up from 2 hours on Gen 1). A newly calibrated dual-vapor-chamber active cooling loop stays virtually silent even during heavy 3D rendering in Blender or Final Cut Pro for visionOS.",
-        "featuredImage": "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=80",
-        "category": "VR & Wearables",
-        "categorySlug": "vr-wearables",
-        "tags": [
-            "Apple",
-            "Vision Pro 2",
-            "Spatial Computing",
-            "VR Headset",
-            "M4 Chip",
-            "visionOS"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-08-28T10:00:00Z",
-        "readingTime": "7 min read",
-        "verdictScore": 9.3,
-        "verdictSummary": "A triumph of industrial engineering that resolves the ergonomic compromises of generation one, establishing the undisputed benchmark for high-end spatial computing.",
-        "pros": [
-            "Stunning 25-million pixel micro-OLED panels with zero visible screen door effect",
-            "Noticeable 28% weight reduction with improved ergonomic weight distribution",
-            "Dual M4 + R2 silicon provides instant latency-free gesture and eye tracking",
-            "Seamless multi-screen virtual Mac desktop integration",
-            "Extended battery life reaching 3.5 hours"
-        ],
-        "cons": [
-            "Substantial $3,299 price tag remains exclusive for prosumers & enterprises",
-            "External battery tether is still required for operation",
-            "Native visionOS third-party gaming ecosystem is still maturing"
-        ],
-        "specs": {
-            "display": "Dual Micro-OLED 25M Pixels, 4K+ per eye, 94% DCI-P3, 120Hz",
-            "processor": "Apple M4 (10-Core) + R2 Real-Time Sensor Processing Chip",
-            "ram": "24GB Unified High-Bandwidth Memory",
-            "storage": "512GB / 1TB / 2TB NVMe PCIe 5.0",
-            "battery": "3.5 hours spatial playback (external graphene battery pack)",
-            "camera": "Stereoscopic 3D camera system with 12 sensors & LiDAR",
-            "os": "visionOS 3.0",
-            "price": "$3,299 USD",
-            "weight": "440g (headset alone)"
-        },
-        "seo": {
-            "metaTitle": "Apple Vision Pro 2 Review: The Spatial Computing Paradigm Shift | GenZ Time",
-            "metaDescription": "Full in-depth review of Apple Vision Pro 2: hands-on testing of M4 silicon, weight ergonomics, 4K micro-OLED displays, battery benchmarks, and visionOS 3.0.",
-            "focusKeyword": "Apple Vision Pro 2 review",
-            "canonicalUrl": "https://genztime.com/blog/apple-vision-pro-2-review",
-            "ogImage": "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": true,
-        "isTrending": true,
-        "views": 18454,
-        "eeatScore": 94,
-        "originalityScore": 98
+    "publishedAt": "2026-09-10T13:28:41.664Z",
+    "updatedAt": "2026-09-10T13:28:41.664Z",
+    "readingTime": "1 min read",
+    "verdictScore": 9.1,
+    "verdictSummary": "The definitive Windows gaming handheld with battery endurance that finally lasts long flights.",
+    "pros": [
+      "Massive 80Wh battery doubles runtime",
+      "24GB RAM resolves memory bottlenecks",
+      "Dual USB-C with USB4 support"
+    ],
+    "cons": [
+      "Still runs Windows 11 desktop UI instead of console-first OS",
+      "Heavier than predecessor (678g)"
+    ],
+    "specs": {
+      "display": "7-inch FHD (1920x1080) 120Hz 500 nits IPS FreeSync Premium",
+      "processor": "AMD Ryzen Z1 Extreme (8 cores, 16 threads)",
+      "ram": "24GB LPDDR5X-7500",
+      "storage": "1TB PCIe 4.0 NVMe M.2 2280",
+      "battery": "80Wh 4-cell Li-ion",
+      "price": " USD",
+      "weight": "678g"
     },
-    {
-        "id": "post-2",
-        "title": "Samsung Galaxy S25 Ultra Hands-On: The Ultimate AI Camera Beast",
-        "slug": "samsung-galaxy-s25-ultra-review",
-        "excerpt": "Samsung's newest flagship combines a flat titanium rail, Snapdragon 8 Elite overclocked silicon, and a 200MP quad-prism zoom system that redefines mobile photography.",
-        "content": "## Galaxy S25 Ultra: Refined Industrial Titanium & Unrivaled AI Imaging\n\nEvery year, Samsung's Ultra lineup defines the technological zenith of the Android ecosystem. With the **Galaxy S25 Ultra**, Samsung introduces its thinnest flagship chassis yet, completely abandoning curved edge distortions in favor of a clean, symmetrical flat titanium rail with uniform 1.1mm bezels.\n\n### 6.9-inch Dynamic AMOLED 2X Display with Anti-Reflective Armor 2\n\nThe 6.9-inch display peaks at a blistering 3,100 nits. Paired with Corning's second-generation Gorilla Armor glass, reflections are reduced by 78%, making outdoor visibility under direct sunlight pristine. The variable LTPO refresh rate scales from 1Hz to 144Hz dynamically during gaming sessions.\n\n### Snapdragon 8 Elite for Galaxy & Galaxy AI 3.0\n\nUnder the hood sits Qualcomm's bespoke Snapdragon 8 Elite platform fabricated on TSMC's 3nm N3E node:\n- Custom Oryon prime cores clocking up to 4.47GHz\n- Dedicated Hexagon NPU pushing 80 TOPS for on-device generative AI processing\n- Real-time video frame translation, generative photo editing without cloud lag, and local audio transcription\n\nIn Geekbench 6, the device achieves over 3,200 single-core and 10,400 multi-core scores, obliterating synthetic thermal throttles thanks to a 1.9x enlarged vapor chamber.\n\n### 200MP Quad-Telephoto Camera Array\n\nThe camera system features:\n1. **200MP ISOCELL HP2+ main sensor** with f/1.7 aperture and dual-pixel autofocus\n2. **50MP ultra-wide** with macro autofocus\n3. **50MP 3x optical telephoto**\n4. **50MP 5x periscope telephoto** utilizing computational AI zoom to deliver pristine 100x Space Zoom captures\n\nNightography noise reduction algorithms utilize AI deep neural networks to produce noiseless 8K 60fps video with cinema-grade dynamic range.\n\n### S-Pen Integration & Battery Longevity\n\nThe embedded S-Pen now includes haptic tip feedback simulating actual pen-on-paper friction. The 5,000mAh battery easily delivers 8.5 hours of screen-on-time, supported by 65W wired fast charging that hits 70% in 28 minutes.",
-        "featuredImage": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=1400&q=80",
-        "category": "Smartphones",
-        "categorySlug": "smartphones",
-        "tags": [
-            "Samsung",
-            "Galaxy S25 Ultra",
-            "Snapdragon 8 Elite",
-            "200MP Camera",
-            "Flagship Phone",
-            "Galaxy AI"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-08-20T14:30:00Z",
-        "readingTime": "6 min read",
-        "verdictScore": 9.5,
-        "verdictSummary": "The most versatile, powerful smartphone on the planet. Its flat titanium build, unmatched 200MP camera array, and blazing on-device AI make it the undisputed Android champion.",
-        "pros": [
-            "Sensational 6.9-inch 3,100 nits display with anti-reflective glass coating",
-            "Class-leading 200MP + dual 50MP zoom cameras with razor-sharp computational optics",
-            "Snapdragon 8 Elite provides peak sustained gaming and thermal performance",
-            "Integrated S-Pen stylus with realistic tactile haptic feedback",
-            "7 years of major Android OS updates & security patches"
-        ],
-        "cons": [
-            "Still large and heavy for single-handed use (219g)",
-            "Charging speed capped at 65W compared to 120W+ rivals",
-            "Premium $1,299 starting retail price"
-        ],
-        "specs": {
-            "display": "6.9-inch Dynamic LTPO AMOLED 2X, 3120x1440, 1-144Hz, 3100 nits peak",
-            "processor": "Qualcomm Snapdragon 8 Elite for Galaxy (3nm)",
-            "ram": "12GB / 16GB LPDDR5X",
-            "storage": "256GB / 512GB / 1TB UFS 4.1",
-            "battery": "5,000mAh, 65W wired, 25W wireless charging",
-            "camera": "200MP Main + 50MP Ultra-wide + 50MP 3x Zoom + 50MP 5x Periscope Zoom",
-            "os": "One UI 7 on Android 15",
-            "price": "$1,299 USD",
-            "weight": "219g"
-        },
-        "seo": {
-            "metaTitle": "Samsung Galaxy S25 Ultra Review: The Ultimate 200MP AI Beast | GenZ Time",
-            "metaDescription": "Hands-on review of Samsung Galaxy S25 Ultra: Snapdragon 8 Elite benchmarks, 200MP camera test, 3,100 nits anti-reflective screen, and full specs analysis.",
-            "focusKeyword": "Samsung Galaxy S25 Ultra review",
-            "canonicalUrl": "https://genztime.com/blog/samsung-galaxy-s25-ultra-review",
-            "ogImage": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": true,
-        "isTrending": true,
-        "views": 24900,
-        "eeatScore": 94,
-        "originalityScore": 98
+    "seo": {
+      "metaTitle": "Asus ROG Ally X Review: Battery Champion Handheld | GenZ Time",
+      "metaDescription": "Hands-on review of the Asus ROG Ally X: 80Wh battery benchmarks, 24GB RAM gaming performance, and lab analysis.",
+      "focusKeyword": "Asus ROG Ally X review",
+      "canonicalUrl": "https://genztime.com/blog/asus-rog-ally-x-review",
+      "ogImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1400&q=80"
     },
-    {
-        "id": "post-3",
-        "title": "Sony WH-1000XM6: Next-Gen ANC & Audiophile Acoustic Engineering",
-        "slug": "sony-wh-1000xm6-review",
-        "excerpt": "Sony reclaims the wireless audio crown with the WH-1000XM6, featuring dual QN2e noise-canceling chips and custom carbon-composite 35mm acoustic drivers.",
-        "content": "## Silence Perfected: The Acoustic Benchmark Returns\n\nSony's 1000X headphone series has set the golden standard for travel noise cancellation for nearly a decade. The new **Sony WH-1000XM6** brings an overhaul of the headband suspension, introduces folded portability back to the lineup, and integrates Sony's proprietary dual **HD Noise Cancelling Processor QN2e** for unprecedented ambient silencing.\n\n### Dual QN2e Processors & 12 Microphones\n\nWhile the XM5 utilized 8 microphones, the XM6 expands to 12 multi-directional sensors backed by real-time neural wind-suppression ducts. In our airport terminal and flight engine decibel tests, low-frequency hums are annihilated by an additional 6dB compared to Bose QuietComfort Ultra and AirPods Max.\n\n### Carbon-Composite 35mm Drivers\n\nSound signature is tuned with audiophile nuance:\n- Deep, articulate sub-bass without muddying lower mids\n- Sparkling high-frequency resolution supported by LDAC and DSEE Extreme upscaling\n- 360 Reality Audio with personalized head tracking\n\n### Battery Life & Multipoint Connectivity\n\nBattery life reaches 42 hours with ANC engaged (up to 55 hours with ANC disabled). A quick 3-minute USB-C charge yields 4 hours of lossless listening. Multipoint allows instantaneous toggling between MacBook, iPhone, and Windows workstation without dropouts.",
-        "featuredImage": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1400&q=80",
-        "category": "Audio & Earbuds",
-        "categorySlug": "audio-earbuds",
-        "tags": [
-            "Sony",
-            "WH-1000XM6",
-            "Noise Cancelling",
-            "Audiophile",
-            "Headphones",
-            "LDAC"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-08-15T09:15:00Z",
-        "readingTime": "5 min read",
-        "verdictScore": 9.4,
-        "verdictSummary": "With the return of a foldable design, industry-annihilating ANC, and rich acoustic clarity, the WH-1000XM6 sits unchallenged atop the wireless headphone mountain.",
-        "pros": [
-            "Best-in-class active noise cancellation kills both drone rumble and human speech",
-            "Foldable headband design returns for compact travel storage",
-            "Up to 42 hours battery endurance with ANC enabled",
-            "LDAC codec and high-resolution spatial audio profile",
-            "Ultra-plush synthetic leather earcups for all-day comfort"
-        ],
-        "cons": [
-            "Touch gestures require brief learning curve",
-            "Microphone call quality in heavy wind could still be slightly crisper"
-        ],
-        "specs": {
-            "display": "N/A (Audio Accessory)",
-            "processor": "Dual Sony HD Noise Cancelling Processor QN2e + Integrated Processor V3",
-            "ram": "N/A",
-            "storage": "N/A",
-            "battery": "42 hours (ANC ON), 55 hours (ANC OFF), 3-min quick charge = 4 hrs",
-            "camera": "N/A",
-            "os": "Sony Headphones Connect compatible (iOS & Android)",
-            "price": "$429 USD",
-            "weight": "245g"
-        },
-        "seo": {
-            "metaTitle": "Sony WH-1000XM6 Review: The King of Noise Cancelling Returns | GenZ Time",
-            "metaDescription": "Sony WH-1000XM6 review: sound quality, ANC benchmarks against AirPods Max, battery life tests, and complete specs breakdown.",
-            "focusKeyword": "Sony WH-1000XM6 review",
-            "canonicalUrl": "https://genztime.com/blog/sony-wh-1000xm6-review",
-            "ogImage": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": false,
-        "isTrending": true,
-        "views": 15200,
-        "eeatScore": 94,
-        "originalityScore": 98
+    "isFeatured": false,
+    "isTrending": false,
+    "views": 144,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-1",
+    "title": "Apple Vision Pro 2 In-Depth Review: The Spatial Computing Evolution",
+    "slug": "apple-vision-pro-2-review",
+    "excerpt": "Apple's second-generation spatial computer tackles weight, battery life, and visual fidelity with dual M4 silicon and micro-OLED 4K panels.",
+    "content": "## The Spatial Computing Revolution Re-Engineered\n\nWhen Apple unveiled the original Vision Pro, it astonished the industry with its breathtaking micro-OLED visual fidelity and near-magical hand-eye tracking. However, heavy front-weight and thermal dissipation were persistent pain points. With the **Apple Vision Pro 2**, Cupertino has delivered a dramatically refined iteration that sheds 28% of its bulk while doubling on-board neural processing power.\n\n### Industrial Design & Ergonomics\n\nThe titanium-alloy chassis has been redesigned with magnesium-carbon composite reinforcement. The Dual Loop band is now integrated with dynamic tension distribution, making 3-hour immersive sessions not just possible, but comfortable. The external EyeSight display has been upgraded to a sharper Lenticular OLED with 120Hz refresh rates, giving bystanders a much more realistic perspective of the wearer's gaze.\n\n### Dual M4 & R2 Silicon Architecture\n\nPowering the Vision Pro 2 is Apple's tandem chip architecture:\n- **M4 Processor (10-core CPU, 10-core GPU)** handles all application logic, 4K rendering pipelines, and spatial audio calculations.\n- **Custom R2 Sensor Co-processor** processes 12 cameras, five sensors, and six microphones with a sub-10-millisecond photon-to-motion latency.\n\nRunning visionOS 3.0, multitasking feels natural. You can anchor twenty floating 4K display windows throughout your room, cast unlimited virtual Mac desktops, and collaborate in hyper-photorealistic spatial Personas.\n\n### Micro-OLED Displays & Optics\n\nFeaturing 25 million pixels across dual custom micro-OLED panels (exceeding 4K per eye), color gamut hits 94% DCI-P3 with custom three-element catadioptric lenses. Edge-to-edge sharpness has visibly improved, with god-rays and internal reflections substantially dampened.\n\n### Battery Performance & Thermal Management\n\nThe external battery pack now features a graphene-enhanced lithium-ion cell capable of 3.5 hours of continuous spatial media playback (up from 2 hours on Gen 1). A newly calibrated dual-vapor-chamber active cooling loop stays virtually silent even during heavy 3D rendering in Blender or Final Cut Pro for visionOS.",
+    "featuredImage": "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=80",
+    "category": "VR & Wearables",
+    "categorySlug": "vr-wearables",
+    "tags": [
+      "Apple",
+      "Vision Pro 2",
+      "Spatial Computing",
+      "VR Headset",
+      "M4 Chip",
+      "visionOS"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
     },
-    {
-        "id": "post-4",
-        "title": "M4 Max MacBook Pro 16-inch: Relentless Performance for Creators",
-        "slug": "m4-max-macbook-pro-16-inch-review",
-        "excerpt": "Apple's M4 Max silicon unleashes 16 CPU cores, 40 GPU cores, and up to 128GB unified memory with liquid retina XDR nano-texture display brilliance.",
-        "content": "## M4 Max: The Ultimate Pro Workstation Laptop\n\nApple silicon transformed the laptop landscape in 2020. The **M4 Max 16-inch MacBook Pro** represents the pinnacle of that architecture, combining desktop-class computational throughput with 22-hour battery longevity and an optional glare-banishing nano-texture display.\n\n### Architecture & Benchmarks\n\nThe M4 Max packs:\n- **16-core CPU** (12 performance cores, 4 efficiency cores)\n- **40-core GPU** featuring hardware-accelerated ray tracing and mesh shading\n- **Up to 128GB Unified Memory** with an astronomical 546 GB/s memory bandwidth\n\nIn our tests, rendering an 8K ProRes RAW video timeline in DaVinci Resolve executed 40% faster than the M3 Max, while pulling a fraction of the wattage compared to high-end Intel/Nvidia mobile laptops.\n\n### Nano-Texture Liquid Retina XDR Display\n\nThe optional nano-texture glass scatters ambient light without muddying contrast. With 1,600 nits peak HDR brightness, 1,000 nits sustained full-screen brightness, and ProMotion 120Hz adaptivity, color grading and coding in brightly lit environments is an absolute joy.",
-        "featuredImage": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1400&q=80",
-        "category": "Laptops & Computing",
-        "categorySlug": "laptops-computing",
-        "tags": [
-            "Apple",
-            "MacBook Pro",
-            "M4 Max",
-            "Laptop",
-            "Workstation",
-            "macOS"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-08-10T12:00:00Z",
-        "readingTime": "8 min read",
-        "verdictScore": 9.7,
-        "verdictSummary": "Unmatched battery efficiency paired with workstation-tier computational muscle and a reference-grade display make the M4 Max 16-inch the finest pro laptop on earth.",
-        "pros": [
-            "Staggering M4 Max CPU and 40-core GPU throughput that runs quietly under load",
-            "Incredible 22-hour real-world battery endurance",
-            "New nano-texture Liquid Retina XDR screen eliminates glare effortlessly",
-            "Thunderbolt 5 ports supporting up to 120Gb/s transfer speeds",
-            "Best-in-class laptop trackpad, keyboard, and 6-speaker spatial audio system"
-        ],
-        "cons": [
-            "Substantial financial investment when configured with 64GB+ unified RAM",
-            "16-inch chassis weighs 2.16 kg (4.76 lbs)",
-            "Zero internal component modularity or post-purchase upgradeability"
-        ],
-        "specs": {
-            "display": "16.2-inch Liquid Retina XDR (3456x2234), 1-120Hz ProMotion, Nano-Texture option",
-            "processor": "Apple M4 Max (16-core CPU, 40-core GPU, 16-core Neural Engine)",
-            "ram": "36GB / 48GB / 64GB / 128GB Unified Memory (546 GB/s bandwidth)",
-            "storage": "1TB / 2TB / 4TB / 8TB PCIe Gen 5 SSD",
-            "battery": "100Wh Lithium-Polymer, up to 22 hours video playback, 140W MagSafe 3",
-            "camera": "12MP Center Stage camera with Desk View support",
-            "os": "macOS Sequoia",
-            "price": "$3,499 USD (as tested)",
-            "weight": "2.16 kg"
-        },
-        "seo": {
-            "metaTitle": "M4 Max MacBook Pro 16-inch Review: Unmatched Power & Battery | GenZ Time",
-            "metaDescription": "In-depth review of the M4 Max 16-inch MacBook Pro: benchmark scores, 40-core GPU performance, nano-texture display testing, and 22-hour battery life.",
-            "focusKeyword": "M4 Max MacBook Pro 16-inch review",
-            "canonicalUrl": "https://genztime.com/blog/m4-max-macbook-pro-16-inch-review",
-            "ogImage": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": true,
-        "isTrending": false,
-        "views": 21800,
-        "eeatScore": 94,
-        "originalityScore": 98
+    "publishedAt": "2026-08-28T10:00:00Z",
+    "readingTime": "7 min read",
+    "verdictScore": 9.3,
+    "verdictSummary": "A triumph of industrial engineering that resolves the ergonomic compromises of generation one, establishing the undisputed benchmark for high-end spatial computing.",
+    "pros": [
+      "Stunning 25-million pixel micro-OLED panels with zero visible screen door effect",
+      "Noticeable 28% weight reduction with improved ergonomic weight distribution",
+      "Dual M4 + R2 silicon provides instant latency-free gesture and eye tracking",
+      "Seamless multi-screen virtual Mac desktop integration",
+      "Extended battery life reaching 3.5 hours"
+    ],
+    "cons": [
+      "Substantial $3,299 price tag remains exclusive for prosumers & enterprises",
+      "External battery tether is still required for operation",
+      "Native visionOS third-party gaming ecosystem is still maturing"
+    ],
+    "specs": {
+      "display": "Dual Micro-OLED 25M Pixels, 4K+ per eye, 94% DCI-P3, 120Hz",
+      "processor": "Apple M4 (10-Core) + R2 Real-Time Sensor Processing Chip",
+      "ram": "24GB Unified High-Bandwidth Memory",
+      "storage": "512GB / 1TB / 2TB NVMe PCIe 5.0",
+      "battery": "3.5 hours spatial playback (external graphene battery pack)",
+      "camera": "Stereoscopic 3D camera system with 12 sensors & LiDAR",
+      "os": "visionOS 3.0",
+      "price": "$3,299 USD",
+      "weight": "440g (headset alone)"
     },
-    {
-        "id": "post-5",
-        "title": "Rabbit r2 & Humane AI Pin: The Hard Reality of Post-Smartphone Hardware",
-        "slug": "rabbit-r2-humane-ai-pin-hardware-analysis",
-        "excerpt": "Can dedicated generative AI gadgets replace the modern smartphone? We put the newest AI wearables through 30 days of real-world endurance testing.",
-        "content": "## The Post-Smartphone Fantasy vs. Daily Reality\n\nThe promise was seductive: throw away your distracting glass slab smartphone and wear an unobtrusive lapel pin or pocket companion powered by large language models and autonomous action agents. But does hardware without a screen truly work in modern society?\n\n### The Large Action Model (LAM) Tested\n\nThe **Rabbit r2** upgraded its camera to a 1080p rotational sensor and doubled its local battery capacity. When asking it to order an Uber, trigger Spotify playlists, or translate a foreign menu, accuracy was approximately 74%. However, the latency barrier—frequently taking 4 to 8 seconds per task—makes pulling out a modern smartphone with Siri or Google Gemini significantly faster.\n\n### The Optical Projection Dilemma\n\nHumane's laser projection onto the palm of your hand remains an intriguing sci-fi novelty, but in bright sunlight or during motion, readability drops precipitously. Thermal limits also force the processor to throttle within 15 minutes of intensive conversational search.\n\n### The Final Verdict on AI Hardware\n\nStandalone AI hardware will not replace the smartphone; rather, smartphones and smartwatches are rapidly absorbing every AI capability faster, more securely, and with zero extra hardware cost.",
-        "featuredImage": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&q=80",
-        "category": "AI Gadgets & Future Tech",
-        "categorySlug": "ai-gadgets",
-        "tags": [
-            "Rabbit r2",
-            "Humane AI Pin",
-            "AI Hardware",
-            "Wearables",
-            "Future Tech"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-08-05T08:00:00Z",
-        "readingTime": "6 min read",
-        "verdictScore": 6.8,
-        "verdictSummary": "Fascinating conceptual prototypes that foreshadow our ambient computing future, but crippled by latency, thermal throttling, and smartphone redundancy.",
-        "pros": [
-            "Charming retro-futuristic industrial design by Teenage Engineering (Rabbit)",
-            "Instant push-to-talk voice input ergonomics",
-            "Real-time camera visual comprehension has improved noticeably"
-        ],
-        "cons": [
-            "4 to 8 second cloud latency destroys real-time convenience",
-            "Requires duplicate cellular data plans or Wi-Fi hotspotting",
-            "Modern smartphones do everything faster with larger displays"
-        ],
-        "specs": {
-            "display": "Rabbit: 2.88-inch TFT LCD / Humane: Laser Ink Display 720p",
-            "processor": "MediaTek Helio / Snapdragon AI Engine",
-            "ram": "4GB / 6GB",
-            "storage": "64GB / 128GB eMMC",
-            "battery": "Rabbit: 1,800mAh (6-8 hours) / Humane: Battery Booster pack (4 hours)",
-            "camera": "13MP 360-degree rotational camera / 7MP RGB camera",
-            "os": "rabbitOS 2.0 / CosmOS",
-            "price": "$199 / $499 USD",
-            "weight": "115g / 54g"
-        },
-        "seo": {
-            "metaTitle": "Rabbit r2 & Humane AI Pin Tested: Can AI Gadgets Replace Phones? | GenZ Time",
-            "metaDescription": "30-day comprehensive test of Rabbit r2 and Humane AI Pin: LAM accuracy, response latency, palm laser display usability, and real-world verdict.",
-            "focusKeyword": "Rabbit r2 AI hardware review",
-            "canonicalUrl": "https://genztime.com/blog/rabbit-r2-humane-ai-pin-hardware-analysis",
-            "ogImage": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": false,
-        "isTrending": false,
-        "views": 11400,
-        "eeatScore": 94,
-        "originalityScore": 98
+    "seo": {
+      "metaTitle": "Apple Vision Pro 2 Review: The Spatial Computing Paradigm Shift | GenZ Time",
+      "metaDescription": "Full in-depth review of Apple Vision Pro 2: hands-on testing of M4 silicon, weight ergonomics, 4K micro-OLED displays, battery benchmarks, and visionOS 3.0.",
+      "focusKeyword": "Apple Vision Pro 2 review",
+      "canonicalUrl": "https://genztime.com/blog/apple-vision-pro-2-review",
+      "ogImage": "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=80"
     },
-    {
-        "id": "post-6",
-        "title": "DJI Mini 4 Pro: The Sub-249g Aerial Imaging Masterpiece",
-        "slug": "dji-mini-4-pro-review",
-        "excerpt": "With omnidirectional obstacle sensing, 4K/60fps HDR true vertical shooting, and 20km FHD video transmission, DJI packs pro cine capabilities into a pocket drone.",
-        "content": "## Cinematic Drone Capabilities Under 249 Grams\n\nFor creators and travel filmmakers, the 249-gram threshold is sacred—it exempts pilots from burdensome registration regulations in many global jurisdictions. With the **DJI Mini 4 Pro**, DJI has accomplished what seemed impossible: fitting true omnidirectional vision obstacle sensing and flagship O4 video transmission into a foldable palm-sized frame.\n\n### Omnidirectional Obstacle Sensing with APAS 5.0\n\nEquipped with four wide-angle vision sensors and a pair of downward vision sensors, the Mini 4 Pro detects obstacles in all directions. During our dense pine forest tracking tests, ActiveTrack 360 smoothly maneuvered around branches and unpredictable tree canopies without a single collision.\n\n### 4K/60fps HDR & True Vertical Shooting\n\nThe 1/1.3-inch CMOS sensor with dual native ISO fusion supports D-Log M and HLG 10-bit color profiles. Furthermore, the physical camera gimbal rotates 90 degrees for native, uncropped vertical video ready for YouTube Shorts and Instagram Reels.",
-        "featuredImage": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1400&q=80",
-        "category": "Drones & Cameras",
-        "categorySlug": "drones-cameras",
-        "tags": [
-            "DJI",
-            "Mini 4 Pro",
-            "Drones",
-            "4K Video",
-            "Aerial Photography",
-            "Tech Gadgets"
-        ],
-        "author": {
-            "name": "GenZ Editorial Team",
-            "role": "Editor-in-Chief & Lead Hardware Analyst",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-            "bio": "Gadget architect and tech journalist testing cutting-edge consumer hardware and spatial devices for over 8 years."
-        },
-        "publishedAt": "2026-07-25T11:00:00Z",
-        "readingTime": "5 min read",
-        "verdictScore": 9.6,
-        "verdictSummary": "The most accomplished compact drone ever built. Uncompromising 4K/60fps HDR imaging and omnidirectional collision avoidance in an ultra-portable sub-249g package.",
-        "pros": [
-            "Sub-249g weight avoids FAA and international drone registration in most regions",
-            "Full omnidirectional obstacle avoidance with intelligent ActiveTrack 360",
-            "Native mechanical 90-degree gimbal rotation for lossless vertical video",
-            "O4 transmission delivers clean 1080p 60fps feed up to 20 km",
-            "10-bit D-Log M color profile provides pro grade dynamic grading range"
-        ],
-        "cons": [
-            "Lightweight frame is more vulnerable in extreme high-wind gale conditions",
-            "Fly More Combo with RC 2 controller pushes price near $1,000"
-        ],
-        "specs": {
-            "display": "5.5-inch 700 nits FHD display on DJI RC 2 controller",
-            "processor": "DJI Core Flight & Computer Vision Processing",
-            "ram": "N/A",
-            "storage": "2GB internal + microSD up to 512GB",
-            "battery": "34 mins (Standard) / 45 mins (Plus Intelligent Flight Battery)",
-            "camera": "1/1.3-inch CMOS 48MP, 24mm f/1.7, 4K/60fps HDR, 4K/100fps slow-mo",
-            "os": "DJI Fly App (iOS / Android / DJI RC 2)",
-            "price": "$759 - $959 USD",
-            "weight": "249g"
-        },
-        "seo": {
-            "metaTitle": "DJI Mini 4 Pro Review: The Best Compact Drone in 2026 | GenZ Time",
-            "metaDescription": "Detailed review of DJI Mini 4 Pro drone: omnidirectional obstacle sensing, 4K/60fps vertical shooting, D-Log M tests, and battery flight times.",
-            "focusKeyword": "DJI Mini 4 Pro review",
-            "canonicalUrl": "https://genztime.com/blog/dji-mini-4-pro-review",
-            "ogImage": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1400&q=80"
-        },
-        "isFeatured": false,
-        "isTrending": true,
-        "views": 17300,
-        "eeatScore": 94,
-        "originalityScore": 98
-    }
+    "isFeatured": true,
+    "isTrending": true,
+    "views": 18454,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-2",
+    "title": "Samsung Galaxy S25 Ultra Hands-On: The Ultimate AI Camera Beast",
+    "slug": "samsung-galaxy-s25-ultra-review",
+    "excerpt": "Samsung's newest flagship combines a flat titanium rail, Snapdragon 8 Elite overclocked silicon, and a 200MP quad-prism zoom system that redefines mobile photography.",
+    "content": "## Galaxy S25 Ultra: Refined Industrial Titanium & Unrivaled AI Imaging\n\nEvery year, Samsung's Ultra lineup defines the technological zenith of the Android ecosystem. With the **Galaxy S25 Ultra**, Samsung introduces its thinnest flagship chassis yet, completely abandoning curved edge distortions in favor of a clean, symmetrical flat titanium rail with uniform 1.1mm bezels.\n\n### 6.9-inch Dynamic AMOLED 2X Display with Anti-Reflective Armor 2\n\nThe 6.9-inch display peaks at a blistering 3,100 nits. Paired with Corning's second-generation Gorilla Armor glass, reflections are reduced by 78%, making outdoor visibility under direct sunlight pristine. The variable LTPO refresh rate scales from 1Hz to 144Hz dynamically during gaming sessions.\n\n### Snapdragon 8 Elite for Galaxy & Galaxy AI 3.0\n\nUnder the hood sits Qualcomm's bespoke Snapdragon 8 Elite platform fabricated on TSMC's 3nm N3E node:\n- Custom Oryon prime cores clocking up to 4.47GHz\n- Dedicated Hexagon NPU pushing 80 TOPS for on-device generative AI processing\n- Real-time video frame translation, generative photo editing without cloud lag, and local audio transcription\n\nIn Geekbench 6, the device achieves over 3,200 single-core and 10,400 multi-core scores, obliterating synthetic thermal throttles thanks to a 1.9x enlarged vapor chamber.\n\n### 200MP Quad-Telephoto Camera Array\n\nThe camera system features:\n1. **200MP ISOCELL HP2+ main sensor** with f/1.7 aperture and dual-pixel autofocus\n2. **50MP ultra-wide** with macro autofocus\n3. **50MP 3x optical telephoto**\n4. **50MP 5x periscope telephoto** utilizing computational AI zoom to deliver pristine 100x Space Zoom captures\n\nNightography noise reduction algorithms utilize AI deep neural networks to produce noiseless 8K 60fps video with cinema-grade dynamic range.\n\n### S-Pen Integration & Battery Longevity\n\nThe embedded S-Pen now includes haptic tip feedback simulating actual pen-on-paper friction. The 5,000mAh battery easily delivers 8.5 hours of screen-on-time, supported by 65W wired fast charging that hits 70% in 28 minutes.",
+    "featuredImage": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=1400&q=80",
+    "category": "Smartphones",
+    "categorySlug": "smartphones",
+    "tags": [
+      "Samsung",
+      "Galaxy S25 Ultra",
+      "Snapdragon 8 Elite",
+      "200MP Camera",
+      "Flagship Phone",
+      "Galaxy AI"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
+    },
+    "publishedAt": "2026-08-20T14:30:00Z",
+    "readingTime": "6 min read",
+    "verdictScore": 9.5,
+    "verdictSummary": "The most versatile, powerful smartphone on the planet. Its flat titanium build, unmatched 200MP camera array, and blazing on-device AI make it the undisputed Android champion.",
+    "pros": [
+      "Sensational 6.9-inch 3,100 nits display with anti-reflective glass coating",
+      "Class-leading 200MP + dual 50MP zoom cameras with razor-sharp computational optics",
+      "Snapdragon 8 Elite provides peak sustained gaming and thermal performance",
+      "Integrated S-Pen stylus with realistic tactile haptic feedback",
+      "7 years of major Android OS updates & security patches"
+    ],
+    "cons": [
+      "Still large and heavy for single-handed use (219g)",
+      "Charging speed capped at 65W compared to 120W+ rivals",
+      "Premium $1,299 starting retail price"
+    ],
+    "specs": {
+      "display": "6.9-inch Dynamic LTPO AMOLED 2X, 3120x1440, 1-144Hz, 3100 nits peak",
+      "processor": "Qualcomm Snapdragon 8 Elite for Galaxy (3nm)",
+      "ram": "12GB / 16GB LPDDR5X",
+      "storage": "256GB / 512GB / 1TB UFS 4.1",
+      "battery": "5,000mAh, 65W wired, 25W wireless charging",
+      "camera": "200MP Main + 50MP Ultra-wide + 50MP 3x Zoom + 50MP 5x Periscope Zoom",
+      "os": "One UI 7 on Android 15",
+      "price": "$1,299 USD",
+      "weight": "219g"
+    },
+    "seo": {
+      "metaTitle": "Samsung Galaxy S25 Ultra Review: The Ultimate 200MP AI Beast | GenZ Time",
+      "metaDescription": "Hands-on review of Samsung Galaxy S25 Ultra: Snapdragon 8 Elite benchmarks, 200MP camera test, 3,100 nits anti-reflective screen, and full specs analysis.",
+      "focusKeyword": "Samsung Galaxy S25 Ultra review",
+      "canonicalUrl": "https://genztime.com/blog/samsung-galaxy-s25-ultra-review",
+      "ogImage": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=1400&q=80"
+    },
+    "isFeatured": true,
+    "isTrending": true,
+    "views": 24900,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-3",
+    "title": "Sony WH-1000XM6: Next-Gen ANC & Audiophile Acoustic Engineering",
+    "slug": "sony-wh-1000xm6-review",
+    "excerpt": "Sony reclaims the wireless audio crown with the WH-1000XM6, featuring dual QN2e noise-canceling chips and custom carbon-composite 35mm acoustic drivers.",
+    "content": "## Silence Perfected: The Acoustic Benchmark Returns\n\nSony's 1000X headphone series has set the golden standard for travel noise cancellation for nearly a decade. The new **Sony WH-1000XM6** brings an overhaul of the headband suspension, introduces folded portability back to the lineup, and integrates Sony's proprietary dual **HD Noise Cancelling Processor QN2e** for unprecedented ambient silencing.\n\n### Dual QN2e Processors & 12 Microphones\n\nWhile the XM5 utilized 8 microphones, the XM6 expands to 12 multi-directional sensors backed by real-time neural wind-suppression ducts. In our airport terminal and flight engine decibel tests, low-frequency hums are annihilated by an additional 6dB compared to Bose QuietComfort Ultra and AirPods Max.\n\n### Carbon-Composite 35mm Drivers\n\nSound signature is tuned with audiophile nuance:\n- Deep, articulate sub-bass without muddying lower mids\n- Sparkling high-frequency resolution supported by LDAC and DSEE Extreme upscaling\n- 360 Reality Audio with personalized head tracking\n\n### Battery Life & Multipoint Connectivity\n\nBattery life reaches 42 hours with ANC engaged (up to 55 hours with ANC disabled). A quick 3-minute USB-C charge yields 4 hours of lossless listening. Multipoint allows instantaneous toggling between MacBook, iPhone, and Windows workstation without dropouts.",
+    "featuredImage": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1400&q=80",
+    "category": "Audio & Earbuds",
+    "categorySlug": "audio-earbuds",
+    "tags": [
+      "Sony",
+      "WH-1000XM6",
+      "Noise Cancelling",
+      "Audiophile",
+      "Headphones",
+      "LDAC"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
+    },
+    "publishedAt": "2026-08-15T09:15:00Z",
+    "readingTime": "5 min read",
+    "verdictScore": 9.4,
+    "verdictSummary": "With the return of a foldable design, industry-annihilating ANC, and rich acoustic clarity, the WH-1000XM6 sits unchallenged atop the wireless headphone mountain.",
+    "pros": [
+      "Best-in-class active noise cancellation kills both drone rumble and human speech",
+      "Foldable headband design returns for compact travel storage",
+      "Up to 42 hours battery endurance with ANC enabled",
+      "LDAC codec and high-resolution spatial audio profile",
+      "Ultra-plush synthetic leather earcups for all-day comfort"
+    ],
+    "cons": [
+      "Touch gestures require brief learning curve",
+      "Microphone call quality in heavy wind could still be slightly crisper"
+    ],
+    "specs": {
+      "display": "N/A (Audio Accessory)",
+      "processor": "Dual Sony HD Noise Cancelling Processor QN2e + Integrated Processor V3",
+      "ram": "N/A",
+      "storage": "N/A",
+      "battery": "42 hours (ANC ON), 55 hours (ANC OFF), 3-min quick charge = 4 hrs",
+      "camera": "N/A",
+      "os": "Sony Headphones Connect compatible (iOS & Android)",
+      "price": "$429 USD",
+      "weight": "245g"
+    },
+    "seo": {
+      "metaTitle": "Sony WH-1000XM6 Review: The King of Noise Cancelling Returns | GenZ Time",
+      "metaDescription": "Sony WH-1000XM6 review: sound quality, ANC benchmarks against AirPods Max, battery life tests, and complete specs breakdown.",
+      "focusKeyword": "Sony WH-1000XM6 review",
+      "canonicalUrl": "https://genztime.com/blog/sony-wh-1000xm6-review",
+      "ogImage": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1400&q=80"
+    },
+    "isFeatured": false,
+    "isTrending": true,
+    "views": 15200,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-4",
+    "title": "M4 Max MacBook Pro 16-inch: Relentless Performance for Creators",
+    "slug": "m4-max-macbook-pro-16-inch-review",
+    "excerpt": "Apple's M4 Max silicon unleashes 16 CPU cores, 40 GPU cores, and up to 128GB unified memory with liquid retina XDR nano-texture display brilliance.",
+    "content": "## M4 Max: The Ultimate Pro Workstation Laptop\n\nApple silicon transformed the laptop landscape in 2020. The **M4 Max 16-inch MacBook Pro** represents the pinnacle of that architecture, combining desktop-class computational throughput with 22-hour battery longevity and an optional glare-banishing nano-texture display.\n\n### Architecture & Benchmarks\n\nThe M4 Max packs:\n- **16-core CPU** (12 performance cores, 4 efficiency cores)\n- **40-core GPU** featuring hardware-accelerated ray tracing and mesh shading\n- **Up to 128GB Unified Memory** with an astronomical 546 GB/s memory bandwidth\n\nIn our tests, rendering an 8K ProRes RAW video timeline in DaVinci Resolve executed 40% faster than the M3 Max, while pulling a fraction of the wattage compared to high-end Intel/Nvidia mobile laptops.\n\n### Nano-Texture Liquid Retina XDR Display\n\nThe optional nano-texture glass scatters ambient light without muddying contrast. With 1,600 nits peak HDR brightness, 1,000 nits sustained full-screen brightness, and ProMotion 120Hz adaptivity, color grading and coding in brightly lit environments is an absolute joy.",
+    "featuredImage": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1400&q=80",
+    "category": "Laptops & Computing",
+    "categorySlug": "laptops-computing",
+    "tags": [
+      "Apple",
+      "MacBook Pro",
+      "M4 Max",
+      "Laptop",
+      "Workstation",
+      "macOS"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
+    },
+    "publishedAt": "2026-08-10T12:00:00Z",
+    "readingTime": "8 min read",
+    "verdictScore": 9.7,
+    "verdictSummary": "Unmatched battery efficiency paired with workstation-tier computational muscle and a reference-grade display make the M4 Max 16-inch the finest pro laptop on earth.",
+    "pros": [
+      "Staggering M4 Max CPU and 40-core GPU throughput that runs quietly under load",
+      "Incredible 22-hour real-world battery endurance",
+      "New nano-texture Liquid Retina XDR screen eliminates glare effortlessly",
+      "Thunderbolt 5 ports supporting up to 120Gb/s transfer speeds",
+      "Best-in-class laptop trackpad, keyboard, and 6-speaker spatial audio system"
+    ],
+    "cons": [
+      "Substantial financial investment when configured with 64GB+ unified RAM",
+      "16-inch chassis weighs 2.16 kg (4.76 lbs)",
+      "Zero internal component modularity or post-purchase upgradeability"
+    ],
+    "specs": {
+      "display": "16.2-inch Liquid Retina XDR (3456x2234), 1-120Hz ProMotion, Nano-Texture option",
+      "processor": "Apple M4 Max (16-core CPU, 40-core GPU, 16-core Neural Engine)",
+      "ram": "36GB / 48GB / 64GB / 128GB Unified Memory (546 GB/s bandwidth)",
+      "storage": "1TB / 2TB / 4TB / 8TB PCIe Gen 5 SSD",
+      "battery": "100Wh Lithium-Polymer, up to 22 hours video playback, 140W MagSafe 3",
+      "camera": "12MP Center Stage camera with Desk View support",
+      "os": "macOS Sequoia",
+      "price": "$3,499 USD (as tested)",
+      "weight": "2.16 kg"
+    },
+    "seo": {
+      "metaTitle": "M4 Max MacBook Pro 16-inch Review: Unmatched Power & Battery | GenZ Time",
+      "metaDescription": "In-depth review of the M4 Max 16-inch MacBook Pro: benchmark scores, 40-core GPU performance, nano-texture display testing, and 22-hour battery life.",
+      "focusKeyword": "M4 Max MacBook Pro 16-inch review",
+      "canonicalUrl": "https://genztime.com/blog/m4-max-macbook-pro-16-inch-review",
+      "ogImage": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1400&q=80"
+    },
+    "isFeatured": true,
+    "isTrending": false,
+    "views": 21800,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-5",
+    "title": "Rabbit r2 & Humane AI Pin: The Hard Reality of Post-Smartphone Hardware",
+    "slug": "rabbit-r2-humane-ai-pin-hardware-analysis",
+    "excerpt": "Can dedicated generative AI gadgets replace the modern smartphone? We put the newest AI wearables through 30 days of real-world endurance testing.",
+    "content": "## The Post-Smartphone Fantasy vs. Daily Reality\n\nThe promise was seductive: throw away your distracting glass slab smartphone and wear an unobtrusive lapel pin or pocket companion powered by large language models and autonomous action agents. But does hardware without a screen truly work in modern society?\n\n### The Large Action Model (LAM) Tested\n\nThe **Rabbit r2** upgraded its camera to a 1080p rotational sensor and doubled its local battery capacity. When asking it to order an Uber, trigger Spotify playlists, or translate a foreign menu, accuracy was approximately 74%. However, the latency barrier—frequently taking 4 to 8 seconds per task—makes pulling out a modern smartphone with Siri or Google Gemini significantly faster.\n\n### The Optical Projection Dilemma\n\nHumane's laser projection onto the palm of your hand remains an intriguing sci-fi novelty, but in bright sunlight or during motion, readability drops precipitously. Thermal limits also force the processor to throttle within 15 minutes of intensive conversational search.\n\n### The Final Verdict on AI Hardware\n\nStandalone AI hardware will not replace the smartphone; rather, smartphones and smartwatches are rapidly absorbing every AI capability faster, more securely, and with zero extra hardware cost.",
+    "featuredImage": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&q=80",
+    "category": "AI Gadgets & Future Tech",
+    "categorySlug": "ai-gadgets",
+    "tags": [
+      "Rabbit r2",
+      "Humane AI Pin",
+      "AI Hardware",
+      "Wearables",
+      "Future Tech"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
+    },
+    "publishedAt": "2026-08-05T08:00:00Z",
+    "readingTime": "6 min read",
+    "verdictScore": 6.8,
+    "verdictSummary": "Fascinating conceptual prototypes that foreshadow our ambient computing future, but crippled by latency, thermal throttling, and smartphone redundancy.",
+    "pros": [
+      "Charming retro-futuristic industrial design by Teenage Engineering (Rabbit)",
+      "Instant push-to-talk voice input ergonomics",
+      "Real-time camera visual comprehension has improved noticeably"
+    ],
+    "cons": [
+      "4 to 8 second cloud latency destroys real-time convenience",
+      "Requires duplicate cellular data plans or Wi-Fi hotspotting",
+      "Modern smartphones do everything faster with larger displays"
+    ],
+    "specs": {
+      "display": "Rabbit: 2.88-inch TFT LCD / Humane: Laser Ink Display 720p",
+      "processor": "MediaTek Helio / Snapdragon AI Engine",
+      "ram": "4GB / 6GB",
+      "storage": "64GB / 128GB eMMC",
+      "battery": "Rabbit: 1,800mAh (6-8 hours) / Humane: Battery Booster pack (4 hours)",
+      "camera": "13MP 360-degree rotational camera / 7MP RGB camera",
+      "os": "rabbitOS 2.0 / CosmOS",
+      "price": "$199 / $499 USD",
+      "weight": "115g / 54g"
+    },
+    "seo": {
+      "metaTitle": "Rabbit r2 & Humane AI Pin Tested: Can AI Gadgets Replace Phones? | GenZ Time",
+      "metaDescription": "30-day comprehensive test of Rabbit r2 and Humane AI Pin: LAM accuracy, response latency, palm laser display usability, and real-world verdict.",
+      "focusKeyword": "Rabbit r2 AI hardware review",
+      "canonicalUrl": "https://genztime.com/blog/rabbit-r2-humane-ai-pin-hardware-analysis",
+      "ogImage": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&q=80"
+    },
+    "isFeatured": false,
+    "isTrending": false,
+    "views": 11400,
+    "eeatScore": 94,
+    "originalityScore": 98
+  },
+  {
+    "id": "post-6",
+    "title": "DJI Mini 4 Pro: The Sub-249g Aerial Imaging Masterpiece",
+    "slug": "dji-mini-4-pro-review",
+    "excerpt": "With omnidirectional obstacle sensing, 4K/60fps HDR true vertical shooting, and 20km FHD video transmission, DJI packs pro cine capabilities into a pocket drone.",
+    "content": "## Cinematic Drone Capabilities Under 249 Grams\n\nFor creators and travel filmmakers, the 249-gram threshold is sacred—it exempts pilots from burdensome registration regulations in many global jurisdictions. With the **DJI Mini 4 Pro**, DJI has accomplished what seemed impossible: fitting true omnidirectional vision obstacle sensing and flagship O4 video transmission into a foldable palm-sized frame.\n\n### Omnidirectional Obstacle Sensing with APAS 5.0\n\nEquipped with four wide-angle vision sensors and a pair of downward vision sensors, the Mini 4 Pro detects obstacles in all directions. During our dense pine forest tracking tests, ActiveTrack 360 smoothly maneuvered around branches and unpredictable tree canopies without a single collision.\n\n### 4K/60fps HDR & True Vertical Shooting\n\nThe 1/1.3-inch CMOS sensor with dual native ISO fusion supports D-Log M and HLG 10-bit color profiles. Furthermore, the physical camera gimbal rotates 90 degrees for native, uncropped vertical video ready for YouTube Shorts and Instagram Reels.",
+    "featuredImage": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1400&q=80",
+    "category": "Drones & Cameras",
+    "categorySlug": "drones-cameras",
+    "tags": [
+      "DJI",
+      "Mini 4 Pro",
+      "Drones",
+      "4K Video",
+      "Aerial Photography",
+      "Tech Gadgets"
+    ],
+    "author": {
+      "name": "Sahil",
+      "role": "Founder & Lead Hardware Editor",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "bio": "Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data."
+    },
+    "publishedAt": "2026-07-25T11:00:00Z",
+    "readingTime": "5 min read",
+    "verdictScore": 9.6,
+    "verdictSummary": "The most accomplished compact drone ever built. Uncompromising 4K/60fps HDR imaging and omnidirectional collision avoidance in an ultra-portable sub-249g package.",
+    "pros": [
+      "Sub-249g weight avoids FAA and international drone registration in most regions",
+      "Full omnidirectional obstacle avoidance with intelligent ActiveTrack 360",
+      "Native mechanical 90-degree gimbal rotation for lossless vertical video",
+      "O4 transmission delivers clean 1080p 60fps feed up to 20 km",
+      "10-bit D-Log M color profile provides pro grade dynamic grading range"
+    ],
+    "cons": [
+      "Lightweight frame is more vulnerable in extreme high-wind gale conditions",
+      "Fly More Combo with RC 2 controller pushes price near $1,000"
+    ],
+    "specs": {
+      "display": "5.5-inch 700 nits FHD display on DJI RC 2 controller",
+      "processor": "DJI Core Flight & Computer Vision Processing",
+      "ram": "N/A",
+      "storage": "2GB internal + microSD up to 512GB",
+      "battery": "34 mins (Standard) / 45 mins (Plus Intelligent Flight Battery)",
+      "camera": "1/1.3-inch CMOS 48MP, 24mm f/1.7, 4K/60fps HDR, 4K/100fps slow-mo",
+      "os": "DJI Fly App (iOS / Android / DJI RC 2)",
+      "price": "$759 - $959 USD",
+      "weight": "249g"
+    },
+    "seo": {
+      "metaTitle": "DJI Mini 4 Pro Review: The Best Compact Drone in 2026 | GenZ Time",
+      "metaDescription": "Detailed review of DJI Mini 4 Pro drone: omnidirectional obstacle sensing, 4K/60fps vertical shooting, D-Log M tests, and battery flight times.",
+      "focusKeyword": "DJI Mini 4 Pro review",
+      "canonicalUrl": "https://genztime.com/blog/dji-mini-4-pro-review",
+      "ogImage": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1400&q=80"
+    },
+    "isFeatured": false,
+    "isTrending": true,
+    "views": 17300,
+    "eeatScore": 94,
+    "originalityScore": 98
+  }
 ]

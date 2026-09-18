@@ -1,12 +1,12 @@
 [
   {
     "id": "usr-superadmin-01",
-    "name": "GenZ Editorial Team",
+    "name": "Sahil",
     "username": "admin",
     "email": "admin@genztime.com",
     "password": "050505",
     "role": "admin",
-    "designation": "Editor-in-Chief & Super Admin",
+    "designation": "Founder & Lead Hardware Editor",
     "active": true,
     "createdAt": "2026-09-01T00:00:00.000Z",
     "lastLogin": "2026-09-12T15:00:00.000Z"

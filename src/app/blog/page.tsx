@@ -6,11 +6,22 @@ import BlogListClient from './BlogListClient';
 import { Cpu, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "Every Gadget We've Tested — Full Review & Benchmark Archive",
-  description: "Browse every smartphone, laptop, earbud, drone, and AI gadget we've personally tested and scored. Filter by category, sort by GenZ Lab Score, or search by brand — no sponsored content, ever.",
+  title: {
+    absolute: "Gen Z Tech Reviews & Hardware Benchmark Archive | GenZ Time",
+  },
+  description: "Browse comprehensive Gen Z gadget reviews, lab-tested smartphone benchmarks, laptop comparisons, and AI hardware deep-dives tested hands-on by Sahil at GenZ Time.",
+  keywords: [
+    "GenZ tech reviews",
+    "Gen Z gadget benchmarks",
+    "smartphone reviews 2026",
+    "best tech for Gen Z",
+    "laptop benchmark archive",
+    "honest tech reviews",
+    "Sahil gadget reviews"
+  ],
   openGraph: {
-    title: "Every Gadget We've Tested — Full Review Archive | GenZ Time",
-    description: "Browse every smartphone, laptop, earbud, drone, and AI gadget we've personally tested and scored. No sponsored rankings. Real hands-on data from the GenZ Time lab.",
+    title: "Gen Z Tech Reviews & Hardware Benchmark Archive | GenZ Time",
+    description: "Browse comprehensive Gen Z gadget reviews, lab-tested smartphone benchmarks, laptop comparisons, and AI hardware deep-dives tested hands-on by Sahil at GenZ Time.",
   },
   alternates: {
     canonical: 'https://genztime.com/blog',

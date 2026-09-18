@@ -48,7 +48,7 @@ export default function AdminBar() {
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Admin Active:</span>
           </span>
-          <span className="text-white">GenZ Editorial Team (Super Admin)</span>
+          <span className="text-white">Sahil (Founder & Admin)</span>
         </div>
 
         {/* Right: Quick Actions & Logout */}

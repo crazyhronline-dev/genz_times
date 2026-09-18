@@ -7,12 +7,12 @@ const USERS_FILE = path.join(process.cwd(), 'data', 'users.json');
 export const DEFAULT_USERS: EditorialUser[] = [
   {
     id: 'usr-superadmin-01',
-    name: 'GenZ Editorial Team',
+    name: 'Sahil',
     username: 'admin',
     email: 'admin@genztime.com',
     password: '050505',
     role: 'admin',
-    designation: 'Editor-in-Chief & Super Admin',
+    designation: 'Founder & Lead Hardware Editor',
     active: true,
     createdAt: '2026-09-01T00:00:00.000Z',
   },

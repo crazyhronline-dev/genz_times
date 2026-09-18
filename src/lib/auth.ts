@@ -5,8 +5,8 @@ export const ADMIN_PIN = '050505';
 export const ADMIN_CREDENTIALS = {
   username: 'admin',
   password: '050505',
-  displayName: 'GenZ Editorial Team',
-  role: 'Editor-in-Chief & Super Admin',
+  displayName: 'Sahil',
+  role: 'Founder & Lead Hardware Editor',
 };
 
 export const AUTH_COOKIE_NAME = 'genz_time_admin_session';

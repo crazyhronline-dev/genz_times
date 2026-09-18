@@ -45,11 +45,11 @@ export async function GET(request: NextRequest) {
         authenticated: true,
         user: {
           id: 'usr-superadmin-01',
-          name: 'GenZ Editorial Team',
+          name: 'Sahil',
           username: 'admin',
           email: 'admin@genztime.com',
           role: 'admin',
-          designation: 'Editor-in-Chief & Super Admin',
+          designation: 'Founder & Lead Hardware Editor',
         },
         allowedModules: ROLE_PERMISSIONS.admin,
       });
