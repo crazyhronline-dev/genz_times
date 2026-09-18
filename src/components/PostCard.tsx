@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { BlogPost } from '@/types/blog';
-import { Clock, Calendar, Star, ChevronRight, Sparkles } from 'lucide-react';
+import { Clock, Calendar, Star, ChevronRight, Sparkles, Eye } from 'lucide-react';
 import ImageWatermark from '@/components/ImageWatermark';
 
 interface Props {
@@ -63,12 +63,17 @@ export default function PostCard({ post, featured = false }: Props) {
       <div className={`p-5 sm:p-6 flex-1 flex flex-col justify-between ${featured ? 'md:col-span-5 md:py-8' : ''}`}>
         <div>
           {/* Metadata Byline */}
-          <div className="flex items-center gap-3 text-xs font-mono text-slate-400 mb-2.5">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs font-mono text-slate-400 mb-2.5">
+            <span className="flex items-center gap-1 text-slate-300">
+              <Calendar className="w-3.5 h-3.5 text-tech-cyan" />
               {formattedDate}
             </span>
-            <span>•</span>
+            <span className="text-slate-600">•</span>
+            <span className="flex items-center gap-1 text-tech-cyan font-semibold">
+              <Eye className="w-3.5 h-3.5" />
+              <span>{(post.views || 0).toLocaleString()} views</span>
+            </span>
+            <span className="text-slate-600">•</span>
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               {post.readingTime}

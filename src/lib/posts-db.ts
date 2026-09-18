@@ -107,11 +107,18 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
     publishedAt: postData.publishedAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     readingTime,
+    postType: postData.postType || (postData.verdictScore && postData.verdictScore > 0 ? 'review' : 'article'),
     verdictScore: postData.verdictScore ?? 9.0,
     verdictSummary: postData.verdictSummary || 'An exceptional tech gadget delivering superb performance and industrial design.',
-    pros: postData.pros && postData.pros.length > 0 ? postData.pros : ['Cutting-edge engineering', 'Class-leading performance'],
-    cons: postData.cons && postData.cons.length > 0 ? postData.cons : ['Premium pricing'],
+    pros: Array.isArray(postData.pros) ? postData.pros.filter(Boolean) : [],
+    cons: Array.isArray(postData.cons) ? postData.cons.filter(Boolean) : [],
     specs: postData.specs || {},
+    keyTakeaways: Array.isArray(postData.keyTakeaways) ? postData.keyTakeaways.filter(Boolean) : [],
+    faqs: postData.faqs || [],
+    sources: postData.sources || [],
+    isComparison: postData.isComparison ?? false,
+    comparisonCount: postData.comparisonCount,
+    comparedProducts: postData.comparedProducts,
     seo: {
       metaTitle: cleanMetaTitle,
       metaDescription: postData.seo?.metaDescription?.trim() || autoSeo.metaDescription,
@@ -121,7 +128,7 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
     },
     isFeatured: postData.isFeatured ?? false,
     isTrending: postData.isTrending ?? false,
-    views: postData.views ?? Math.floor(Math.random() * 500) + 100,
+    views: typeof postData.views === 'number' ? postData.views : 0,
     eeatScore: postData.eeatScore ?? evaluateEeat({
       title: postData.title,
       content: postData.content,
@@ -142,6 +149,20 @@ export async function savePost(postData: Partial<BlogPost> & { title: string; co
 
   await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
   return newPost;
+}
+
+export async function incrementPostViews(idOrSlug: string): Promise<number | null> {
+  try {
+    const posts = await getAllPosts();
+    const post = posts.find((p) => p.id === idOrSlug || p.slug.toLowerCase() === idOrSlug.toLowerCase());
+    if (!post) return null;
+    post.views = (post.views || 0) + 1;
+    await fs.writeFile(DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    return post.views;
+  } catch (error) {
+    console.error('Error incrementing post views:', error);
+    return null;
+  }
 }
 
 export async function deletePost(id: string): Promise<boolean> {

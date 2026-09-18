@@ -14,7 +14,8 @@ import {
   ShieldCheck, 
   Gauge, 
   Microscope, 
-  Star
+  Star,
+  Eye
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -128,7 +129,16 @@ export default async function HomePage() {
                   />
                   <div>
                     <p className="text-sm font-bold text-white">{heroPost.author.name}</p>
-                    <p className="text-xs text-slate-400 font-mono">{heroPost.readingTime}</p>
+                    <p className="text-xs text-slate-400 font-mono flex items-center gap-2 mt-0.5">
+                      <span>{new Date(heroPost.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                      <span>•</span>
+                      <span className="text-tech-cyan font-bold flex items-center gap-1">
+                        <Eye className="w-3 h-3 text-tech-cyan" />
+                        <span>{(heroPost.views || 0).toLocaleString()} views</span>
+                      </span>
+                      <span>•</span>
+                      <span>{heroPost.readingTime}</span>
+                    </p>
                   </div>
                 </div>
 

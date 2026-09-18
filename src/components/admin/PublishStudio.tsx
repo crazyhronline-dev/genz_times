@@ -156,8 +156,8 @@ export default function PublishStudio({
     price: '',
     weight: '',
   });
-  const [pros, setPros] = useState<string[]>(['Class-leading build quality', 'Breakthrough hardware efficiency']);
-  const [cons, setCons] = useState<string[]>(['Premium flagship pricing']);
+  const [pros, setPros] = useState<string[]>([]);
+  const [cons, setCons] = useState<string[]>([]);
   const [newPro, setNewPro] = useState('');
   const [newCon, setNewCon] = useState('');
   const [verdictScore, setVerdictScore] = useState(9.2);
@@ -184,8 +184,8 @@ export default function PublishStudio({
         price: '',
         connectivity: '',
       },
-      pros: ['Class-leading build quality', 'Breakthrough hardware efficiency'],
-      cons: ['Premium flagship pricing'],
+      pros: [],
+      cons: [],
     },
   ]);
   const [activeProductTab, setActiveProductTab] = useState(0);
@@ -287,8 +287,8 @@ export default function PublishStudio({
           verdictScore: 8.8,
           verdictSummary: 'Solid performance with competitive trade-offs in its price tier.',
           specs: { ...(copy[0]?.specs || {}) },
-          pros: ['Strong competitive value', 'Reliable performance'],
-          cons: ['Minor thermal throttling under peak load'],
+          pros: [],
+          cons: [],
         });
       }
       return copy;
@@ -306,8 +306,8 @@ export default function PublishStudio({
       verdictScore: 8.9,
       verdictSummary: 'Competitive hardware package with notable class-leading features.',
       specs: { ...(comparedProducts[0]?.specs || {}) },
-      pros: ['Impressive build and finish', 'Great ergonomics'],
-      cons: ['Premium price point'],
+      pros: [],
+      cons: [],
     };
     setComparedProducts((prev) => [...prev, newProduct]);
     setActiveProductTab(comparedProducts.length);
@@ -420,8 +420,8 @@ export default function PublishStudio({
           verdictScore: post.verdictScore || 9.2,
           verdictSummary: post.verdictSummary || '',
           specs: post.specs || {},
-          pros: post.pros || ['Class-leading build quality', 'Breakthrough hardware efficiency'],
-          cons: post.cons || ['Premium flagship pricing'],
+          pros: post.pros || [],
+          cons: post.cons || [],
         },
       ]);
     }
@@ -662,6 +662,8 @@ export default function PublishStudio({
       payload.keyTakeaways = keyTakeaways.filter(Boolean);
       payload.faqs = faqs;
       payload.sources = sources;
+      payload.pros = pros.filter(Boolean);
+      payload.cons = cons.filter(Boolean);
     }
 
     try {
@@ -1256,6 +1258,128 @@ export default function PublishStudio({
                 >
                   + Add Source
                 </button>
+              </div>
+            </div>
+
+            {/* Optional Strengths & Weaknesses / Pros & Cons for Articles */}
+            <div className="p-6 rounded-3xl bg-tech-900/50 border border-slate-800 space-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-tech-emerald">
+                    <Sliders className="w-4 h-4" />
+                    <span>Product Pros & Cons / Strengths & Weaknesses (Optional)</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-500">
+                    {pros.length + cons.length > 0 ? `${pros.length} Pros, ${cons.length} Cons` : 'Optional • None Added'}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 font-mono">
+                  If this article evaluates hardware, software, or tech services, enter your key pros and cons below. If left empty, NO pros & cons block will appear on the published article.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                {/* Pros */}
+                <div className="space-y-3">
+                  <span className="text-xs font-mono font-bold text-tech-emerald block">
+                    ✓ Strengths / Pros ({pros.length})
+                  </span>
+                  <div className="space-y-2">
+                    {pros.map((p, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-tech-emerald/20 text-xs text-slate-200">
+                        <span>{p}</span>
+                        <button
+                          type="button"
+                          onClick={() => setPros(pros.filter((_, i) => i !== idx))}
+                          className="text-slate-500 hover:text-rose-400"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newPro}
+                      onChange={(e) => setNewPro(e.target.value)}
+                      placeholder="Add a pro point..."
+                      className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-tech-emerald"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (newPro.trim()) {
+                            setPros([...pros, newPro.trim()]);
+                            setNewPro('');
+                          }
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (newPro.trim()) {
+                          setPros([...pros, newPro.trim()]);
+                          setNewPro('');
+                        }
+                      }}
+                      className="px-3.5 py-2 bg-tech-emerald/20 text-tech-emerald rounded-xl text-xs font-mono font-bold border border-tech-emerald/40 hover:bg-tech-emerald/30 transition"
+                    >
+                      + Pro
+                    </button>
+                  </div>
+                </div>
+
+                {/* Cons */}
+                <div className="space-y-3">
+                  <span className="text-xs font-mono font-bold text-rose-400 block">
+                    ✕ Weaknesses / Cons ({cons.length})
+                  </span>
+                  <div className="space-y-2">
+                    {cons.map((c, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-2.5 rounded-xl bg-tech-950 border border-rose-500/20 text-xs text-slate-200">
+                        <span>{c}</span>
+                        <button
+                          type="button"
+                          onClick={() => setCons(cons.filter((_, i) => i !== idx))}
+                          className="text-slate-500 hover:text-rose-400"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCon}
+                      onChange={(e) => setNewCon(e.target.value)}
+                      placeholder="Add a con point..."
+                      className="flex-1 px-3 py-2 bg-tech-950 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-rose-400"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (newCon.trim()) {
+                            setCons([...cons, newCon.trim()]);
+                            setNewCon('');
+                          }
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (newCon.trim()) {
+                          setCons([...cons, newCon.trim()]);
+                          setNewCon('');
+                        }
+                      }}
+                      className="px-3.5 py-2 bg-rose-500/20 text-rose-400 rounded-xl text-xs font-mono font-bold border border-rose-500/40 hover:bg-rose-500/30 transition"
+                    >
+                      + Con
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

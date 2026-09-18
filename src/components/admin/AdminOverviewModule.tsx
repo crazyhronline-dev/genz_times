@@ -286,6 +286,11 @@ export default function AdminOverviewModule({
                       <span className="text-tech-cyan">{post.category}</span>
                       <span>•</span>
                       <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+                      <span>•</span>
+                      <span className="text-tech-emerald font-bold flex items-center gap-1">
+                        <Eye className="w-3 h-3 text-tech-emerald" />
+                        <span>{(post.views || 0).toLocaleString()} views</span>
+                      </span>
                       {post.isFeatured && (
                         <>
                           <span>•</span>

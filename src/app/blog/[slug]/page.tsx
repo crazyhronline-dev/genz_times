@@ -13,6 +13,7 @@ import PostCard from '@/components/PostCard';
 import CommentSection from '@/components/CommentSection';
 import EeatBadge from '@/components/EeatBadge';
 import ImageWatermark from '@/components/ImageWatermark';
+import PostViewTracker from '@/components/PostViewTracker';
 import { evaluateEeat } from '@/lib/eeat';
 import { 
   Calendar, 
@@ -30,7 +31,8 @@ import {
   HelpCircle,
   ExternalLink,
   Link as LinkIcon,
-  Sliders
+  Sliders,
+  Eye
 } from 'lucide-react';
 
 interface PageProps {
@@ -312,18 +314,24 @@ export default async function SinglePostPage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
-              {formattedDate}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5">
+            <span className="flex items-center gap-1 text-slate-300">
+              <Calendar className="w-3.5 h-3.5 text-tech-cyan" />
+              <span>{formattedDate}</span>
             </span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
+            <span className="text-slate-600">•</span>
+            <span className="flex items-center gap-1.5 text-tech-cyan font-bold bg-tech-cyan/10 px-2.5 py-0.5 rounded-full border border-tech-cyan/25">
+              <Eye className="w-3.5 h-3.5" />
+              <span>{(post.views || 0).toLocaleString()} Views</span>
+            </span>
+            <span className="text-slate-600">•</span>
+            <span className="flex items-center gap-1 text-slate-400">
               <Clock className="w-3.5 h-3.5" />
-              {post.readingTime}
+              <span>{post.readingTime}</span>
             </span>
           </div>
         </div>
+        <PostViewTracker postId={post.id} />
       </header>
 
       {/* 3. Featured Image */}
@@ -374,7 +382,7 @@ export default async function SinglePostPage({ params }: PageProps) {
           )}
 
           {/* Single Gadget Pros & Cons Comparison */}
-          {post.postType !== 'article' && ((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
+          {((post.pros?.length ?? 0) > 0 || (post.cons?.length ?? 0) > 0) && (
             <div className="my-8">
               <h2 className="text-xl sm:text-2xl font-black text-white mb-4 flex items-center gap-2">
                 <Sliders className="w-5 h-5 text-tech-emerald" />

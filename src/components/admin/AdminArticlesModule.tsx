@@ -228,9 +228,9 @@ export default function AdminArticlesModule({
                             {post.title}
                           </h3>
                           <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500 mt-0.5">
-                            <span className="flex items-center gap-1">
-                              <Eye className="w-3 h-3 text-slate-600" />
-                              <span>{post.views || 0}</span>
+                            <span className="flex items-center gap-1 text-tech-cyan font-bold">
+                              <Eye className="w-3 h-3 text-tech-cyan" />
+                              <span>{(post.views || 0).toLocaleString()} views</span>
                             </span>
                             <span>•</span>
                             <span>{post.readingTime}</span>
@@ -289,9 +289,13 @@ export default function AdminArticlesModule({
                       </button>
                     </td>
 
-                    {/* Published Date */}
-                    <td className="py-3.5 px-3 font-mono text-[11px] text-slate-400 whitespace-nowrap">
-                      {new Date(post.publishedAt).toLocaleDateString()}
+                    {/* Published Date & Views */}
+                    <td className="py-3.5 px-3 font-mono text-[11px] whitespace-nowrap">
+                      <div className="text-slate-300">{new Date(post.publishedAt).toLocaleDateString()}</div>
+                      <div className="text-[10px] text-tech-cyan font-bold flex items-center gap-1 mt-0.5">
+                        <Eye className="w-3 h-3 text-tech-cyan" />
+                        <span>{(post.views || 0).toLocaleString()} views</span>
+                      </div>
                     </td>
 
                     {/* Action Buttons */}
