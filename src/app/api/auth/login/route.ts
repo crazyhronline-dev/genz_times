@@ -12,12 +12,29 @@ export async function POST(request: NextRequest) {
     const username = body.username ? String(body.username).trim() : '';
     const password = body.password ? String(body.password).trim() : '';
 
-    // Check for Master Admin PIN 050505
-    const isAdminPin = pin === '050505' || password === '050505' || ((username.toLowerCase() === 'admin' || !username) && (password === '050505' || pin === '050505'));
-
     let user: any = null;
 
-    if (isAdminPin) {
+    // 1. PIN-based Authentication
+    if (pin) {
+      if (pin === '050505') {
+        user = {
+          id: 'usr-superadmin-01',
+          name: ADMIN_CREDENTIALS.displayName,
+          username: ADMIN_CREDENTIALS.username,
+          email: 'admin@genztime.com',
+          password: '050505',
+          role: 'admin',
+          designation: ADMIN_CREDENTIALS.role,
+          active: true,
+          createdAt: '2026-09-01T00:00:00.000Z',
+        };
+      } else {
+        return NextResponse.json(
+          { success: false, error: 'Incorrect 6-digit Security PIN. Access denied.' },
+          { status: 401 }
+        );
+      }
+    } else if (password === '050505' && (!username || username.toLowerCase() === 'admin')) {
       user = {
         id: 'usr-superadmin-01',
         name: ADMIN_CREDENTIALS.displayName,
@@ -30,10 +47,10 @@ export async function POST(request: NextRequest) {
         createdAt: '2026-09-01T00:00:00.000Z',
       };
     } else if (username && password) {
-      // 1. Verify against dynamic users database
+      // 2. Verify against dynamic users database
       user = await verifyUserCredentials(username, password);
 
-      // 2. Fallback to hardcoded admin check
+      // Fallback to hardcoded admin check
       if (!user) {
         const u = username.toLowerCase();
         if ((u === ADMIN_CREDENTIALS.username || u === 'genz') && password === '050505') {
@@ -58,12 +75,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (!user) {
-      if (pin || (!username && password)) {
-        return NextResponse.json(
-          { success: false, error: 'Incorrect 6-digit Security PIN. Access denied.' },
-          { status: 401 }
-        );
-      }
 
       // Check if user exists but inactive
       const existing = await getUserByUsername(username);
