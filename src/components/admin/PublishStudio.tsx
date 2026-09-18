@@ -130,12 +130,14 @@ export default function PublishStudio({
   };
 
   // Article-Specific State
-  const [keyTakeaways, setKeyTakeaways] = useState<string[]>([
-    'Breakthrough performance leaps over previous generation silicon',
-    'Real-world power efficiency exceeds synthetic expectations',
-  ]);
+  const [keyTakeaways, setKeyTakeaways] = useState<string[]>([]);
   const [newTakeaway, setNewTakeaway] = useState('');
   
+  // Draft Auto-Recovery State
+  const [hasDraft, setHasDraft] = useState(false);
+  const [draftTime, setDraftTime] = useState('');
+  const [originalPublishedAt, setOriginalPublishedAt] = useState<string | null>(null);
+
   const [faqs, setFaqs] = useState<{ question: string; answer: string }[]>([]);
   const [newFaqQ, setNewFaqQ] = useState('');
   const [newFaqA, setNewFaqA] = useState('');
@@ -356,7 +358,7 @@ export default function PublishStudio({
     setTimeout(() => setToastNotification(''), 4000);
   };
 
-  // Watch for initialEditingId
+  // Watch for initialEditingId or Draft in localStorage
   useEffect(() => {
     if (initialEditingId) {
       fetch(`/api/posts/${initialEditingId}`)
@@ -367,11 +369,100 @@ export default function PublishStudio({
           }
         })
         .catch(console.error);
+    } else {
+      try {
+        const raw = localStorage.getItem('genz_studio_draft');
+        if (raw) {
+          const draft = JSON.parse(raw);
+          if (draft && (draft.title || draft.content)) {
+            setHasDraft(true);
+            if (draft.savedAt) {
+              setDraftTime(new Date(draft.savedAt).toLocaleTimeString());
+            }
+          }
+        }
+      } catch {}
     }
   }, [initialEditingId]);
 
+  // Draft Auto-Saver: saves working content to localStorage every 2.5s
+  useEffect(() => {
+    if (editingId) return; // Don't overwrite draft when editing existing post
+    if (!title && !content) return;
+
+    const timer = setTimeout(() => {
+      try {
+        const draft = {
+          title,
+          subtitle,
+          slug,
+          categorySlug,
+          excerpt,
+          featuredImage,
+          featuredImageAlt,
+          tagsInput,
+          content,
+          postType,
+          keyTakeaways,
+          faqs,
+          sources,
+          specs,
+          pros,
+          cons,
+          verdictScore,
+          verdictSummary,
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('genz_studio_draft', JSON.stringify(draft));
+      } catch {}
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [
+    editingId, title, subtitle, slug, categorySlug, excerpt, featuredImage, 
+    featuredImageAlt, tagsInput, content, postType, keyTakeaways, faqs, 
+    sources, specs, pros, cons, verdictScore, verdictSummary
+  ]);
+
+  const handleRestoreDraft = () => {
+    try {
+      const raw = localStorage.getItem('genz_studio_draft');
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (draft.title) setTitle(draft.title);
+      if (draft.subtitle) setSubtitle(draft.subtitle);
+      if (draft.slug) { setSlug(draft.slug); setIsSlugCustom(true); }
+      if (draft.categorySlug) setCategorySlug(draft.categorySlug);
+      if (draft.excerpt) setExcerpt(draft.excerpt);
+      if (draft.featuredImage) setFeaturedImage(draft.featuredImage);
+      if (draft.featuredImageAlt) setFeaturedImageAlt(draft.featuredImageAlt);
+      if (draft.tagsInput) setTagsInput(draft.tagsInput);
+      if (draft.content) setContent(draft.content);
+      if (draft.postType) setPostType(draft.postType);
+      if (Array.isArray(draft.keyTakeaways)) setKeyTakeaways(draft.keyTakeaways);
+      if (Array.isArray(draft.faqs)) setFaqs(draft.faqs);
+      if (Array.isArray(draft.sources)) setSources(draft.sources);
+      if (draft.specs) setSpecs(draft.specs);
+      if (Array.isArray(draft.pros)) setPros(draft.pros);
+      if (Array.isArray(draft.cons)) setCons(draft.cons);
+      if (typeof draft.verdictScore === 'number') setVerdictScore(draft.verdictScore);
+      if (draft.verdictSummary) setVerdictSummary(draft.verdictSummary);
+      setHasDraft(false);
+      showToast('Draft successfully restored from previous session!');
+    } catch {
+      alert('Failed to parse draft.');
+    }
+  };
+
+  const handleDiscardDraft = () => {
+    localStorage.removeItem('genz_studio_draft');
+    setHasDraft(false);
+    showToast('Saved draft removed.');
+  };
+
   const handleLoadPost = (post: BlogPost) => {
     setEditingId(post.id);
+    setOriginalPublishedAt(post.publishedAt || null);
     setTitle(post.title);
     setSubtitle(post.subtitle || '');
     setSlug(post.slug);
@@ -623,7 +714,7 @@ export default function PublishStudio({
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
         bio: 'Lead hardware reviewer and founder at GenZ Time. Rigorously testing smartphones, silicon benchmarks, gaming gear, and AI hardware with real hands-on lab data.',
       },
-      publishedAt: new Date().toISOString(),
+      publishedAt: originalPublishedAt || (editingId ? undefined : new Date().toISOString()),
       readingTime: `${Math.ceil(content.split(/\s+/).length / 200)} min read`,
       seo: {
         metaTitle: metaTitle || title,
@@ -678,6 +769,9 @@ export default function PublishStudio({
 
       const data = await res.json();
       if (data.success) {
+        try {
+          localStorage.removeItem('genz_studio_draft');
+        } catch {}
         setSuccessMessage(editingId ? 'Post updated successfully!' : 'Post published live to GenZ Time!');
         if (onPostSaved) onPostSaved();
         setTimeout(() => {
@@ -700,6 +794,34 @@ export default function PublishStudio({
         <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-tech-cyan/15 border border-tech-cyan/50 text-white shadow-2xl backdrop-blur-md text-xs font-mono flex items-center gap-2.5 animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 text-tech-cyan" />
           <span>{toastNotification}</span>
+        </div>
+      )}
+
+      {/* Draft Auto-Recovery Banner */}
+      {hasDraft && !editingId && (
+        <div className="p-4 rounded-2xl bg-amber-400/15 border border-amber-400/40 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-fadeIn">
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <span className="p-1 rounded bg-amber-400/20 text-amber-300 font-bold">DRAFT SAVED</span>
+            <span className="text-slate-200">
+              You have an unsaved article draft from {draftTime || 'your previous session'}.
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <button
+              type="button"
+              onClick={handleRestoreDraft}
+              className="px-3 py-1.5 rounded-lg bg-amber-400 text-tech-950 font-bold hover:bg-amber-300 transition shadow-sm"
+            >
+              Restore Draft
+            </button>
+            <button
+              type="button"
+              onClick={handleDiscardDraft}
+              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 transition"
+            >
+              Discard
+            </button>
+          </div>
         </div>
       )}
 

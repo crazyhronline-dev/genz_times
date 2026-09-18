@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getPostById, deletePost, savePost } from '@/lib/posts-db';
 
@@ -11,19 +11,32 @@ interface Params {
 }
 
 export async function GET(request: NextRequest, { params }: Params) {
-  const post = await getPostById(params.id);
-  if (!post) {
-    return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
+  try {
+    const post = await getPostById(params.id);
+    if (!post) {
+      return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
+    }
+    return NextResponse.json(
+      { success: true, post },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' } }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message || 'Error fetching post' }, { status: 500 });
   }
-  return NextResponse.json(
-    { success: true, post },
-    { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
-  );
 }
 
 export async function PUT(request: NextRequest, { params }: Params) {
   try {
-    const body = await request.json();
+    let body: any;
+    try {
+      body = await request.json();
+    } catch (parseErr: any) {
+      return NextResponse.json(
+        { success: false, error: 'Malformed JSON payload: ' + (parseErr?.message || 'Invalid format') },
+        { status: 400 }
+      );
+    }
+
     const updated = await savePost({ ...body, id: params.id });
 
     try {
@@ -39,17 +52,21 @@ export async function PUT(request: NextRequest, { params }: Params) {
     }
 
     return NextResponse.json({ success: true, post: updated });
-  } catch (error) {
-    return NextResponse.json({ success: false, error: 'Failed to update post' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Error updating post:', error);
+    return NextResponse.json({ success: false, error: error?.message || 'Failed to update post' }, { status: 500 });
   }
 }
 
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
     const post = await getPostById(params.id);
+    if (!post) {
+      return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
+    }
     const success = await deletePost(params.id);
     if (!success) {
-      return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
+      return NextResponse.json({ success: false, error: 'Cannot delete post: post protected or database locked' }, { status: 400 });
     }
 
     try {
@@ -66,8 +83,9 @@ export async function DELETE(request: NextRequest, { params }: Params) {
       console.warn('Revalidation notice:', e);
     }
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({ success: false, error: 'Failed to delete post' }, { status: 500 });
+    return NextResponse.json({ success: true, message: 'Post archived safely into deleted_posts.json' });
+  } catch (error: any) {
+    console.error('Error deleting post:', error);
+    return NextResponse.json({ success: false, error: error?.message || 'Failed to delete post' }, { status: 500 });
   }
 }

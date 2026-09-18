@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getAllPosts, savePost } from '@/lib/posts-db';
 
@@ -8,28 +8,39 @@ export async function GET() {
   try {
     const posts = await getAllPosts();
     return NextResponse.json(
-      { success: true, posts },
-      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
+      { success: true, count: posts.length, posts },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' } }
     );
-  } catch (error) {
-    return NextResponse.json({ success: false, error: 'Failed to fetch posts' }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch posts: ' + (error?.message || 'Unknown error') },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-
-    if (!body.title || !body.content) {
+    let body: any;
+    try {
+      body = await request.json();
+    } catch (parseErr: any) {
       return NextResponse.json(
-        { success: false, error: 'Title and content are required fields' },
+        { success: false, error: 'Malformed JSON payload: ' + (parseErr?.message || 'Invalid JSON format') },
+        { status: 400 }
+      );
+    }
+
+    if (!body || !body.title || !body.content) {
+      return NextResponse.json(
+        { success: false, error: 'Title and body content are required fields' },
         { status: 400 }
       );
     }
 
     const saved = await savePost(body);
 
-    // Immediately revalidate entire site layout and specific pages
+    // Revalidate paths safely
     try {
       revalidatePath('/', 'layout');
       revalidatePath('/');
@@ -43,8 +54,15 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, post: saved }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error saving post:', error);
-    return NextResponse.json({ success: false, error: 'Failed to save post' }, { status: 500 });
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error?.message || 'Failed to save post',
+        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      }, 
+      { status: 500 }
+    );
   }
 }

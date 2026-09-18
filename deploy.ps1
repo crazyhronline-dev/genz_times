@@ -48,6 +48,11 @@ $remoteUser = "u185228347"
 $keyPath = "$env:USERPROFILE/.ssh/id_rsa"
 $remoteBase = "/home/u185228347/domains/genztime.com/hbuilds/current/nodejs"
 
+# Safeguard: Take immutable snapshot of production data before deployment
+Write-Host " - Creating immutable snapshot of production posts and data..." -ForegroundColor Cyan
+$backupCmd = "mkdir -p $remoteBase/data/backups && cp -p $remoteBase/data/posts.json $remoteBase/data/posts.backup.json 2>/dev/null; cp -p $remoteBase/data/posts.json $remoteBase/data/backups/posts-pre-deploy-`$(date +%Y-%m-%d-%H%M%S).json 2>/dev/null"
+& ssh -p $remotePort -i $keyPath "$($remoteUser)@$($remoteHost)" $backupCmd
+
 # Upload tarball
 & scp -P $remotePort -i $keyPath $tarFile "$($remoteUser)@$($remoteHost):$($remoteBase)/$tarFile"
 
