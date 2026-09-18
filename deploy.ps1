@@ -53,6 +53,15 @@ Write-Host " - Creating immutable snapshot of production posts and data..." -For
 $backupCmd = "mkdir -p $remoteBase/data/backups && cp -p $remoteBase/data/posts.json $remoteBase/data/posts.backup.json 2>/dev/null; cp -p $remoteBase/data/posts.json $remoteBase/data/backups/posts-pre-deploy-`$(date +%Y-%m-%d-%H%M%S).json 2>/dev/null"
 & ssh -p $remotePort -i $keyPath "$($remoteUser)@$($remoteHost)" $backupCmd
 
+# Bidirectional non-destructive post sync: merge remote & local posts so no posts are ever lost
+Write-Host " - Synchronizing and safeguarding articles and reviews..." -ForegroundColor Cyan
+& scp -P $remotePort -i $keyPath "$($remoteUser)@$($remoteHost):$($remoteBase)/data/posts.json" scratch/remote_posts.json 2>$null
+if (Test-Path scratch/remote_posts.json) {
+    & node scripts/merge-posts.js
+}
+& scp -P $remotePort -i $keyPath data/posts.json "$($remoteUser)@$($remoteHost):$($remoteBase)/data/posts.json"
+& scp -P $remotePort -i $keyPath data/posts.backup.json "$($remoteUser)@$($remoteHost):$($remoteBase)/data/posts.backup.json"
+
 # Upload tarball
 & scp -P $remotePort -i $keyPath $tarFile "$($remoteUser)@$($remoteHost):$($remoteBase)/$tarFile"
 
