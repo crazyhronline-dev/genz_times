@@ -12,6 +12,7 @@ import ShareButtons from '@/components/ShareButtons';
 import PostCard from '@/components/PostCard';
 import CommentSection from '@/components/CommentSection';
 import EeatBadge from '@/components/EeatBadge';
+import ImageWatermark from '@/components/ImageWatermark';
 import { evaluateEeat } from '@/lib/eeat';
 import { 
   Calendar, 
@@ -320,12 +321,14 @@ export default async function SinglePostPage({ params }: PageProps) {
       </header>
 
       {/* 3. Featured Image */}
-      <div className="relative rounded-3xl overflow-hidden aspect-[16/9] mb-10 border border-slate-800 shadow-2xl bg-tech-950">
+      <div className="relative rounded-3xl overflow-hidden aspect-[16/9] mb-10 border border-slate-800 shadow-2xl bg-tech-950 group">
         <img
           src={post.featuredImage}
           alt={post.featuredImageAlt || `${post.title} - GenZ Time hardware lab review`}
           className="w-full h-full object-cover"
         />
+        {/* Official GenZ Time Logo Watermark */}
+        <ImageWatermark size="md" position="bottom-right" label="OFFICIAL LAB VERIFIED" />
       </div>
 
       {/* Key Takeaways / Executive Highlights (For Articles) */}

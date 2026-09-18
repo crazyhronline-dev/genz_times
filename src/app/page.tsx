@@ -5,6 +5,7 @@ import { getAllCategories } from '@/lib/categories-db';
 import { getCategoryIcon } from '@/lib/category-icons';
 import PostCard from '@/components/PostCard';
 import NewsletterBox from '@/components/NewsletterBox';
+import ImageWatermark from '@/components/ImageWatermark';
 import { 
   Flame, 
   Sparkles, 
@@ -142,13 +143,15 @@ export default async function HomePage() {
             </div>
 
             {/* Right: Immersive Gadget Image */}
-            <div className="lg:col-span-6 relative min-h-[340px] lg:min-h-full overflow-hidden bg-tech-950">
+            <div className="lg:col-span-6 relative min-h-[340px] lg:min-h-full overflow-hidden bg-tech-950 group">
               <img
                 src={heroPost.featuredImage}
                 alt={heroPost.featuredImageAlt || `${heroPost.title} - GenZ Time`}
                 className="w-full h-full object-cover object-center lg:absolute inset-0 hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-tech-900 via-transparent to-transparent lg:bg-gradient-to-r lg:from-tech-900 lg:via-transparent lg:to-transparent" />
+              {/* Official GenZ Time Logo Watermark */}
+              <ImageWatermark size="md" position="bottom-right" label="FEATURED LAB BENCHMARK" />
             </div>
 
           </div>

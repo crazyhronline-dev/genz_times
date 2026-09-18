@@ -1,8 +1,10 @@
 import { UserRole } from '@/types/user';
 
+export const ADMIN_PIN = '050505';
+
 export const ADMIN_CREDENTIALS = {
   username: 'admin',
-  password: 'genztime2026',
+  password: '050505',
   displayName: 'GenZ Editorial Team',
   role: 'Editor-in-Chief & Super Admin',
 };

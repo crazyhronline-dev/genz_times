@@ -13,10 +13,8 @@ import {
   Smartphone, 
   Laptop, 
   Headphones, 
-  PlusCircle, 
   ShieldCheck,
   ChevronDown,
-  Lock,
   Tag
 } from 'lucide-react';
 
@@ -140,47 +138,20 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          {/* Action CTAs: Search & Publish Studio */}
+          {/* Action CTAs: Search */}
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/blog"
-              className="p-2.5 rounded-xl text-slate-400 hover:text-tech-cyan hover:bg-white/5 transition border border-transparent hover:border-tech-cyan/30"
-              title="Search Reviews"
+              className="px-3.5 py-2 rounded-xl text-slate-400 hover:text-tech-cyan hover:bg-white/5 transition border border-slate-800/80 hover:border-tech-cyan/40 flex items-center gap-2 text-xs font-mono"
+              title="Search Reviews & Articles"
             >
-              <Search className="w-5 h-5" />
-            </Link>
-
-            <Link
-              href="/admin"
-              className={`px-3 py-2 rounded-xl text-xs font-mono transition-colors flex items-center gap-1.5 border ${
-                pathname.startsWith('/admin')
-                  ? 'text-tech-cyan bg-tech-cyan/10 border-tech-cyan/40'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5 border-slate-800'
-              }`}
-              title="Admin Portal"
-            >
-              <Lock className="w-3.5 h-3.5 text-tech-cyan" />
-              <span>Admin</span>
-            </Link>
-
-            <Link
-              href="/publish"
-              className="relative group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm text-tech-950 font-semibold bg-gradient-to-r from-tech-cyan via-teal-300 to-tech-emerald shadow-glow hover:shadow-glow-emerald transition duration-300 transform active:scale-95"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Publish Article</span>
+              <Search className="w-4 h-4 text-tech-cyan" />
+              <span>Search Reviews</span>
             </Link>
           </div>
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link
-              href="/publish"
-              className="p-2 rounded-lg bg-tech-cyan text-tech-950 font-bold text-xs flex items-center gap-1"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Post</span>
-            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 focus:outline-none"
@@ -261,25 +232,6 @@ export default function Navbar() {
               className="block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-white/5"
             >
               Contact & Pitch Reviews
-            </Link>
-            <Link
-              href="/admin"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-tech-cyan hover:bg-tech-cyan/10 font-mono"
-            >
-              <Lock className="w-4 h-4" />
-              <span>Admin Portal / Login</span>
-            </Link>
-          </div>
-
-          <div className="pt-2 border-t border-slate-800">
-            <Link
-              href="/publish"
-              onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-tech-950 bg-gradient-to-r from-tech-cyan to-tech-emerald text-sm"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Open Publishing Studio</span>
             </Link>
           </div>
         </div>

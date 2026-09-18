@@ -57,7 +57,6 @@ export default function AdminDashboardPage() {
     return null;
   });
   const [loading, setLoading] = useState(true);
-  const [switchingRole, setSwitchingRole] = useState(false);
 
   // Editing state passed to Publish Studio
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
@@ -117,32 +116,6 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  // Instant Role Switcher
-  const handleRoleSwitch = async (username: string, pass: string) => {
-    setSwitchingRole(true);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password: pass }),
-      });
-      const data = await res.json();
-      if (data.success && data.user) {
-        setCurrentUser(data.user);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('genz_current_user', JSON.stringify(data.user));
-        }
-        if (!hasModuleAccess(data.user.role, activeModule)) {
-          setActiveModule('overview');
-        }
-      }
-    } catch (e) {
-      console.error('Error switching role:', e);
-    } finally {
-      setSwitchingRole(false);
-    }
-  };
 
   // Handle Edit Post from any module
   const handleEditPost = (postId: string) => {
@@ -273,58 +246,26 @@ export default function AdminDashboardPage() {
             </div>
           </header>
 
-          {/* Role-Based Access Live Simulator & Session Switcher */}
-          <div className="bg-tech-950 border-b border-slate-800/80 px-4 sm:px-8 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs font-mono">
+          {/* Active Editorial Workspace Header */}
+          <div className="bg-tech-950 border-b border-slate-800/80 px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3 text-xs font-mono">
             <div className="flex items-center gap-2 min-w-0">
               <div className="flex items-center gap-1.5 shrink-0 text-slate-400">
                 <UserCheck className="w-3.5 h-3.5 text-tech-cyan" />
                 <span>Active Workspace:</span>
               </div>
-              <span className="font-bold text-white truncate">{currentUser?.name || 'Staff User'}</span>
-              <span className="text-slate-500 hidden sm:inline truncate">(@{currentUser?.username || 'user'})</span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${ROLE_CONFIG[currentUser?.role || 'author']?.badgeColor}`}>
-                {ROLE_CONFIG[currentUser?.role || 'author']?.label}
+              <span className="font-bold text-white truncate">{currentUser?.name || 'Super Admin'}</span>
+              <span className="text-slate-500 hidden sm:inline truncate">(@{currentUser?.username || 'admin'})</span>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${ROLE_CONFIG[currentUser?.role || 'admin']?.badgeColor}`}>
+                {ROLE_CONFIG[currentUser?.role || 'admin']?.label}
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 shrink-0 overflow-x-auto pb-0.5">
-              <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mr-1">Switch Role:</span>
-              <button
-                onClick={() => handleRoleSwitch('admin', 'genztime2026')}
-                disabled={switchingRole}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
-                  currentUser?.role === 'admin'
-                    ? 'bg-rose-500 text-white shadow-glow'
-                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-                title="Super Admin has access to all 8 modules including Team & System"
-              >
-                👑 Super Admin (8)
-              </button>
-              <button
-                onClick={() => handleRoleSwitch('alex_reviewer', 'reviewer2026')}
-                disabled={switchingRole}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
-                  currentUser?.role === 'editor'
-                    ? 'bg-tech-cyan text-tech-950 shadow-glow'
-                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-                title="Senior Editor has access to 5 modules (Overview, Articles, Publish, Reviews, Enquiries)"
-              >
-                ✒️ Senior Editor (5)
-              </button>
-              <button
-                onClick={() => handleRoleSwitch('maya_writer', 'writer2026')}
-                disabled={switchingRole}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition whitespace-nowrap ${
-                  currentUser?.role === 'author'
-                    ? 'bg-amber-400 text-slate-950 shadow-glow'
-                    : 'bg-white/5 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-                title="Staff Writer has access to 3 modules (Overview, Articles, Publish Studio)"
-              >
-                📝 Staff Writer (3)
-              </button>
+            <div className="flex items-center gap-2 text-[11px] text-slate-400">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tech-emerald opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-tech-emerald" />
+              </span>
+              <span className="text-slate-300 font-semibold hidden sm:inline">Encrypted Session Active</span>
             </div>
           </div>
 

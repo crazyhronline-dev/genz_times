@@ -9,6 +9,7 @@ import { checkPlagiarism, removePlagiarismAndHumanize } from '@/lib/plagiarism';
 import { evaluateEeat } from '@/lib/eeat';
 import { generateHighLevelSeo } from '@/lib/auto-seo';
 import { applyWatermark, WatermarkOptions } from '@/lib/watermark';
+import ImageWatermark from '@/components/ImageWatermark';
 import { BlogPost, GadgetSpecs, ComparedGadget } from '@/types/blog';
 import { 
   Sparkles, 
@@ -1038,6 +1039,7 @@ export default function PublishStudio({
               <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-tech-950/85 backdrop-blur-md border border-slate-800 text-[11px] font-mono text-slate-300">
                 Active Featured Media
               </div>
+              <ImageWatermark size="sm" position="bottom-right" label="AUTO-WATERMARKED" />
             </div>
           )}
 

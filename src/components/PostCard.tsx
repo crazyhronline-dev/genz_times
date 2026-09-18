@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { BlogPost } from '@/types/blog';
 import { Clock, Calendar, Star, ChevronRight, Sparkles } from 'lucide-react';
+import ImageWatermark from '@/components/ImageWatermark';
 
 interface Props {
   post: BlogPost;
@@ -53,6 +54,9 @@ export default function PostCard({ post, featured = false }: Props) {
             <span>{post.verdictScore.toFixed(1)}</span>
           </div>
         ) : null}
+
+        {/* Official Brand Watermark */}
+        <ImageWatermark size="sm" position="bottom-right" label="LAB TESTED" />
       </div>
 
       {/* Content Container */}

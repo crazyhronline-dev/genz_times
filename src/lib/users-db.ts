@@ -10,7 +10,7 @@ export const DEFAULT_USERS: EditorialUser[] = [
     name: 'GenZ Editorial Team',
     username: 'admin',
     email: 'admin@genztime.com',
-    password: 'genztime2026',
+    password: '050505',
     role: 'admin',
     designation: 'Editor-in-Chief & Super Admin',
     active: true,

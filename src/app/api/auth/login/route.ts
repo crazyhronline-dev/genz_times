@@ -7,37 +7,64 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password } = await request.json();
+    const body = await request.json();
+    const pin = body.pin ? String(body.pin).trim() : null;
+    const username = body.username ? String(body.username).trim() : '';
+    const password = body.password ? String(body.password).trim() : '';
 
-    if (!username || !password) {
+    // Check for Master Admin PIN 050505
+    const isAdminPin = pin === '050505' || password === '050505' || ((username.toLowerCase() === 'admin' || !username) && (password === '050505' || pin === '050505'));
+
+    let user: any = null;
+
+    if (isAdminPin) {
+      user = {
+        id: 'usr-superadmin-01',
+        name: ADMIN_CREDENTIALS.displayName,
+        username: ADMIN_CREDENTIALS.username,
+        email: 'admin@genztime.com',
+        password: '050505',
+        role: 'admin',
+        designation: ADMIN_CREDENTIALS.role,
+        active: true,
+        createdAt: '2026-09-01T00:00:00.000Z',
+      };
+    } else if (username && password) {
+      // 1. Verify against dynamic users database
+      user = await verifyUserCredentials(username, password);
+
+      // 2. Fallback to hardcoded admin check
+      if (!user) {
+        const u = username.toLowerCase();
+        if ((u === ADMIN_CREDENTIALS.username || u === 'genz') && password === '050505') {
+          user = {
+            id: 'usr-superadmin-01',
+            name: ADMIN_CREDENTIALS.displayName,
+            username: ADMIN_CREDENTIALS.username,
+            email: 'admin@genztime.com',
+            password: '050505',
+            role: 'admin',
+            designation: ADMIN_CREDENTIALS.role,
+            active: true,
+            createdAt: '2026-09-01T00:00:00.000Z',
+          };
+        }
+      }
+    } else {
       return NextResponse.json(
-        { success: false, error: 'Username and password are required' },
+        { success: false, error: 'Please enter your 6-digit Admin Security PIN (or staff credentials)' },
         { status: 400 }
       );
     }
 
-    // 1. Verify against dynamic users database
-    let user = await verifyUserCredentials(username, password);
-
-    // 2. Fallback to hardcoded admin check if DB is empty or during migration
     if (!user) {
-      const u = username.trim().toLowerCase();
-      if ((u === ADMIN_CREDENTIALS.username || u === 'genz') && password.trim() === ADMIN_CREDENTIALS.password) {
-        user = {
-          id: 'usr-superadmin-01',
-          name: ADMIN_CREDENTIALS.displayName,
-          username: ADMIN_CREDENTIALS.username,
-          email: 'admin@genztime.com',
-          password: ADMIN_CREDENTIALS.password,
-          role: 'admin',
-          designation: ADMIN_CREDENTIALS.role,
-          active: true,
-          createdAt: '2026-09-01T00:00:00.000Z',
-        };
+      if (pin || (!username && password)) {
+        return NextResponse.json(
+          { success: false, error: 'Incorrect 6-digit Security PIN. Access denied.' },
+          { status: 401 }
+        );
       }
-    }
 
-    if (!user) {
       // Check if user exists but inactive
       const existing = await getUserByUsername(username);
       if (existing && !existing.active) {
