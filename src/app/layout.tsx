@@ -140,7 +140,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         {/* Google tag (gtag.js) */}
         <script
           async
@@ -157,6 +156,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         {/* Search Engine Organization & WebSite Schemas */}
         <script
           type="application/ld+json"
