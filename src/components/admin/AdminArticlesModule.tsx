@@ -38,6 +38,7 @@ export default function AdminArticlesModule({
 }: AdminArticlesModuleProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [postTypeFilter, setPostTypeFilter] = useState<'all' | 'article' | 'review'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
@@ -50,9 +51,14 @@ export default function AdminArticlesModule({
         post.tags?.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchCategory =
         selectedCategory === 'all' || post.categorySlug === selectedCategory;
-      return matchSearch && matchCategory;
+      const matchType =
+        postTypeFilter === 'all' ||
+        (postTypeFilter === 'review'
+          ? post.postType === 'review'
+          : post.postType === 'article' || !post.postType);
+      return matchSearch && matchCategory && matchType;
     });
-  }, [posts, searchTerm, selectedCategory]);
+  }, [posts, searchTerm, selectedCategory, postTypeFilter]);
 
   const showNotice = (msg: string) => {
     setActionNotice(msg);
@@ -146,6 +152,40 @@ export default function AdminArticlesModule({
           <span>{actionNotice}</span>
         </div>
       )}
+
+      {/* Post Type Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-mono">
+        <button
+          onClick={() => setPostTypeFilter('all')}
+          className={`px-3.5 py-1.5 rounded-xl border transition ${
+            postTypeFilter === 'all'
+              ? 'bg-tech-cyan/20 border-tech-cyan text-tech-cyan font-bold shadow-glow'
+              : 'bg-tech-950/60 border-slate-800 text-slate-400 hover:text-white'
+          }`}
+        >
+          All Posts ({posts.length})
+        </button>
+        <button
+          onClick={() => setPostTypeFilter('article')}
+          className={`px-3.5 py-1.5 rounded-xl border transition ${
+            postTypeFilter === 'article'
+              ? 'bg-tech-emerald/20 border-tech-emerald text-tech-emerald font-bold shadow-glow'
+              : 'bg-tech-950/60 border-slate-800 text-slate-400 hover:text-white'
+          }`}
+        >
+          Editorial Articles ({posts.filter((p) => p.postType === 'article' || !p.postType).length})
+        </button>
+        <button
+          onClick={() => setPostTypeFilter('review')}
+          className={`px-3.5 py-1.5 rounded-xl border transition ${
+            postTypeFilter === 'review'
+              ? 'bg-amber-400/20 border-amber-400 text-amber-300 font-bold shadow-glow'
+              : 'bg-tech-950/60 border-slate-800 text-slate-400 hover:text-white'
+          }`}
+        >
+          Hardware Reviews ({posts.filter((p) => p.postType === 'review').length})
+        </button>
+      </div>
 
       {/* Filter & Search Bar */}
       <div className="p-4 rounded-2xl bg-tech-900/30 border border-slate-800 flex flex-col md:flex-row gap-3 items-center justify-between">

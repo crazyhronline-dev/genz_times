@@ -30,7 +30,7 @@ export default async function HomePage() {
   ]);
   const heroPost = featuredPosts[0] || posts[0];
   const secondaryFeatured = featuredPosts.slice(1, 3);
-  const latestPosts = posts.filter((p) => p.id !== heroPost.id).slice(0, 6);
+  const latestPosts = posts.filter((p) => p.id !== heroPost.id).slice(0, 9);
 
   const trendingList = trendingPosts.length > 0 ? trendingPosts : posts.slice(0, 6);
   // Duplicate list to achieve continuous seamless loop

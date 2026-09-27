@@ -39,12 +39,15 @@ export default function AdminReviewsModule({
     setTimeout(() => setNotice(null), 3500);
   };
 
-  const avgScore = posts.length > 0
-    ? (posts.reduce((acc, p) => acc + (p.verdictScore || 0), 0) / posts.length).toFixed(1)
+  const reviewsOnly = posts.filter((p) => p.postType === 'review');
+  const displayPosts = reviewsOnly.length > 0 ? reviewsOnly : posts;
+
+  const avgScore = displayPosts.length > 0
+    ? (displayPosts.reduce((acc, p) => acc + (p.verdictScore || 0), 0) / displayPosts.length).toFixed(1)
     : '9.2';
 
-  const highestScorePost = posts.reduce((prev, curr) => 
-    ((curr.verdictScore || 0) > (prev.verdictScore || 0) ? curr : prev), posts[0] || {}
+  const highestScorePost = displayPosts.reduce((prev, curr) => 
+    ((curr.verdictScore || 0) > (prev.verdictScore || 0) ? curr : prev), displayPosts[0] || {}
   );
 
   const handleStartEditScore = (post: BlogPost) => {
@@ -151,7 +154,7 @@ export default function AdminReviewsModule({
           <div>
             <span className="text-xs font-mono text-slate-400 block">Trending in Ticker</span>
             <span className="text-2xl font-black font-mono text-tech-emerald">
-              {posts.filter((p) => p.isTrending).length} devices
+              {displayPosts.filter((p) => p.isTrending).length} devices
             </span>
           </div>
         </div>
@@ -174,7 +177,7 @@ export default function AdminReviewsModule({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {posts.map((post) => {
+              {displayPosts.map((post) => {
                 const specsCount = Object.keys(post.specs || {}).filter(
                   (k) => Boolean((post.specs as Record<string, string>)[k])
                 ).length;
