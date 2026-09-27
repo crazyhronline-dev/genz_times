@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "google-site-verification-genztime",
+    google: "9r2PvtX5BOGUEOaDyz4MNp9u6pO0Bp3mF5p379Halms",
   },
   openGraph: {
     type: "website",
