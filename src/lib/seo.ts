@@ -63,7 +63,13 @@ export function generatePostGraphSchema(post: BlogPost): Record<string, any> {
   const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
   const wordCount = (post.content || '').split(/\s+/).filter(Boolean).length;
   const isReview = post.postType === 'review' || Boolean(post.verdictScore) || Boolean(post.isComparison);
-  const articleType = isReview ? 'TechArticle' : 'Article';
+  const articleType = post.seo?.schemaType?.includes('NewsArticle')
+    ? 'NewsArticle'
+    : post.seo?.schemaType?.includes('TechArticle')
+    ? 'TechArticle'
+    : isReview
+    ? 'TechArticle'
+    : 'Article';
 
   const graph: any[] = [];
 

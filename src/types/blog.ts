@@ -39,6 +39,10 @@ export interface SeoMeta {
   focusKeyword: string;
   canonicalUrl?: string;
   ogImage?: string;
+  schemaType?: string;
+  schemaMarkupNotes?: string;
+  contentNotes?: string;
+  humanTouchNotes?: string;
 }
 
 export interface Author {

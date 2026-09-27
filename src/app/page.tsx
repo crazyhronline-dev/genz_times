@@ -90,11 +90,16 @@ export default async function HomePage() {
                   </span>
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-4">
+                {/* Primary Site Entity H1 for Google Search Indexing */}
+                <h1 className="sr-only">
+                  GenZ Time — Gen Z Tech Reviews, Hands-On Benchmarks & Next-Gen Gadgets Tested by Sahil
+                </h1>
+
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-4">
                   <Link href={`/blog/${heroPost.slug}`} className="hover:text-tech-cyan transition duration-200">
                     {heroPost.title}
                   </Link>
-                </h1>
+                </h2>
 
                 <p className="text-base text-slate-300 leading-relaxed line-clamp-3 mb-6">
                   {heroPost.excerpt}
